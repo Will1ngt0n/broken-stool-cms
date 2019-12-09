@@ -23,6 +23,7 @@ export class ItemsListPage implements OnInit {
   searchInput
   searchArray
   name
+  pictureUpdate : File
   productName
   pictures : Array<any> = []
   //promos and updates
@@ -110,7 +111,6 @@ export class ItemsListPage implements OnInit {
     //   console.log(date);
       
     // }
-    this.orderItems()
 
     for(let key in this.status){
       this.getPendingOrders(this.status[key])
@@ -302,20 +302,6 @@ export class ItemsListPage implements OnInit {
     this.department = 'Select Department'
     this.selectedCategory = 'Select Category'
   }
-
-  //Routing to sales page
-  // viewSales(query){
-  //   console.log(query);
-  //   let navOptions = {
-  //     queryParams : {query : query}
-  //   }
-  //   //this.navCtrl.navigateForward(['sales-specials'], navOptions)    
-  // }
-
-  // viewMore(query){
-  //   this.route.navigate(['/'+ query])
-  // }
-  
   loadKwangaItems(){
     let category : String
     for(let key in this.kwangaCategories){
@@ -337,6 +323,9 @@ export class ItemsListPage implements OnInit {
   //Loading items from the category and brand the user just clicked on in the previous pages
   loadCategoryItems(category, brand){
     let data : Array<any> = []
+    console.log(category);
+    console.log(brand);
+    
     return this.productsService.loadCategoryItems(category, brand).then(result => {
       if(result !== undefined){
       }
@@ -346,13 +335,9 @@ export class ItemsListPage implements OnInit {
         console.log(result[key]);
         this.currentViewedItems.push(result[key])
       }
-     //this.loadPictures()
-     console.log('mine');
-     
-    }).then(result => {
-      console.log(result);
+      console.log(this.currentViewedItems);
       
-      //this.loadPictures()
+    }).then(result => {
     })
 
   }
@@ -400,35 +385,13 @@ export class ItemsListPage implements OnInit {
     let data : Array<any> = []
     return this.productsService.loadCategoryItems(category, brand).then(result => {
       if(result !== undefined){
-      }
-      console.log(result);
-      
-      for(let key in result){
-        if(brand === 'Kwanga'){
-          this.kwangaProducts.push(result[key])
+        for(let key in result){
           this.allProducts.push(result[key])
-        }else if(brand === 'Dankie Jesu'){
-          this.dankieJesuProducts.push(result[key])
-          this.allProducts.push(result[key])
-          if(result[key].data.isSummer === true){
-            this.summerProducts.push(result[key])
-          }else if(result[key].data.isSummer === false){
-            this.winterProducts.push(result[key])
-          }
         }
       }
-      if(this.summerProducts.length > 0 ){
-      }else if(this.winterProducts.length > 0){   
-      }
+    })
+  }
 
-      })
-      }
-      orderItems(){
-        this.summerProducts.sort(( a , b  ) => a.data.dateAdded > b.data.dateAdded ? 1 : 0 )
-        this.winterProducts.sort(( a , b  ) => a.data.dateAdded > b.data.dateAdded ? 1 : 0 )
-        for(let i = 0; i < 5; i++){this.summerGear.push(this.summerProducts[i])}
-        for(let i = 0; i < 5; i++){this.winterGear.push(this.winterProducts[i])}
-      }
   getInventory(){
     console.log(this.allProducts, 'yugfg7g76gyg6gt7677');
     
@@ -465,9 +428,6 @@ export class ItemsListPage implements OnInit {
     console.log(this.pendingOrders);
     
   })
-  //thisgffdsg
-
-  
 }
   getReadyOrders(){
     return this.productsService.getReadyOrders().then(result => {
@@ -486,10 +446,6 @@ export class ItemsListPage implements OnInit {
     })
   }
 
-
-
-
-
   //////native to this page
   ngOnInit() {
     return this.authService.checkingAuthState().then( result => {
@@ -504,41 +460,15 @@ export class ItemsListPage implements OnInit {
           console.log(this.title)
           this.link = result.link
           console.log(this.link);
-          
-          
           console.log(brand);
           console.log(this.currentCategory);
           console.log(this.currentCategory);
           this.loadCategoryItems(this.currentCategory, brand)
-          this.loadPictures().then(result => {
-            console.log(result);
-            
-          })
         })
       }
     })
 
   }
-  // loadKwangaItems(){
-  //   let category : String
-  //   for(let key in this.kwangaCategories){
-  //     category  = this.kwangaCategories[key]
-  //     this.loadItems(category, 'Kwanga').then(result => {
-  //       console.log(result);
-        
-  //     })
-  //   }
-  // }
-  // loadDankieJesuItems(){
-  //   let category : String
-  //   for(let key in this.dankieJesuCategories){
-  //     category = this.dankieJesuCategories[key]
-  //     this.loadItems(category, 'Dankie Jesu')
-  //   }
-  // }
-  // loadViewedCategory(){
-    
-  // }
 
   back(){
     this.route.navigate(['/landing'])
@@ -546,19 +476,7 @@ export class ItemsListPage implements OnInit {
   navigate(){
     this.route.navigate(['/'+ this.link])
   }
-  // loadItems(category, brand){
-  //   //console.log(1234);
-  //   let data : Array<any> = []
-  //   return this.productsService.loadCategoryItems(category, brand).then(result => {
-  //     console.log(result);
-  //     for(let key in result){
-  //       console.log(result);
-  //       //this.allItems.push(result[key])
-  //       this.currentViewedItems.push(result[key])
-  //     }
-  //     //console.log(this.allItems);
-  //   })
-  // }
+  
   promoteItem(){
     console.log(this.editPercentage);
     console.log(this.editStartDate);
@@ -568,7 +486,7 @@ export class ItemsListPage implements OnInit {
     console.log(price);
     
     
-    return this.productsService.promoteItem(price, this.editPercentage, this.editStartDate, this.editEndDate, this.itemBrand, this.itemCategory, this.itemID).then(result => {
+    return this.productsService.promoteItem(price, this.editPercentage, this.editStartDate, this.editEndDate, this.itemBrand, this.itemCategory, this.itemID, this.itemName, this.itemImageLink, this.itemDescription).then(result => {
       console.log(result);
       if(result === 'success'){
         console.log(result);
@@ -594,14 +512,17 @@ export class ItemsListPage implements OnInit {
   updateItem(){
     console.log(this.updateName, this.updatePrice, this.updateDescription, this.itemID, this.itemBrand, this.itemCategory, this.updateSizes);
     //console.log(this.updateName);
-    
-    return this.productsService.updateItem(this.itemID, this.itemBrand, this.itemCategory, this.updatePrice, this.updateDescription, this.updateName, this.updateSizes).then(result => {
+
+    return this.productsService.updateItemsListItem(this.itemID, this.itemBrand, this.itemCategory, this.updatePrice, this.updateDescription, this.updateName, this.updateSizes, this.pictureUpdate).then(result => {
       console.log(result);
       if(result === 'success'){
         console.log(result);
          return this.dismissPromo()
       }
     })
+  }
+  addPictureUpdate(event){
+    this.pictureUpdate = <File>event.target.files[0]
   }
   submitUpdatedItem(itemName, itemPrice, itemDescription){
 
@@ -675,8 +596,6 @@ export class ItemsListPage implements OnInit {
         console.log(this.updateSizes);
       }
     }
-    // console.log(event.target.checked);
-    // console.log(event.target['name']);
   }
 //Search functionality
 search(query){
@@ -685,19 +604,8 @@ search(query){
 }
 filterItems(query, array){
   let queryFormatted = query.toLowerCase();
-  console.log(queryFormatted);
-  console.log(array);
   if(queryFormatted !== ''){
     let nameResult = array.filter(item => item.data.name.toLowerCase().indexOf(queryFormatted) >= 0)
-    let addBrand : boolean
-    let addCategory : boolean
-    let addName : boolean
-    addName = false
-    addCategory = false
-    addBrand = false
-    //console.log(brandResult);
-    //console.log(categoryResult);
-    console.log(nameResult);
     this.searchArray = nameResult
   }else if(queryFormatted === ''){
     this.searchArray = []

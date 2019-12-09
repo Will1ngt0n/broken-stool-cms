@@ -47,6 +47,8 @@
             <ion-checkbox color="primary" name='checkboxXXXL' (ionChange)='checkSizeUpdateCheckboxes($event, "XXXL")'></ion-checkbox>
             <p id="text-size">XXXL</p>
           </div>
+          <input #pictureUpdate width='100px' class='pictureInput' type="file" accept="image/jpeg, jpg, tif, png"
+          (change)='addPictureUpdate($event)'>
           <p class="item-detail">Choose Available Colours</p>
           <div class="sizes-colours-item">
             <div></div>
@@ -156,15 +158,15 @@
           </div>
           <div class="SubCat"  *ngFor = 'let item of currentViewedItems'>
             <div class="gridder">
-              <img defer [src]="item.pictures.link" *ngIf ='item.pictures' alt="">
-              <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="!item.pictures" alt="">
+              <img defer [src]="item.link" *ngIf ='item.link' alt="">
+              <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="!item.link" alt="">
               <div id="info">
                 <h5>{{item.data.name}}</h5>
                 <p>{{item.data.description}}.</p>
                 <p><b>R {{item.data.price}}</b></p>
                 <div class="options">
-                  <div (click)="togglePromo(item.productID, item.brand, item.category, item.data.name, item.data.description, item.data.price, item.pictures.link)">Promote</div>
-                  <div (click)="toggleUpdate(item.productID, item.brand, item.category, item.data.name, item.data.description, item.data.price, item.pictures.link)">Update</div>
+                  <div (click)="togglePromo(item.productID, item.brand, item.category, item.data.name, item.data.description, item.data.price, item.link)">Promote</div>
+                  <div (click)="toggleUpdate(item.productID, item.brand, item.category, item.data.name, item.data.description, item.data.price, item.link)">Update</div>
                   <div (click)='hideItem(item.productID, item.brand, item.category)'>Hide</div>
                   <div (click)='deleteItem(item.productID, item.brand, item.category)'>Delete</div>
                 </div>

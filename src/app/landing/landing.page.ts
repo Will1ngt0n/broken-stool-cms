@@ -5,6 +5,8 @@ import { ProductsService } from '../services/products-services/products.service'
 import * as moment from 'moment';
 import { NavController, AlertController } from '@ionic/angular';
 import { IonSlides } from '@ionic/angular';
+import { LoginPageModule } from '../login/login.module';
+import * as firebase from 'firebase'
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.page.html',
@@ -57,6 +59,8 @@ export class LandingPage implements OnInit {
   orangeAvailable; orangePic
   yellowAvailable; yellowPic
   whiteAvailable; whitePic
+
+  searchInput
   dankieJesuPic: object = {}
   kwangaPic: object = {}
   AllCatpic: object = {}
@@ -82,6 +86,15 @@ export class LandingPage implements OnInit {
   kwangaSpecialsPicture
   dankieJesuSpecialsPicture
   allSpecialsPicture
+
+
+  searchName
+  searchPic
+  searchDescription
+  searchPrice
+  searchProductID
+  searchBrand
+  searchCategory
 
   sliderConfig = {
     pagination: '.swiper-pagination',
@@ -202,7 +215,7 @@ export class LandingPage implements OnInit {
       if(result === null){
         this.route.navigate(['/login'])
       }else{
-        return this.loadPictures()
+        //return this.loadPictures()
 
       }
     })
@@ -215,7 +228,7 @@ export class LandingPage implements OnInit {
     console.log(event.target['value']);
     this.department = event.target['value']
     if (this.department === 'Dankie Jesu') {
-      this.categoryOptions = ['Select Category', 'Vests', 'Caps ', 'Bucket Hats', 'Shorts', 'Crop Tops', 'T-Shirts', 'Sweaters', 'Hoodies', 'Track Suits', 'Winter Hats', 'Beanies', 'Bags']
+      this.categoryOptions = ['Select Category', 'Vests', 'Caps', 'Bucket Hats', 'Shorts', 'Crop Tops', 'T-Shirts', 'Sweaters', 'Hoodies', 'Track Suits', 'Winter Hats', 'Beanies', 'Bags']
     }
     if (this.department === 'Kwanga') {
       this.categoryOptions = ['Select Category', 'Formal', 'Traditional', 'Smart Casual', 'Sports wear']
@@ -324,14 +337,8 @@ export class LandingPage implements OnInit {
   }
   addPicture(event){
     this.picture = <File>event.target.files[0]
-    // let name = event.target.name
-    // let pictureName = name
-    // this.itemName = pictureName.replace('-', ' ')
-    // this.description = this.itemName
+    this.checkValidity()
   }
-  // addItem() {
-  //   this.route.navigate(['/'])
-  // }
   addProduct() {
     return this.productService.addItem(this.department, this.selectedCategory, this.itemName, this.description, this.price, this.size, this.accessory, this.summer, this.color, this.picture).then(result => {
       this.clearForm();
@@ -350,8 +357,6 @@ export class LandingPage implements OnInit {
     this.description = ''
     this.size = [];
     this.picture = undefined
-    document.getElementById('accessory')['checked'] = false;
-    document.getElementById('summer')['checked'] = false;
     this.fileInput.nativeElement.value = ''
     this.departmentCombo.nativeElement.value ='Select Department'
     let checkboxes: Array<any> = ['checkboxXS', 'checkboxS', 'checkboxM', 'checkboxL', 'checkboxXL', 'checkboxXXL', 'checkboxXXXL', 'checkboxBlack', 'checkboxBrown', 'checkboxOrange', 'checkboxYellow', 'checkboxWhite']
@@ -617,7 +622,7 @@ export class LandingPage implements OnInit {
 
 
   //Search functionality
-  searchInput
+  // searchInput
   search() {
     this.filterItems(this.allProducts)
     // this.searchArray = []
@@ -722,6 +727,26 @@ export class LandingPage implements OnInit {
       }
     }
   }
+
+  updateItem(){
+    return this.productService.updateProduct(this.searchProductID, this.searchBrand, this.searchCategory, this.searchName, this.searchDescription, this.searchPrice).then(result => {
+      if(result === 'Success'){
+        
+      }
+    })
+  }
+  hideItem(){
+    return this.productService.hideProduct(this.searchProductID, this.searchBrand, this.searchCategory).then(result => {
+
+    })
+  }
+  deleteSearchItem(){
+    return this.productService.deleteItemFromInventory(this.searchProductID, this.searchBrand, this.searchCategory).then(result => {
+      if(result === 'Deleted'){
+        
+      }
+    })
+  }
   showLeftSide() {
     console.log("Showing left side menu");
     document.getElementById("left-items-list").style.left = "0"
@@ -771,9 +796,19 @@ export class LandingPage implements OnInit {
     this.listOfItems = 0;
   }
   clickedSearchItem: string = "item hidden"
-  showHideSearchDetails() {
+  showHideSearchDetails(item) {
+    console.log(item);
+    
     if (this.clickedSearchItem == "hideItem") {
+      this.searchName = item.data.name
+      this.searchPic = item.link
+      this.searchDescription = item.data.description
+      this.searchPrice = item.data.price
+      this.searchProductID = item.productID
+      this.searchBrand = item.brand
+      this.searchCategory = item.category
       this.clickedSearchItem = "showItem"
+
       setTimeout(() => {
         this.searchInput = ''
       }, 100);

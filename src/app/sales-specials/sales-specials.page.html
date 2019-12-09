@@ -119,14 +119,14 @@
             </div>
           </div>
         </div> -->
-        <div *ngFor="let item of allProducts">
+        <div *ngFor="let item of allBrandSales">
           <div *ngIf="brandName === 'All'">
 
             <div *ngIf="item.brand === 'Kwanga' || item.brand === 'Dankie Jesu'">
               <div class="SubCat">
                 <div class="gridder">
-                  <img defer [src]="item.pictures.link" *ngIf='item.pictures' alt="">
-                  <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="!item.pictures" alt="">
+                  <img defer [src]="item.link" *ngIf='item.link' alt="">
+                  <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="!item.link" alt="">
                   <div id="info">
                     <h5>{{item.data.name}}</h5>
                     <p>{{item.data.description}}.</p>
@@ -151,15 +151,15 @@
             <div *ngIf="item.brand === 'Dankie Jesu'">
               <div class="SubCat">
                 <div class="gridder">
-                  <img defer [src]="item.pictures.link" *ngIf='item.pictures' alt="">
-                  <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="!item.pictures" alt="">
+                  <img defer [src]="item.link" *ngIf='item.link' alt="">
+                  <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="!item.link" alt="">
                   <div id="info">
                     <h5>{{item.data.name}}</h5>
                     <p>{{item.data.description}}.</p>
                     <p><b>R {{item.data.price}}</b></p>
                     <div class="options">
                       <!-- <div
-                        (click)="togglePromo(item.productID, item.brand, item.category, item.data.name, item.data.description, item.data.price, item.pictures.link)">
+                        (click)="togglePromo(item.productID, item.brand, item.category, item.data.name, item.data.description, item.data.price, item.link.link)">
                         Promote</div> -->
                       <div
                         (click)="toggleUpdate(item.productID, item.brand, item.category, item.data.name, item.data.description, item.data.price, item.pictures.link)">
@@ -177,8 +177,8 @@
             <div *ngIf="item.brand === 'Kwanga'">
               <div class="SubCat">
                 <div class="gridder">
-                  <img defer [src]="item.pictures.link" *ngIf='item.pictures' alt="">
-                  <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="!item.pictures" alt="">
+                  <img defer [src]="item.link" *ngIf='item.link' alt="">
+                  <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="!item.link" alt="">
                   <div id="info">
                     <h5>{{item.data.name}}</h5>
                     <p>{{item.data.description}}.</p>
@@ -190,8 +190,8 @@
                       <div
                         (click)="toggleUpdate(item.productID, item.brand, item.category, item.data.name, item.data.description, item.data.price, item.pictures.link)">
                         Update</div>
-                      <div (click)='hideItem(item.productID, item.brand, item.category)'>Hide</div>
-                      <div (click)='deleteItem(item.productID, item.brand, item.category)'>Delete</div>
+                      <div (click)='hideItem(item.productID)'>Hide</div>
+                      <div (click)='deleteItem(item.productID)'>Delete</div>
                     </div>
                   </div>
                 </div>

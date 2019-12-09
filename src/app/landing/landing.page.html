@@ -2,22 +2,23 @@
   <div class="searchResults" *ngIf="searchInput">
     Search Results
     <ion-list *ngFor="let item of searchArray">
-      <ion-item (click)="showHideSearchDetails()">{{item.data.name}}</ion-item>
+      <ion-item (click)="showHideSearchDetails(item)">{{item.data.name}}</ion-item>
     </ion-list>
   </div>
   <div class="clicked-from-search" *ngIf="clickedSearchItem === 'showItem'">
     <div>
-      <button id="dismisser" (click)="showHideSearchDetails()">
+      <button id="dismisser" (click)="showHideSearchDetails(item)">
         <ion-icon name="close"></ion-icon>
       </button>
-      <img src="../../assets/imgs/331249_1_800.jpeg" alt="">
+      <img src="../../assets/imgs/331249_1_800.jpeg" *ngIf='!searchPic' alt="">
+      <img [src]="searchPic" *ngIf='searchPic' alt="">
       <div class="product-information-search">
-        <input type="text" placeholder="Item Name">
-        <input type="text" placeholder="Price (R)">
-        <textarea rows="4" type="text" placeholder="Description"></textarea>
-        <ion-button color="dark">Update</ion-button>
-        <ion-button color="medium">Hide</ion-button>
-        <ion-button color="danger">Delete</ion-button>
+        <input type="text" placeholder="Item Name" [(ngModel)]='searchName'>
+        <input type="text" placeholder="Price (R)" [(ngModel)]='searchPrice'>
+        <textarea rows="4" type="text" placeholder="Description" [(ngModel)]='searchDescription'></textarea>
+        <ion-button color="dark" (click)='updateItem()'>Update</ion-button>
+        <ion-button color="medium" (click)='hideItem()'>Hide</ion-button>
+        <ion-button color="danger" (click)='deleteItem()'>Delete</ion-button>
       </div>
     </div>
   </div>
@@ -76,7 +77,7 @@
           </div>
           <div class="items-list">
             <ion-card *ngFor='let item of allProducts'>
-              <img [src]="item.pictures.link" *ngIf='item.pictures' alt="">
+              <img [src]="item.link" *ngIf='item.link' alt="">
               <p><b>{{item.data.name}}</b></p>
               <p>{{item.data.quantity}}</p>
 
@@ -115,18 +116,18 @@
           <div class="items">
             <div class="box-item" (click)='viewSales("viewAll")'>
               <p id="item-label1">View All Specials</p>
-              <img class="bg" src="../../assets/imgs/images.jpg" *ngIf='!allSpecialsPicture' alt="">
-              <img class="bg" [src]="allSpecialsPicture" *ngIf='allSpecialsPicture' alt="">
+              <!-- <img class="bg" src="../../assets/imgs/images.jpg" *ngIf='!allSpecialsPicture' alt=""> -->
+              <img class="bg" src="https://firebasestorage.googleapis.com/v0/b/broken-stool.appspot.com/o/clothes%2F08hGnhI4XSIwbQ9qY2Wb?alt=media&token=166fe9d6-30d2-4512-ac0f-af8e7f9e7aa6" *ngIf='allSpecialsPicture' alt="">
             </div>
             <div class="box-item" (click)='viewSales("Dankie Jesu")'>
               <p id="item-label">Dankie Jesu Clothing</p>
-              <img class="bg" src="../../assets/imgs/images.jpg" *ngIf='!dankieJesuSpecialsPicture' alt="">
-              <img class="bg" [src]="dankieJesuSpecialsPicture" *ngIf='dankieJesuSpecialsPicture' alt="">
+              <!-- <img class="bg" src="../../assets/imgs/images.jpg" *ngIf='!dankieJesuSpecialsPicture' alt=""> -->
+              <img class="bg" src="https://firebasestorage.googleapis.com/v0/b/broken-stool.appspot.com/o/clothes%2F6qqPZbeyylRdNnkxyJ2K?alt=media&token=976dbe35-5ee2-4dbb-ba85-5330fbbd8a17" *ngIf='dankieJesuSpecialsPicture' alt="">
             </div>
             <div class="box-item" (click)='viewSales("Kwanga")'>
               <p id="item-label">Kwanga Apparel</p>
-              <img class="bg" src="../../assets/imgs/images.jpg" *ngIf='!kwangaSpecialsPicture' alt="">
-              <img class="bg" [src]="kwangaSpecialsPicture" *ngIf='kwangaSpecialsPicture' alt="">
+              <!-- <img class="bg" src="../../assets/imgs/images.jpg" *ngIf='!kwangaSpecialsPicture' alt=""> -->
+              <img class="bg" src="https://firebasestorage.googleapis.com/v0/b/broken-stool.appspot.com/o/clothes%2FbmaQWCCKXVTCF0KLvThX?alt=media&token=ca79efc9-e56a-4356-b129-e562fcf0ae67" alt="">
             </div>
           </div>
         </div>
@@ -142,8 +143,8 @@
           <div class="items">
             <div class="box-item" *ngFor='let item of summerGear'>
               <p id="item-label">{{item.data.name}}</p>
-              <img class="bg" [src]="item.pictures.link" *ngIf='item.pictures' alt="">
-              <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="!item.pictures" alt="">
+              <img class="bg" [src]="item.link" *ngIf='item.link' alt="">
+              <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="!item.link" alt="">
             </div>
 
           </div>
@@ -161,8 +162,8 @@
           <div class="items">
             <div class="box-item" *ngFor='let item of winterGear'>
               <p id="item-label">{{item.data.name}}</p>
-              <img class="bg" [src]="item.pictures.link" *ngIf='item.pictures' alt="">
-              <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="!item.pictures" alt="">
+              <img class="bg" [src]="item.link" *ngIf='item.link' alt="">
+              <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="!item.link" alt="">
             </div>
 
           </div>
@@ -180,8 +181,8 @@
           <div class="items">
             <div class="box-item" *ngFor='let item of kwangaGear'>
               <p id="item-label1">{{item.data.name}}</p>
-              <img class="bg" [src]="item.pictures.link" *ngIf='item.pictures' alt="">
-              <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="!item.pictures" alt="">
+              <img class="bg" [src]="item.link" *ngIf='item.link' alt="">
+              <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="!item.link" alt="">
             </div>
 
           </div>

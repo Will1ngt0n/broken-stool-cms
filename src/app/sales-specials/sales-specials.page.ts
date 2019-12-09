@@ -120,6 +120,7 @@ export class SalesSpecialsPage implements OnInit {
     this.getReadyOrders()
     this.getClosedOrders()
     this.getInventory()
+    this.loadSales()
   }
   signOutPopup(){
     this.presentLogoutConfirmAlert()
@@ -170,10 +171,10 @@ export class SalesSpecialsPage implements OnInit {
           }else{
             this.toggleKwanga()
           }
-          this.loadPictures().then(result => {
-            console.log(result);
+          // this.loadPictures().then(result => {
+          //   console.log(result);
             
-          })
+          // })
         })
       }
     })
@@ -236,6 +237,11 @@ export class SalesSpecialsPage implements OnInit {
           console.log('ddsfds');
           this.allBrandSales[key].pictures = {link: this.pictures[i].link}
           console.log(this.allBrandSales[key])
+        }
+      }
+      for(let key in this.allProducts){
+        if(this.allProducts[key].productID === this.pictures[i].productID){
+          this.allProducts[key].pictures = {link : this.pictures[i].link}
         }
       }
       
@@ -377,18 +383,24 @@ export class SalesSpecialsPage implements OnInit {
     })
   }
 
-deleteItem(item, productID){
-  console.log(productID);
-  console.log(item);
-  
-  return this.productsService.deleteSpecialsItem(productID, item).then(result => {
-    console.log(result);
+deleteItem(productID){
+  return this.productsService.deleteSpecialsItem(productID).then(result => {
+    if(result === 'Deleted'){
+      this.loadSales()
+    }else if(result === 'Not Deleted'){
+      
+    }
   })
 }
 
-hideItem(item, productID){
-  return this.productsService.hideItem(productID, item).then(result => {
+hideItem(productID){
+  return this.productsService.hideSpecialsItem(productID).then(result => {
     console.log(result);
+    if(result === 'Successfully hidden'){
+      this.loadSales()
+    }else if(result === 'Could not hide item'){
+      
+    }
   })
 }
 
@@ -414,13 +426,7 @@ changeDepartment(event) {
   }
   this.checkValidity()
 }
-isSummer(data) {
-  if (data.target.checked === true) {
-    this.summer = true;
-  } else {
-    this.summer = false;
-  }
-}
+
 changeCategory() {
   console.log(event.target['value']);
   this.selectedCategory = event.target['value']
@@ -461,14 +467,6 @@ check(event, size) {
   this.checkValidity()
 }
 checkValidity(){
-  console.log(this.department);
-  console.log(this.selectedCategory);
-  console.log(this.itemName);
-  console.log(this.description);
-  console.log(this.price);
-  console.log(this.size);
-  console.log(this.color);
-
   if(this.selectedCategory === undefined || this.department === undefined || this.size.length === 0 || this.color.length === 0 || this.itemName === '' || this.description === '' || this.price === ''){
     this.addForm = false
     console.log(this.addForm);
@@ -495,17 +493,6 @@ checkColor(event, color){
     if (event.target.checked === true) {
       this.color.push(color)
       console.log(this.color);
-      // if(color === 'Black'){
-      //   this.blackAvailable = true
-      // }else if(color === 'Brown'){
-      //   this.brownAvailable = true
-      // }else if(color === 'Orange'){
-      //   this.orangeAvailable = true
-      // }else if(color === 'Yellow'){
-      //   this.yellowAvailable = true
-      // }else{
-      //   this.whiteAvailable = true
-      // }
     } else if (event.target.checked === false) {
       let index = this.color.indexOf(color)
       console.log(index);
@@ -513,8 +500,6 @@ checkColor(event, color){
       console.log(this.color);
     }
   }
-  console.log(event.target.checked);
-  console.log(event.target['name']);
   this.checkValidity()
 }
 
@@ -528,9 +513,6 @@ addProduct() {
 }
 addPicture(event){
   this.picture = <File>event.target.files[0]
-  console.log(<File>event.target.files)
-  console.log(this.picture);
-  
 }
 
 //Clearing all form variables and form inputs respectively
@@ -569,16 +551,26 @@ loadKwangaItems(){
 }
 loadDankieJesuItems(){
   let category : String
-  console.log('fgdfgdfggdgdg');
+  //console.log('fgdfgdfggdgdg');
   
   for(let key in this.dankieJesuCategories){
     category = this.dankieJesuCategories[key]
     this.loadItems(category, 'Dankie Jesu')
+
   }
 }
 loadViewedCategory(){
   
 }
+loadSales(){
+  return this.productsService.getBrandSales().then(result => {
+    console.log(result);
+    if(result  !== undefined && result !== null && result.length !== 0){
+      this.allBrandSales = result
+    }
+  })
+}
+
 loadItems(category, brand){
   let data : Array<any> = []
   return this.productsService.loadCategoryItems(category, brand).then(result => {
@@ -587,6 +579,8 @@ loadItems(category, brand){
     }
     for(let key in result){
       if(brand === 'Kwanga'){
+        console.log(result[key]);
+        
         this.kwangaProducts.push(result[key])
        // console.log(this.kwangaProducts);
         this.allProducts.push(result[key])
@@ -594,9 +588,10 @@ loadItems(category, brand){
         //console.log('I belong to Dankie Jesu');
         this.dankieJesuProducts.push(result[key])
         this.allProducts.push(result[key])
-        console.log(this.allProducts, 'I think i am running perfectly');
+        //console.log(this.allProducts, 'I think i am running perfectly');
         }
       }
+
     })
     }
   orderItems(){
@@ -606,7 +601,7 @@ loadItems(category, brand){
       for(let i = 0; i < 5; i++){this.winterGear.push(this.winterProducts[i])}
     }
 getInventory(){
-  console.log(this.allProducts, 'inventory')
+  //console.log(this.allProducts, 'inventory')
   
 }
 getPendingOrders(){
@@ -620,20 +615,20 @@ getPendingOrders(){
 getReadyOrders(){
   return this.productsService.getReadyOrders().then(result => {
     this.readyOrders = result
-    console.log(this.readyOrders, 'ready orders');
+    //console.log(this.readyOrders, 'ready orders');
   })
 }
 getClosedOrders(){
   return this.productsService.getOrderHistory().then(result => {
     if(result.length !== 0){
       this.history = result
-      console.log(this.history, 'closed orders');
+      //console.log(this.history, 'closed orders');
     }
   })
 }
 closeOrder(docID){
   return this.productsService.closedOrder(docID).then(result => {
-    console.log(result);
+    //console.log(result);
     
   })
 }

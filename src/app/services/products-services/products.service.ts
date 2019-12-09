@@ -26,6 +26,7 @@ export class ProductsService {
       description : description,
       isAccessory: accessory,
       isSummer: summer,
+      hideItem: false,
       timestamp : firebase.firestore.FieldValue.serverTimestamp(),
       dateAdded : moment(new Date()).format('LLLL')
     }).then(result => {
@@ -47,6 +48,12 @@ export class ProductsService {
       console.log(picture);
       
       storageRef.put(picture).then((data) => {
+        console.log(data);
+        data.ref.getDownloadURL().then(url => {
+          firebase.firestore().collection('Products').doc(department).collection(selectedCategory).doc(result.id).update({
+            pictureLink: url
+          })
+        })
         console.log('Saved');
       })
     })
@@ -155,63 +162,42 @@ export class ProductsService {
       return sales
     })
   }
-  getBrandSales(query){
-    //console.log(que);
-    
-    return firebase.firestore().collection('Specials').doc(query).collection('Bucket Hats').doc('Items').collection('Product').get().then(result => {
+  getBrandSales(){
+    return firebase.firestore().collection('Specials').get().then(result => {
       let sales : Array<any> = []
-    //  console.log(result);
+  ;
       
       for(let key in result.docs){
-      //  console.log(key);
-        let productID = result.docs[key].id
-      //  console.log(productID);
-     // console.log(result.docs[key].data());
-      let data = result.docs[key].data()
-      sales.push({productID: productID, category : data['category'], brand : data['brand'], currentPrice : data['currentPrice'], startDate : data['startDate'], endDate : data['endDate']})
-      }
-     // console.log(sales);
-      return sales
-    })
-
+          let productID = result.docs[key].id
+          let docData = result.docs[key].data()
+          console.log(docData);
+          
+          sales.push({productID: productID, data: docData, category: docData.category, brand: docData.brand, link: docData.pictureLink})
+        }
+        if(sales.length !== 0){
+          return sales
+        }
+      })
   }
-  // getSales(query){
-  //   console.log(query);
-  //   if(query === 'viewAll'){
-  //     return this.getAllSales().then(result => { 
-  //       return result  
-  //     })
-  //   }else{
-  //     return this.getBrandSales(query).then(result => {
-  //       return result
-  //     })
-  //   }
-  // }
   getRecentSummerItems(){
     return firebase.firestore().collection('Products').where('brand', '==', 'Dankie Jesu').where('isSummer', '==', true).orderBy('timestamp', 'desc').limit(5).get().then(result => {
-    //  console.log(result);
       let data = []
       for(let key in result.docs){
         let productID = result.docs[key].id
         let item = result.docs[key].data()
         data.push({productID : productID, brand: item['brand'], category : item['category'], description : item['description'], group : item['group'], name : item['name'], price : item['price']})
       }
-    //  console.log(data);
       return data
     })
   }
   getRecentWinterItems(){
     return firebase.firestore().collection('Products').where('brand', '==', 'Dankie Jesu').where('isSummer', '==', false).orderBy('timestamp', 'desc').limit(5).get().then(result => {
-     // console.log(result);
       let data = []
       for(let key in result.docs){
         let productID = result.docs[key].id
-       // console.log(productID);
-        
         let item = result.docs[key].data()
         data.push({productID : productID, brand: item['brand'], category : item['category'], description : item['description'], group : item['group'], name : item['name'], price : item['price']})
       }
-     // console.log(data);
       return data
     })
   }
@@ -248,19 +234,21 @@ export class ProductsService {
     })
   }
 
-  deleteSpecialsItem(productID, item){
-    return firebase.firestore().collection('Specials').doc(item.data.brand).collection(item.data.category).doc(productID).delete().then(result => {
+  deleteSpecialsItem(productID){
+    return firebase.firestore().collection('Specials').doc(productID).delete().then(result => {
     //  console.log(result);
-      return result
+      return 'Deleted'
     }).catch(error => {
       return 'Not deleted'
     })
   }
-  hideItem(productID, item){
-    return firebase.firestore().collection('Specials').doc(item.data.brand).collection(item.data.category).doc(productID).update({
+  hideSpecialsItem(productID){
+    return firebase.firestore().collection('Specials').doc(productID).update({
       hideItem : true
     }).then(result => {
-     // console.log(result);
+      return 'Successfully hidden'
+    }).catch(result => {
+      return 'Could not hide item'
     })
   }
 
@@ -307,6 +295,9 @@ export class ProductsService {
   loadCategoryItems(category, brand){
    // console.log(brand);
    // console.log(category);
+    // console.log(brand);
+    // console.log(category);
+    
     
     
     return firebase.firestore().collection('Products').doc(brand).collection(category).get().then(result => {
@@ -318,7 +309,9 @@ export class ProductsService {
       //  console.log(result.docs[key].data());
         let productID = result.docs[key].id
         let docData = result.docs[key].data()
-        data.push({productID: productID, data: docData, category: category, brand: brand})
+        //console.log(docData);
+        
+        data.push({productID: productID, data: docData, category: category, brand: brand, link: docData.pictureLink})
       }
       //console.log(data);
       if(data.length !== 0){
@@ -328,7 +321,9 @@ export class ProductsService {
   }
   deleteItemFromInventory(productID, brand, category){
     return firebase.firestore().collection('Products').doc(brand).collection(category).doc(productID).delete().then( result => {
-     // console.log(result);
+     return 'Deleted'
+    }).catch(result => {
+      return 'Failed to delete'
     })
   }
   hideProduct(productID, brand, category){
@@ -336,6 +331,9 @@ export class ProductsService {
       hideItem : true
     }).then(result => {
      // console.log(result);
+     return 'Product successfully hidden'
+    }).catch(result => {
+      return 'Product could not be deleted'
     })
   }
   showProduct(productID, brand, category){
@@ -343,6 +341,9 @@ export class ProductsService {
       hideItem : false
     }).then(result => {
      // console.log(result);
+     return 'Product successfully edited to show'
+    }).catch(result => {
+      return 'Product could not be shown'
     })
   }
   updateItem(itemID, itemBrand, itemCategory, itemPrice, itemDescription, itemName, sizes){
@@ -356,35 +357,72 @@ export class ProductsService {
       return 'success'
     })
   }
-  promoteItem(price, percentage, startDate, endDate, itemBrand, itemCategory, itemID){
-    return firebase.firestore().collection('Specials').doc(itemBrand).collection(itemCategory).doc(itemID).set({
+
+  updateItemsListItem(itemID, itemBrand, itemCategory, itemPrice, itemDescription, itemName, sizes, picture){
+    if(picture !== undefined || picture !== null || picture !== ''){
+      firebase.storage().ref('clothes' + itemID).delete().then(result => {
+        firebase.storage().ref('clothes' + itemID).put(picture).then(result => {
+          result.ref.getDownloadURL().then(url => {
+            firebase.firestore().collection('Products').doc(itemBrand).collection(itemCategory).doc(itemID).update({
+              pictureLink : url 
+            })
+          })
+        })
+      })
+    }
+    return firebase.firestore().collection('Products').doc(itemBrand).collection(itemCategory).doc(itemID).update({
+      price : itemPrice,
+      description : itemDescription,
+      name : itemName,
+      size: sizes
+    }).then(result => {
+
+      return 'success'
+    })
+  }
+  //search results update // updateProduct(), promoteItem(), deleteItem()
+  updateProduct(productID, brand, category, itemName, itemDescription, itemPrice){
+    return firebase.firestore().collection('Products').doc(brand).collection(category).doc(productID).update({
+      price : itemPrice,
+      description : itemDescription,
+      name : itemName
+    }).then(result => {
+
+      return 'Successfully updated product'
+    }).catch(result => {
+      return 'Product could not be updated'
+    })
+  }
+  promoteItem(price, percentage, startDate, endDate, itemBrand, itemCategory, itemID, itemName, itemImageLink, description){
+    return firebase.firestore().collection('Specials').doc(itemID).set({
       saleprice : price,
       discount: percentage,
       startDate : startDate,
       endDate : endDate,
-      hideItem : false
+      hideItem : false,
+      brand: itemBrand,
+      category: itemCategory,
+      pictureLink: itemImageLink,
+      name: itemName,
+      description: description,
+      // isAccessory: accessory,
+      // isSummer: summer,
+      // hideItem: false,
+      timestamp : firebase.firestore.FieldValue.serverTimestamp(),
     }).then(result => {
      // console.log(result);
       return 'success'
     })
   }
-
-  getInventory(){
-    
-  }
-  
   getPendingOrders(status){
     return firebase.firestore().collection('Order').where('status', '==', status).get().then(result => {
       let pendingOrder = []
-     // console.log(result);
-      
       for(let key in result.docs){
       //  console.log(result.docs[key].id);
         let refNo = result.docs[key].id
        // console.log(result.docs[key].data());
         let data = result.docs[key].data()
         let userID = data.userID
-        console.log(userID);
         //this.loadUser(userID)
 
         pendingOrder.push({refNo : refNo, details : data, noOfItems: data.product.length})
@@ -432,7 +470,7 @@ export class ProductsService {
         let data = result.docs[key].data()
         closedOrder.push({refNo : refNo, details : data})
       };
-      console.log(closedOrder);
+      //console.log(closedOrder);
         return closedOrder
       })
   }
