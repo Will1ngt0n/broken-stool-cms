@@ -567,6 +567,8 @@ loadSales(){
     console.log(result);
     if(result  !== undefined && result !== null && result.length !== 0){
       this.allBrandSales = result
+      console.log(this.allBrandSales[0].data.saleprice);
+      
     }
   })
 }
@@ -579,7 +581,7 @@ loadItems(category, brand){
     }
     for(let key in result){
       if(brand === 'Kwanga'){
-        console.log(result[key]);
+       // console.log(result[key]);
         
         this.kwangaProducts.push(result[key])
        // console.log(this.kwangaProducts);

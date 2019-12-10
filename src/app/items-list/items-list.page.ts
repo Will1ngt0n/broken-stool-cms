@@ -4,6 +4,7 @@ import { ProductsService } from '../services/products-services/products.service'
 import * as firebase from 'firebase'
 import { AuthService } from '../services/auth-services/auth.service';
 import { AlertController } from '@ionic/angular';
+import { ItemsListPageModule } from './items-list.module';
 @Component({
   selector: 'app-items-list',
   templateUrl: './items-list.page.html',
@@ -28,8 +29,9 @@ export class ItemsListPage implements OnInit {
   pictures : Array<any> = []
   //promos and updates
   //promos
-  itemName; itemPrice; itemDescription; itemBrand; itemCategory; itemID; itemImageLink
+  itemName; itemPrice; itemDescription; itemBrand; itemCategory; itemID; itemImageLink; selectedItem; itemSizes
   editName; editPrice; editDescription; editBrand; editCategory; editID; editPercentage; editStartDate; editEndDate
+  checkXS : boolean; checkS : boolean; checkM : boolean; checkL : boolean; checkXL : boolean; checkXXL : boolean; checkXXXL : boolean;
   //updates
   updateName; updatePrice; updateDescription; updateColors : Array<any> = []; updateSizes : Array<any> = []
 
@@ -103,15 +105,8 @@ export class ItemsListPage implements OnInit {
     this.department = undefined
     this.addForm = false
     this.formHasValues = false
-    // let date = moment(new Date()).format('LLLL');
-    // let tee = moment(new Date('10/12/2019')).format('LLLL')
-    // console.log(date);
-    // console.log(tee);
-    // if(date > tee){
-    //   console.log(date);
-      
-    // }
-
+    console.log(this.checkboxXS);
+    
     for(let key in this.status){
       this.getPendingOrders(this.status[key])
     }
@@ -469,7 +464,15 @@ export class ItemsListPage implements OnInit {
     })
 
   }
-
+  changeUpdatePrice(){
+    console.log('changing price');
+    
+    if(Number(this.updatePrice) < 0){
+      this.updatePrice = ''
+    }else if(Number(this.updatePrice) > 10000){
+      this.updatePrice = '10000'
+    }
+  }
   back(){
     this.route.navigate(['/landing'])
   }
@@ -486,7 +489,7 @@ export class ItemsListPage implements OnInit {
     console.log(price);
     
     
-    return this.productsService.promoteItem(price, this.editPercentage, this.editStartDate, this.editEndDate, this.itemBrand, this.itemCategory, this.itemID, this.itemName, this.itemImageLink, this.itemDescription).then(result => {
+    return this.productsService.promoteItem(price, this.editPercentage, this.editStartDate, this.editEndDate, this.itemBrand, this.itemCategory, this.itemID, this.itemName, this.itemImageLink, this.itemDescription, this.selectedItem).then(result => {
       console.log(result);
       if(result === 'success'){
         console.log(result);
@@ -497,6 +500,9 @@ export class ItemsListPage implements OnInit {
   deleteItem(productID, brand, category){
     return this.productsService.deleteItemFromInventory(productID, brand, category).then(result => {
       console.log(result);
+      if(result === 'Deleted'){
+        this.loadCategoryItems(category, brand)
+      }
     })
   }
   hideItem(productID, brand, category){
@@ -517,7 +523,10 @@ export class ItemsListPage implements OnInit {
       console.log(result);
       if(result === 'success'){
         console.log(result);
-         return this.dismissPromo()
+        this.currentViewedItems = []
+          this.loadCategoryItems(this.itemCategory, this.itemBrand)
+          return this.dismissPromo()
+         
       }
     })
   }
@@ -527,7 +536,7 @@ export class ItemsListPage implements OnInit {
   submitUpdatedItem(itemName, itemPrice, itemDescription){
 
   }
-  toggleUpdate(productID, brand, category, name, description, price, imageLink) {
+  toggleUpdate(productID, brand, category, name, description, price, imageLink, sizes) {
     var promoUpd = document.getElementsByClassName("del-upd-del") as HTMLCollectionOf<HTMLElement>;
 
     promoUpd[0].style.display = "flex";
@@ -539,8 +548,36 @@ export class ItemsListPage implements OnInit {
     this.itemCategory = category
     this.itemID = productID
     this.itemImageLink = imageLink
+    this.itemSizes = sizes
+    console.log(this.itemSizes);
+    console.log(this.checkboxXS);
+    this.checkXS =false ;this.checkS =false ;this.checkM =false ;this.checkL =false ;this.checkXL =false ;this.checkXXL =false ;this.checkXXXL =false ;
+    for(let key in this.itemSizes){
+      if(this.itemSizes[key] === 'XS'){
+        this.checkXS = true
+        this.updateSizes.push('XS')
+      }else if(this.itemSizes[key] === 'S'){
+        this.checkS = true
+        this.updateSizes.push('S')
+      }else if(this.itemSizes[key] === 'M'){
+        this.checkM = true
+        this.updateSizes.push('M')
+      }else if(this.itemSizes[key] === 'L'){
+        this.checkL = true
+        this.updateSizes.push('XL')
+      }else if(this.itemSizes[key] === 'XL'){
+        this.checkXL = true
+        this.updateSizes.push('XXL')
+      }else if(this.itemSizes[key] === 'XXL'){
+        this.checkXXL = true
+        this.updateSizes.push('XXL')
+      }else if(this.itemSizes[key] === 'XXXL'){
+        this.checkXXXL = true
+        this.updateSizes.push('XXXL')
+      }
+    }
   }
-  togglePromo(productID, brand, category, name, description, price, imageLink) {
+  togglePromo(productID, brand, category, name, description, price, imageLink, item) {
     var promoUpd = document.getElementsByClassName("del-upd-del") as HTMLCollectionOf<HTMLElement>;
 
     promoUpd[0].style.display = "flex";
@@ -552,6 +589,9 @@ export class ItemsListPage implements OnInit {
     this.itemCategory = category
     this.itemID = productID
     this.itemImageLink = imageLink
+    this.selectedItem = item
+    console.log(this.selectedItem);
+    
   }
   dismissPromo() {
     var promoUpd = document.getElementsByClassName("del-upd-del") as HTMLCollectionOf<HTMLElement>;

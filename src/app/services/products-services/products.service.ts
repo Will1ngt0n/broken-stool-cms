@@ -1,6 +1,7 @@
 import { Injectable, Query } from '@angular/core';
 import * as firebase from 'firebase'
 import * as moment from 'moment';
+import { toastController } from '@ionic/core';
 @Injectable({
   providedIn: 'root'
 })
@@ -359,16 +360,17 @@ export class ProductsService {
   }
 
   updateItemsListItem(itemID, itemBrand, itemCategory, itemPrice, itemDescription, itemName, sizes, picture){
-    if(picture !== undefined || picture !== null || picture !== ''){
-      firebase.storage().ref('clothes' + itemID).delete().then(result => {
-        firebase.storage().ref('clothes' + itemID).put(picture).then(result => {
-          result.ref.getDownloadURL().then(url => {
-            firebase.firestore().collection('Products').doc(itemBrand).collection(itemCategory).doc(itemID).update({
-              pictureLink : url 
-            })
-          })
-        })
+    console.log(picture,' I am pictrue');
+    
+    if(picture !== undefined){
+      console.log(picture);
+      
+      firebase.storage().ref('clothes/' + itemID).put(picture).then(result => {
+
       })
+    }else{
+      console.log('Picture is undefined');
+      
     }
     return firebase.firestore().collection('Products').doc(itemBrand).collection(itemCategory).doc(itemID).update({
       price : itemPrice,
@@ -381,7 +383,12 @@ export class ProductsService {
     })
   }
   //search results update // updateProduct(), promoteItem(), deleteItem()
-  updateProduct(productID, brand, category, itemName, itemDescription, itemPrice){
+  updateProduct(productID, brand, category, itemName, itemDescription, itemPrice, picture){
+    if(picture !== undefined){
+      firebase.storage().ref('clothes/' + productID).put(picture).then(result => {
+
+      })
+    }
     return firebase.firestore().collection('Products').doc(brand).collection(category).doc(productID).update({
       price : itemPrice,
       description : itemDescription,
@@ -393,7 +400,7 @@ export class ProductsService {
       return 'Product could not be updated'
     })
   }
-  promoteItem(price, percentage, startDate, endDate, itemBrand, itemCategory, itemID, itemName, itemImageLink, description){
+  promoteItem(price, percentage, startDate, endDate, itemBrand, itemCategory, itemID, itemName, itemImageLink, description, selectedItem){
     return firebase.firestore().collection('Specials').doc(itemID).set({
       saleprice : price,
       discount: percentage,
@@ -405,8 +412,11 @@ export class ProductsService {
       pictureLink: itemImageLink,
       name: itemName,
       description: description,
-      // isAccessory: accessory,
-      // isSummer: summer,
+      isAccessory: selectedItem.data.isAccessory,
+      isSummer: selectedItem.data.isSummer,
+      color: selectedItem.data.color,
+      quantity: selectedItem.data.quantity,
+      size: selectedItem.data.size,
       // hideItem: false,
       timestamp : firebase.firestore.FieldValue.serverTimestamp(),
     }).then(result => {
@@ -414,6 +424,34 @@ export class ProductsService {
       return 'success'
     })
   }
+  //getting pending orders as a table
+  getPendingOrdersList(){
+    return firebase.firestore().collection('Order').get().then(result => {
+      let pendingOrder = []
+
+      for(let key in result.docs){
+        let noOfItems : number = 0
+      console.log(result.docs[key].id);
+        let refNo = result.docs[key].id
+       console.log(result.docs[key].data());
+        let data = result.docs[key].data()
+        let userID = data.userID
+
+        //this.loadUser(userID)
+        console.log(data.product.length);
+        for(let i in data.product){
+          console.log(data.product[i]);
+          noOfItems = noOfItems + data.product[i].quantity
+          console.log(noOfItems);
+          
+        }
+        pendingOrder.push({refNo : refNo, details : data, noOfItems: noOfItems})
+      };
+      return pendingOrder
+      })
+  }
+
+  //getting pending orders according to status
   getPendingOrders(status){
     return firebase.firestore().collection('Order').where('status', '==', status).get().then(result => {
       let pendingOrder = []
@@ -509,20 +547,22 @@ export class ProductsService {
   getOrderDetails(refNo){
     return firebase.firestore().collection('Order').doc(refNo).get().then(result => {
       let item = result.data()
-      let data : Array<any> = []
-      console.log(item);
-      
-      data = [{details: item, refNo: refNo}]
+      let data : object = {}
+      let totalQuantity : number = 0
+      for(let key in item['product']){
+        totalQuantity = totalQuantity + item['product'][key]['quantity']
+      }
+      data = {details: item, refNo: refNo, totalQuantity: totalQuantity}
       return data
     })
   }
   getOrderHistoryDetails(refNo){
     return firebase.firestore().collection('orderHistory').doc(refNo).get().then(result => {
       let item = result.data()
-      let data : Array<any> = []
+      let data : object = {}
       console.log(item);
       
-      data = [{details: item, refNo: refNo}]
+      data = {details: item, refNo: refNo}
       console.log(data);
       
       return data
@@ -543,8 +583,8 @@ export class ProductsService {
   }
   cancelOrder(refNo, status, userID, products){
     return firebase.firestore().collection('orderHistory').doc(refNo).set({
+      receipt: 'Order Cancelled',
       status: status,
-      reciept: 'N/A',
       timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
       refNo: refNo,
       uid: userID,

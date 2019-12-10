@@ -13,9 +13,11 @@
       <img src="../../assets/imgs/331249_1_800.jpeg" *ngIf='!searchPic' alt="">
       <img [src]="searchPic" *ngIf='searchPic' alt="">
       <div class="product-information-search">
-        <input type="text" placeholder="Item Name" [(ngModel)]='searchName'>
-        <input type="text" placeholder="Price (R)" [(ngModel)]='searchPrice'>
-        <textarea rows="4" type="text" placeholder="Description" [(ngModel)]='searchDescription'></textarea>
+        <input type="text" placeholder="Item Name" maxlength="25" [(ngModel)]='searchName'>
+        <input type="text" placeholder="Price (R)"  (keyup)='changeSearchPrice();' [(ngModel)]='searchPrice'>
+        <textarea rows="4" type="text" placeholder="Description" maxlength="150" [(ngModel)]='searchDescription'></textarea>
+        <input #updateSearchPic width='100px' class='pictureInput' type="file" accept="image/jpeg, jpg, tif, png"
+        (change)='addUpdatePicture($event)'>
         <ion-button color="dark" (click)='updateItem()'>Update</ion-button>
         <ion-button color="medium" (click)='hideItem()'>Hide</ion-button>
         <ion-button color="danger" (click)='deleteItem()'>Delete</ion-button>
@@ -78,6 +80,7 @@
           <div class="items-list">
             <ion-card *ngFor='let item of allProducts'>
               <img [src]="item.link" *ngIf='item.link' alt="">
+              <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="!item.link" alt="">
               <p><b>{{item.data.name}}</b></p>
               <p>{{item.data.quantity}}</p>
 
@@ -192,7 +195,7 @@
 
         <div class="adding">
           <h4>Add Item</h4>
-          <select #departmentCombo (click)="changeDepartment($event);">
+          <select #departmentCombo (change)='changeDepartment($event); checkValidity()'>
             <option value='i' *ngFor='let i of departmentOptions' [value]='i'>{{i}}</option>
 
           </select><br>
@@ -201,12 +204,9 @@
             <option *ngFor='let x of categoryOptions' [value]='x'>{{x}}</option>
           </select><br>
 
-          <input type="text" class="user-input" placeholder="Item name" [(ngModel)]='itemName'
-            (keyup)='checkValidity()'>
-          <input #itemPrice type="number" class="user-input" placeholder="Price" [(ngModel)]='price'
-            (keyup)='checkValidity(); changePrice()'>
-          <textarea type="text" rows="5" class="user-input-area" placeholder="About the item" [(ngModel)]='description'
-            (keyup)='checkValidity()'></textarea>
+          <input type="text" maxlength='25' class="user-input" placeholder="Item name" [(ngModel)]='itemName' (keyup)='checkItemName();' >
+          <input #itemPrice type="number" class="user-input" placeholder="Price" [(ngModel)]='price' (keyup)='changePrice();'>
+          <textarea type="text" maxlength='150' rows="5" class="user-input-area" placeholder="About the item" [(ngModel)]='description' (keyup)='checkItemDescription();' ></textarea>
           <div class="sizes">
 
             <input #checkboxXS type='checkbox' name='checkboxXS' (change)='check($event, "XS")'> XS

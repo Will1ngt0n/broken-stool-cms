@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductsService } from '../services/products-services/products.service';
 import { AuthService } from '../services/auth-services/auth.service';
 import { AlertController } from '@ionic/angular';
-​
+​import * as moment from 'moment'
 @Component({
   selector: 'app-order-receipt',
   templateUrl: './order-receipt.page.html',
@@ -21,6 +21,7 @@ export class OrderReceiptPage implements OnInit {
   cell
   totalQuantity : Number
   routingPage
+  dateOrdered
   constructor(private alertController : AlertController, private authService : AuthService, private activatedRoute : ActivatedRoute, private productsService : ProductsService, private route : Router) {
 ​
   }
@@ -60,10 +61,14 @@ export class OrderReceiptPage implements OnInit {
   getOrderHistory(refNo, name){
     return this.productsService.getOrderHistoryDetails(refNo).then(result => {
       console.log(result)
-       this.item = result[0]
+       this.item = result
        //this.item['details'].name = name
        console.log(this.item);
       this.products = this.item['details']['orders']
+      let time = this.item['details']['date']
+      this.dateOrdered = moment(new Date(time)).format('DD/MM/YYYY')
+      console.log(this.dateOrdered);
+      
       //  this.quantity = this.products.length
       //this.totalPrice = this.item['details']['totalPrice']
        console.log(this.products);

@@ -5,8 +5,6 @@ import { ProductsService } from '../services/products-services/products.service'
 import * as moment from 'moment';
 import { NavController, AlertController } from '@ionic/angular';
 import { IonSlides } from '@ionic/angular';
-import { LoginPageModule } from '../login/login.module';
-import * as firebase from 'firebase'
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.page.html',
@@ -29,7 +27,7 @@ export class LandingPage implements OnInit {
   pictures: Array<any> = []
   departmentOptions: Array<any> = ['Select Department', 'Dankie Jesu', 'Kwanga']
   kwangaCategories: Array<any> = ['Formal', 'Traditional', 'Smart Casual', 'Sports Wear']
-  dankieJesuCategories: Array<any> = ['Vests', 'Caps', 'Bucket Hats', 'Shorts', 'Crop Tops', 'T-Shirts', 'Bags', 'Sweaters', 'Hoodies', 'Track Suits', 'Winter Hats', 'Beanies']
+  dankieJesuCategories: Array<any> = ['Vests', 'Caps', 'Bucket Hats', 'Shorts', 'Crop Tops', 'T-Shirts', 'Bags', 'Sweaters', 'Hoodies', 'Track Suits', 'Beanies']
   categoryOptions: Array<any> = ['Select Category']
   inventoryItems: Array<any> = []
   summer: boolean;
@@ -95,6 +93,7 @@ export class LandingPage implements OnInit {
   searchProductID
   searchBrand
   searchCategory
+  updateSearchPic : File
 
   sliderConfig = {
     pagination: '.swiper-pagination',
@@ -131,8 +130,8 @@ export class LandingPage implements OnInit {
     this.colors = { red: '' }
     this.accessory = false;
     this.summer = false;
-    this.department = undefined
-    this.selectedCategory = undefined
+    this.department = 'Select Department'
+    this.selectedCategory = 'Select Category'
     this.addForm = false
     this.formHasValues = false
     this.itemName = ''
@@ -149,18 +148,18 @@ export class LandingPage implements OnInit {
       console.log(date);
 
     }
-
-    for (let key = 0; key < this.status.length; key++) {
-      this.getPendingOrders(this.status[key])
-      if (key === this.status.length - 1) {
-        this.orderItems()
-      }
-    }
+    //getting users who ordered
+    // for (let key = 0; key < this.status.length; key++) {
+    //   this.getPendingOrders(this.status[key])
+    //   if (key === this.status.length - 1) {
+    //     this.orderItems()
+    //   }
+    // }
 
     this.getReadyOrders()
     this.getOrderHistory()
     this.getInventory()
-
+    this.getPendingOrdersList()
   }
   signOutPopup() {
     this.presentLogoutConfirmAlert()
@@ -228,35 +227,41 @@ export class LandingPage implements OnInit {
     console.log(event.target['value']);
     this.department = event.target['value']
     if (this.department === 'Dankie Jesu') {
-      this.categoryOptions = ['Select Category', 'Vests', 'Caps', 'Bucket Hats', 'Shorts', 'Crop Tops', 'T-Shirts', 'Sweaters', 'Hoodies', 'Track Suits', 'Winter Hats', 'Beanies', 'Bags']
+      this.categoryOptions = ['Select Category', 'Vests', 'Caps', 'Bucket Hats', 'Shorts', 'Crop Tops', 'T-Shirts', 'Sweaters', 'Hoodies', 'Track Suits', 'Beanies', 'Bags']
     }
     if (this.department === 'Kwanga') {
       this.categoryOptions = ['Select Category', 'Formal', 'Traditional', 'Smart Casual', 'Sports wear']
     }
     if (this.department === 'Select Department') {
-      this.department = undefined
+      console.log('I am not selected department');
+      
+      this.department = 'Select Department'
       this.nativeCategory.nativeElement.disabled = true   ////
       this.nativeCategory.nativeElement.value = 'Select Category'   ///
     }else{
       this.nativeCategory.nativeElement.disabled = false   ////
     }
-    this.checkValidity()
+    //this.checkValidity()
   }
 
   changeCategory() {
-    console.log(event.target['value']);
+    //console.log(event.target['value']);
     this.selectedCategory = event.target['value']
     if (this.selectedCategory === 'Select Category') {
-      this.selectedCategory = undefined
+      this.selectedCategory = 'Select Category'
     }
-    if(this.selectedCategory === 'Vests' || this.selectedCategory === 'Caps ' || this.selectedCategory === 'Bucket Hats' || this.selectedCategory === 'Shorts' || this.selectedCategory === 'Crop Tops' || this.selectedCategory === 'T-Shirts'){
+    if(this.selectedCategory === 'Vests' || this.selectedCategory === 'Caps' || this.selectedCategory === 'Bucket Hats' || this.selectedCategory === 'Shorts' || this.selectedCategory === 'Crop Tops' || this.selectedCategory === 'T-Shirts'){
       this.summer = true
-    }   /// 'Sweaters', 'Hoodies', 'Track Suits', 'Winter Hats', 'Beanies', 'Bags')
-    if(this.selectedCategory === 'Sweaters' || this.selectedCategory === 'Hoodies' || this.selectedCategory === 'Track Suits' || this.selectedCategory === 'Winter Hats' || this.selectedCategory === 'Beanies'){
+      //console.log(this.summer);
+      
+    }   /// 'Sweaters', 'Hoodies', 'Track Suits', 'Beanies', 'Bags')
+    if(this.selectedCategory === 'Sweaters' || this.selectedCategory === 'Hoodies' || this.selectedCategory === 'Track Suits' || this.selectedCategory === 'Beanies'){
       this.summer = false
+      //console.log(this.summer);
+      
     }
     
-    if(this.selectedCategory === 'Bags'){
+    if(this.selectedCategory === 'Bags' || this.selectedCategory === 'Caps' || this.selectedCategory === 'Bucket Hats' || this.selectedCategory === 'Beanies'){
       this.accessory = true   ///, 'Bags'))
     }else{
       this.accessory = false
@@ -269,33 +274,63 @@ export class LandingPage implements OnInit {
 
   check(event, size) {
 
-    console.log(size);
-    console.log(this.size);
+    //console.log(size);
+    //console.log(this.size);
     let checkbox = event.target['name']
     if (checkbox) {
       if (event.target.checked === true) {
         this.size.push(size)
-        console.log(this.size);
+       // console.log(this.size);
       } else if (event.target.checked === false) {
         let index = this.size.indexOf(size)
-        console.log(index);
+       // console.log(index);
         this.size.splice(index, 1)
-        console.log(this.size);
+        //console.log(this.size);
       }
     }
-    console.log(event.target.checked);
-    console.log(event.target['name']);
+   // console.log(event.target.checked);
+   // console.log(event.target['name']);
     this.checkValidity()
   }
-
+  changeSearchPrice(){
+    console.log('changing price');
+    
+    if(Number(this.searchPrice) < 0){
+      this.searchPrice = ''
+    }else if(Number(this.searchPrice) > 10000){
+      this.searchPrice = '10000'
+    }
+  }
   changePrice(){
     if(Number(this.price) < 0){
-      this.price = '0'
+      this.price = ''
     }else if(Number(this.price) > 10000){
       this.price = '10000'
     }
+    console.log(this.price);
+    if(this.price === null){
+      this.price = ''
+    }
+    console.log(this.price);
+    
+    this.checkValidity()
+  }
+  checkItemName(){
+    console.log(this.itemName);
+    
+    this.checkValidity()
+  }
+  checkItemDescription(){
+    console.log(this.description);
+    //
+    this.checkValidity()
   }
   checkValidity() {
+    console.log('running');
+    
+    if(this.nativeCategory.nativeElement.disabled === true){
+      this.selectedCategory = 'Select Category'
+    }
     if (this.selectedCategory === undefined || this.selectedCategory === 'Select Category' || this.department === undefined || this.department === 'Select Department' || this.size.length === 0 || this.color.length === 0 || this.itemName === '' || this.description === '' || this.price === '' || this.fileInput.nativeElement.value === '' || this.picture === undefined) {
       this.addForm = false
       console.log(this.addForm);
@@ -304,16 +339,13 @@ export class LandingPage implements OnInit {
       this.addForm = true
       console.log(this.addForm);
     }
-    if (this.department !== undefined || this.department !== 'Select Department' || this.selectedCategory !== 'Select Category' || this.selectedCategory !== undefined || this.size.length !== 0 || this.color.length !== 0 || this.itemName !== '' || this.description !== '' || this.price !== '' || this.fileInput.nativeElement.value !== '' || this.picture !== undefined) {
+    if (this.department !== 'Select Department' || this.selectedCategory !== 'Select Category' || this.size.length !== 0 || this.color.length !== 0 || this.itemName !== '' || this.description !== '' || this.price !== '' || this.fileInput.nativeElement.value !== '' || this.picture !== undefined) {
       this.formHasValues = true
       console.log(this.formHasValues, 'form has values');
      // this.btnClearForm.nativeElement.disabled = false
-    } 
-    // else {
-    //   this.formHasValues = false
-    //   console.log(this.formHasValues, 'form has values');
-    //   //this.btnClearForm.nativeElement.disabled = true
-    // }
+    }else{
+      this.formHasValues = false
+    }
   }
   checkColor(event, color) {
     this.checkValidity()
@@ -356,6 +388,7 @@ export class LandingPage implements OnInit {
     this.price = ''
     this.description = ''
     this.size = [];
+    this.color = []
     this.picture = undefined
     this.fileInput.nativeElement.value = ''
     this.departmentCombo.nativeElement.value ='Select Department'
@@ -456,6 +489,20 @@ export class LandingPage implements OnInit {
   getInventory() {
     console.log(this.allProducts, 'yugfg7g76gyg6gt7677');
 
+  }
+  getPendingOrdersList(){
+    return this.productService.getPendingOrdersList().then(result => {
+      console.log(result);
+      if (result.length !== 0) {
+        for (let key in result) {
+          this.pendingOrders.push(result[key])
+          console.log(this.pendingOrders);
+        }
+        for (let key in this.pendingOrders) {
+          this.loadUserName(this.pendingOrders[key].details.userID)
+        }
+      }
+    })
   }
   getPendingOrders(status) {
     return this.productService.getPendingOrders(status).then(result => {
@@ -727,12 +774,12 @@ export class LandingPage implements OnInit {
       }
     }
   }
-
+  addUpdatePicture(event){
+    this.updateSearchPic =  <File>event.target.files[0]
+  }
   updateItem(){
-    return this.productService.updateProduct(this.searchProductID, this.searchBrand, this.searchCategory, this.searchName, this.searchDescription, this.searchPrice).then(result => {
-      if(result === 'Success'){
-        
-      }
+    return this.productService.updateProduct(this.searchProductID, this.searchBrand, this.searchCategory, this.searchName, this.searchDescription, this.searchPrice, this.updateSearchPic).then(result => {
+        console.log(result);
     })
   }
   hideItem(){

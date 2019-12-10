@@ -29,7 +29,7 @@
             </div>
             <div class="toFlex">
               <p id="SubHeader">Date of Purchase</p>
-              <p id="dayDate">20/11/2019</p>
+              <p id="dayDate">{{dateOrdered}}</p>
             </div>
             <p id="subHeader">
               Items
@@ -62,7 +62,8 @@
               Items Ordered
             </p>
             <ion-card *ngFor='let item of products'>
-              <img [src]="item.pictures.link" *ngIf='item.pictures'  alt="">
+              <img [src]="item.picture" *ngIf='item.picture'  alt="">
+              <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="!item.picture" alt="">
               <div class="cont-container">
                 <h4>{{item.product_name}}</h4>
                 <p>R {{item.cost}}</p>

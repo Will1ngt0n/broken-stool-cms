@@ -26,25 +26,25 @@
         <p id="topic-item"><b>{{promoUdpate}}</b></p>
         <img *ngIf='itemImageLink' [src]="itemImageLink" alt="" id="item-image">
         <div class="item-data">
-          <h3>Wu-Tang Hoodie</h3>
+          <h3>{{updateName}}</h3>
           <p class="item-detail">
-            R 399.90
+            R {{updatePrice}}
           </p>
           <p class="item-detail">Choose Avalable Sizes</p>
           <div class="sizes-colours-item">
-            <ion-checkbox color="primary" name='checkboxXS' (ionChange)='checkSizeUpdateCheckboxes($event, "XS")'></ion-checkbox>
+            <input type='checkbox' color="primary" [checked]='checkXS' #checkboxXS name='checkboxXS' (change)='checkSizeUpdateCheckboxes($event, "XS")'>
             <p id="text-size">XS</p>
-            <ion-checkbox color="primary" name='checkboxS' (ionChange)='checkSizeUpdateCheckboxes($event, "S")'></ion-checkbox>
+            <input type='checkbox' color="primary" [checked]='checkS' #checkboxS name='checkboxS' (change)='checkSizeUpdateCheckboxes($event, "S")'>
             <p id="text-size">S</p>
-            <ion-checkbox color="primary" name='checkboxM' (ionChange)='checkSizeUpdateCheckboxes($event, "M")'></ion-checkbox>
+            <input type='checkbox' color="primary" [checked]='checkM' #checkboxM name='checkboxM'(change)='checkSizeUpdateCheckboxes($event, "M")'>
             <p id="text-size">M</p>
-            <ion-checkbox color="primary" name='checkboxL' (ionChange)='checkSizeUpdateCheckboxes($event, "L")'></ion-checkbox>
+            <input type='checkbox' color="primary" [checked]='checkL' #checkboxL name='checkboxL' (change)='checkSizeUpdateCheckboxes($event, "L")'>
             <p id="text-size">L</p>
-            <ion-checkbox color="primary" name='checkboxXL' (ionChange)='checkSizeUpdateCheckboxes($event, "XL")'></ion-checkbox>
+            <input type='checkbox' color="primary" [checked]='checkXl' #checkboxXL name='checkboxXL' (change)='checkSizeUpdateCheckboxes($event, "XL")'>
             <p id="text-size">XL</p>
-            <ion-checkbox color="primary" name='checkboxXXL' (ionChange)='checkSizeUpdateCheckboxes($event, "XXL")'></ion-checkbox>
+            <input type='checkbox' color="primary" [checked]='checkXXL' #checkboxXXL name='checkboxXXL' (change)='checkSizeUpdateCheckboxes($event, "XXL")'>
             <p id="text-size">XXL</p>
-            <ion-checkbox color="primary" name='checkboxXXXL' (ionChange)='checkSizeUpdateCheckboxes($event, "XXXL")'></ion-checkbox>
+            <input type='checkbox' color="primary" [checked]='checkXXXL' #checkboxXXXL name='checkboxXXXL' (change)='checkSizeUpdateCheckboxes($event, "XXXL")'>
             <p id="text-size">XXXL</p>
           </div>
           <input #pictureUpdate width='100px' class='pictureInput' type="file" accept="image/jpeg, jpg, tif, png"
@@ -58,11 +58,11 @@
             <div></div>
             <div></div>
           </div>
-          <input type="text" placeholder="Item Name" [(ngModel)]='updateName'/><br/>
+          <input type="text" placeholder="Item Name" maxlength="25" [(ngModel)]='updateName'/><br/>
   ​
-          <input type="number" placeholder="Price" [(ngModel)]='updatePrice'/>
+          <input type="number" placeholder="Price" (keyup)='changeUpdatePrice();' [(ngModel)]='updatePrice'/>
           <br/>
-          <textarea placeholder="Item Description" rows="3" [(ngModel)]='updateDescription'></textarea>
+          <textarea placeholder="Item Description" maxlength="150" rows="3" [(ngModel)]='updateDescription'></textarea>
           <div class="gridded-inputs">
             <ion-button color="danger" (click)="dismissPromo()">Cancel</ion-button>
             <ion-button color="success" (click)='updateItem()'>Update</ion-button>
@@ -165,8 +165,8 @@
                 <p>{{item.data.description}}.</p>
                 <p><b>R {{item.data.price}}</b></p>
                 <div class="options">
-                  <div (click)="togglePromo(item.productID, item.brand, item.category, item.data.name, item.data.description, item.data.price, item.link)">Promote</div>
-                  <div (click)="toggleUpdate(item.productID, item.brand, item.category, item.data.name, item.data.description, item.data.price, item.link)">Update</div>
+                  <div (click)="togglePromo(item.productID, item.brand, item.category, item.data.name, item.data.description, item.data.price, item.link, item)">Promote</div>
+                  <div (click)="toggleUpdate(item.productID, item.brand, item.category, item.data.name, item.data.description, item.data.price, item.link, item.data.size)">Update</div>
                   <div (click)='hideItem(item.productID, item.brand, item.category)'>Hide</div>
                   <div (click)='deleteItem(item.productID, item.brand, item.category)'>Delete</div>
                 </div>
@@ -193,7 +193,7 @@
         <input type="text" class="user-input" placeholder="Item name" [(ngModel)]='productName' (keyup)='checkValidity()'>
         <input type="number" class="user-input" placeholder = "Price" [(ngModel)]='price'  (keyup)='checkValidity()'>
         <textarea type="text" rows="5" class="user-input-area" placeholder="About the item" [(ngModel)]='description'  (keyup)='checkValidity()'></textarea>
-        <div class="sizes">
+        <!-- <div class="sizes">
           
       <input type='checkbox' name='checkboxXS'  (change)='check($event, "XS")'> XS
       <input type='checkbox' name='checkboxS'  (change)='check($event, "S")'> S 
@@ -202,7 +202,7 @@
       <input type='checkbox' name='checkboxXL'  (change)='check($event, "XL")'> XL
       <input type='checkbox' name='checkboxXXL'  (change)='check($event, "XXL")'> XXL
       <input type='checkbox' name='checkboxXXXL'  (change)='check($event, "XXXL")'> XXXL
-        </div>
+        </div> -->
         <!-- <input width='100px' type="file" value='Insert black picture' [(ngModel)]='picture'/> -->
         <!-- Div for colors, checkboxes work but currently can't add pictures -->
         <div class='colors' >

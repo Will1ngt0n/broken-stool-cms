@@ -29,7 +29,7 @@
             </div>
             <div class="toFlex">
               <p id="SubHeader">Date of Purchase</p>
-              <p id="dayDate">20/11/2019</p>
+              <p id="dayDate">{{time}}</p>
             </div>
             <p id="subHeader">
               Items
@@ -51,10 +51,10 @@
                 <p>Collection</p>
               </div>
             </div>
-            <p id="subHeader">
+            <p id="subHeader" *ngIf='deliveryAddress'>  <!-- Added by V-->
               Order Address
             </p>
-            <p id="address">4877 Ugago Street Protea Glen Ext 3 Johannesburg 1819</p>
+            <p id="address">{{deliveryAddress}}</p>
             <p id="Notifier" *ngIf="status === 'collected'">Order has been closed.</p>
             <ion-button color="dark" (click)='goBack()'>Go Back</ion-button>
           </div>
@@ -62,20 +62,20 @@
             <p class="titleName">
               Items Ordered
             </p>
-            <ion-card>
-              <img [src]="item.pictures.link" *ngIf='item.pictures' alt="">
-              <div class="cont-container"  *ngFor='let item of products'>
+            <ion-card  *ngFor='let item of products'>
+              <img [src]="item.picture" *ngIf='item.picture' alt="">
+              <div class="cont-container" >
                 <h4>{{item.product_name}}</h4>
-                <p>R {{item.unitCost}}</p>
+                <p>R {{item.cost}}</p>
                 <p><b>QTY</b> {{item.quantity}}</p>
               </div>
             </ion-card>
           </div>
 
           <div id="buttons">
-            <div class="to-buttons">
+            <div class="to-buttons" *ngIf='status'>
               <div (click)='cancelOrder()' *ngIf="status !== 'collected'">Cancel Order</div>
-              <div (click)='processOrder()' *ngIf="status === 'recieved'">Process Order</div>
+              <div (click)='processOrder()' *ngIf="status === 'received'">Process Order</div>
               <div (click)='orderReady()' *ngIf="status === 'processed'">Ready for Collection</div>
               <div (click)='orderCollected()' *ngIf="status === 'ready'">Collected</div>
             </div>

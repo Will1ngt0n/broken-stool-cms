@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductsService } from '../services/products-services/products.service';
 import { AuthService } from '../services/auth-services/auth.service';
 import { AlertController } from '@ionic/angular';
+import * as moment from 'moment';
 declare var window
 @Component({
   selector: 'app-pending-order',
@@ -21,6 +22,10 @@ export class PendingOrderPage implements OnInit {
   cell
   totalQuantity : Number
   routingPage
+  ​status
+  time
+  deliveryType
+  deliveryAddress
   constructor(private alertController : AlertController, private authService : AuthService, private route : Router, private activatedRoute : ActivatedRoute, private productsService: ProductsService) { }
 ​
   ngOnInit() {
@@ -42,10 +47,6 @@ export class PendingOrderPage implements OnInit {
           console.log(this.routingPage);
           
           this.getOrder(this.refNo, name)
-          this.loadPictures().then(result => {
-            console.log(result);
-            
-          })
         })
       }
     })
@@ -85,59 +86,37 @@ export class PendingOrderPage implements OnInit {
   }
 getOrder(refNo, name){
  return this.productsService.getOrderDetails(refNo).then(result => {
-    this.item = result[0]
+   console.log(result);
+   
+    this.item = result
     this.item['details'].name = name
-    console.log(this.item);
+    //console.log(this.item);
+    let timestamp = this.item['details']['timestamp']
+    //console.log(timestamp);
+    this.time = moment(new Date(timestamp)).format('DD/MM/YYYY')
+    //console.log(this.time);
+    let deliveryType = this.item['details']['deliveryType']
+    if(deliveryType === 'Collect'){
+      this.deliveryType = 'Collection'
+    }else if(deliveryType === 'Deliver'){
+      this.deliveryType = 'Delivery'
+    }
+
+    this.deliveryAddress = this.item['details']['address']
+    console.log(this.deliveryAddress);
+    
+    console.log(this.deliveryType);
+    
+    this.totalQuantity = this.item['totalQuantity']
     this.products = this.item['details']['product']
     this.quantity = this.products.length
     this.totalPrice = this.item['details']['totalPrice']
-    console.log(this.products);
-    this.countQuantity()
+    this.status = this.item['details']['status']
   })
 }
-countQuantity(){
-  this.totalQuantity = 0
-  for(let key in this.products){
-    this.totalQuantity = this.totalQuantity + this.products[key].quantity
-  }
-  console.log(this.totalQuantity);
-  
-}
+
 goBack(){
   this.route.navigate([this.routingPage])
-}
-​
-async loadPictures(){
-  return this.productsService.getPictures().then(result => {
-    console.log(result);
-    let pictures : Array<any> = []
-    for(let key in result.items){
-      result.items[key].getDownloadURL().then(link => {
-        let path = result.items[key].fullPath
-        let splitPath = path.split('/')
-        let pictureID = splitPath[splitPath.length -1]
-        // picture['link'] = link
-        // picture['productID'] = pictureID
-        this.pictures.push({link : link, productID : pictureID})
-        console.log(this.pictures);
-        this.insertPictures()
-       });
-       return result
-      }
-  })
-}
-​
-insertPictures(){
-  for(let i in this.pictures){
-    //Adding pictures to products arrays
-    for(let key in this.products){
-      if(this.pictures[i].productID === this.products[key].productID){
-        console.log('ddsfds');
-        this.products[key].pictures = {link: this.pictures[i].link}
-        console.log(this.products[key])
-      }
-    }
-  }
 }
 ​
 cancelOrder(){
