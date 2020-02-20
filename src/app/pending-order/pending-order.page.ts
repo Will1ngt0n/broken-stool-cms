@@ -358,7 +358,8 @@ getOrder(refNo, name){
     this.quantity = this.products.length
     this.deliveryType = this.item['details']['deliveryType']
     this.totalPrice = this.item['details']['totalPrice']
-
+    console.log(this.deliveryType);
+    
     if(this.deliveryType === 'Delivery'){
       this.deliveryAddress = this.userAddress
       this.deliveryFee = this.item['details']['deliveryCost']

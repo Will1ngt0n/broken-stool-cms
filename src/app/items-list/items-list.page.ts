@@ -8,6 +8,7 @@ import { AlertController, LoadingController } from '@ionic/angular';
 import { Location } from '@angular/common'
 import { RouteService } from '../services/route-services/route.service';
 import { NetworkService } from '../services/network-service/network.service';
+import { LoginPage } from '../login/login.page';
 import { PopoverController } from '@ionic/angular';
 @Component({
   selector: 'app-items-list',
@@ -354,6 +355,7 @@ export class ItemsListPage implements OnInit, OnDestroy {
         data.push({productID: productID, data: docData, category: category, brand: brand})
       }
       this.currentViewedItems = data
+      this.currentSelectedItems = data
       //console.log(data);
       if(this.pageLoader){
         this.loadingCtrl.dismiss()
@@ -478,6 +480,8 @@ export class ItemsListPage implements OnInit, OnDestroy {
           }
           this.promoUdpate = ''
           this.activatedRoute.params.subscribe(result => {
+            console.log(result);
+            
             console.log(result.id);
             let para = result.id
             let exists : boolean
@@ -499,15 +503,31 @@ export class ItemsListPage implements OnInit, OnDestroy {
               {category: 'Track Suits', brand: 'Dankie Jesu', title: 'Winter Gear', link: 'winter-gear'},
               {category: 'Beanies', brand: 'Dankie Jesu', title: 'Winter Gear', link: 'winter-gear'},
             ]
-            for(let key in parameters){
-              if(parameters[key].category === para){
-                reroute = false
-                break
-              }else{
-                reroute = true
-              }
-            }
-      
+            // for(let key in parameters){
+            //   if(parameters[key].category === para){
+            //     reroute = false
+            //     break
+            //   }else{
+            //     reroute = true
+            //   }
+            // }
+            // if(para === 'all-hidden-items'){
+            //   console.log(true);
+            //   this.runMe()
+            // }
+            // let cutPara = para.split('+')
+            // console.log(cutPara);
+            // let firstPara =  cutPara[0]
+            // console.log(firstPara);
+            
+            // console.log(para);
+            // console.log((this.link + '-hidden-items'));
+            
+            // if(para === (this.link + '-hidden-items')){
+            //   console.log(this.link,  true);
+              
+            // }
+            this.load16CategoryItems()
             return this.routeService.readParameters().then((result : object)=> {
               console.log(result);
                 this.currentCategory = result['category']
@@ -520,7 +540,12 @@ export class ItemsListPage implements OnInit, OnDestroy {
                   this.loc.replaceState('items-list/' + this.currentCategory)
                 }
                 this.loadCategoryItemsSnap(this.currentCategory, brand)
+                if(para === (this.link + '-hidden-items')){
+                  console.log(this.link,  true);
+                  
+                }
             })
+
           })
         }else{
           this.isConnected = false
@@ -564,9 +589,8 @@ export class ItemsListPage implements OnInit, OnDestroy {
     return this.productsService.promoteItem(this.salePrice, this.editPercentage, this.editStartDate, this.editEndDate, this.itemBrand, this.itemCategory, this.itemID, this.itemName, this.itemImageLink, this.itemDescription, this.selectedItem).then(result => {
       console.log(result);
       if(result === 'success'){
-        if(this.loadingCtrl){
           this.loadingCtrl.dismiss()
-        }
+        
         this.clearPromoForm()
         return this.dismissPromo()
       }else(
@@ -625,9 +649,8 @@ export class ItemsListPage implements OnInit, OnDestroy {
           return this.productsService.deleteSpecialsItem(productID, item).then(result => {
             console.log(result);
             if(result === 'success'){
-              if(this.loadingCtrl){
                 this.loadingCtrl.dismiss()
-              }
+              
             }
             //location.reload()
           })
@@ -643,9 +666,8 @@ export class ItemsListPage implements OnInit, OnDestroy {
     this.presentLoading()
     return this.productsService.deleteItemFromInventory(productID, brand, category, item).then(result => {
       if(result === 'Deleted'){
-        if(this.loadingCtrl){
-          this.loadingCtrl.dismiss()
-        }
+          //this.loadingCtrl.dismiss()
+        
       }
     })
   }
@@ -653,14 +675,11 @@ export class ItemsListPage implements OnInit, OnDestroy {
     this.presentLoading()
     return this.productsService.hideProduct(productID, brand, category, item).then(result => {
       if(result === 'success'){
-        if(this.loadingCtrl){
-          this.loadingCtrl.dismiss()
-        }
+          //this.loadingCtrl.dismiss()
+        
       }else if(result === 'error'){
-        if(this.loadingCtrl){
-          this.loadingCtrl.dismiss()
+          //this.loadingCtrl.dismiss()
         }
-      }
     })
   }
   showItem(productID, brand, category, item) {
@@ -668,11 +687,11 @@ export class ItemsListPage implements OnInit, OnDestroy {
     return this.productsService.showProduct(productID, brand, category, item).then(result => {
       if(result === 'success'){
         if(this.loadingCtrl){
-          this.loadingCtrl.dismiss()
+          //this.loadingCtrl.dismiss()
         }
       }else if(result === 'error'){
         if(this.loadingCtrl){
-          this.loadingCtrl.dismiss()
+          //this.loadingCtrl.dismiss()
         }
       }
     })
@@ -1041,6 +1060,74 @@ export class ItemsListPage implements OnInit, OnDestroy {
   }
   alreadyOnSale(){
     this.promoWarnAlert();
+  }
+  load16CategoryItems(){
+    // this.presentLoading()
+    // this.pageLoader = true
+    return this.productsService.load16CategoryItems().then((result : any) => {
+      if(result !== null && result.length > 0){
+        this.allProducts = result
+        console.log(this.allProducts);
+        
+      //this.inventoryLength = this.allProducts.length
+      //this.sortProducts()
+    }
+    if(this.pageLoader){
+      //this.loadingCtrl.dismiss()
+      //this.pageLoader = false
+    }
+    })
+  }
+  runMeClear(){
+    this.currentSelectedItems = this.currentViewedItems
+    this.togglePop()
+  }
+  hiddenItems : Array<any> = []
+  runMe(){
+    this.hiddenItems = []
+    console.log(this.currentViewedItems);
+    console.log(this.link);
+    
+    //this.loc.go('/items-list' + '/all+hidden-items')
+    for(let key in this.currentViewedItems){
+      if(this.currentViewedItems[key].data.hideItem === true){
+        console.log(true);
+        this.hiddenItems.push(this.currentViewedItems[key])
+      }
+    }
+    console.log(this.hiddenItems);
+    this.currentSelectedItems = this.hiddenItems
+    this.togglePop()
+  }
+  visibleItems : Array<any> = []
+  currentSelectedItems : Array<any> = []
+  runMeNot(){
+    this.visibleItems = []
+    for(let key in this.currentViewedItems){
+      if(this.currentViewedItems[key].data.hideItem === false){
+        console.log(true);
+        this.visibleItems.push(this.currentViewedItems[key])
+      }
+    }
+    console.log(this.visibleItems);
+    this.currentSelectedItems = this.visibleItems
+    this.togglePop()
+  }
+  
+  runMeDry(){
+    this.hiddenItems = []
+    console.log(this.allProducts);
+    console.log(this.link);
+    
+    //this.loc.go('/items-list' + '/' + this.link + '+hidden-items')
+    for(let key in this.allProducts){
+      if(this.allProducts[key].data.hideItem === true){
+        console.log(true);
+        this.hiddenItems.push(this.allProducts[key])
+      }
+    }
+    console.log(this.hiddenItems);
+    
   }
 
   popOpen: boolean = false;

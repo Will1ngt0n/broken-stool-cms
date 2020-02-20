@@ -48,9 +48,9 @@
 
 
                 <p><b>{{totalQuantity}}</b></p>
-                <p><b>R {{totalPrice}}</b></p>
-                <p><b>R {{deliveryFee}}</b></p>
-                <p><b>R {{grandTotal}}</b></p>
+                <p><b>{{totalPrice | currency : 'R'}}</b></p>
+                <p><b>{{deliveryFee | currency : 'R'}}</b></p>
+                <p><b>{{grandTotal | currency : 'R'}}</b></p>
                 <p>{{deliveryType}}</p>
               </div>
             </div>
@@ -115,7 +115,7 @@
               <img [src]="item.picture" alt="">
               <div class="cont-container">
                 <h4>{{item.product_name}}</h4>
-                <p>R {{item.cost}}</p>
+                <p>{{item.cost | currency : 'R'}}</p>
                 <p><b>QTY</b> {{item.quantity}}</p>
                 <p>Colour: {{item.color}}</p>
                 <p>Size: {{item.size}}</p>

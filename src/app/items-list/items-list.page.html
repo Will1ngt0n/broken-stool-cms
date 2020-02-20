@@ -150,12 +150,12 @@
             <ion-icon name="more"></ion-icon>
           </div>
           <div class="filterList">
-            <p>Show All</p>
-            <p>Show Hidden</p>
-            <p>Show Visible</p>
+            <p (click)='runMeClear()'>Show All</p>
+            <p (click)='runMe()'>Show Hidden</p>
+            <p (click)='runMeNot()'>Show Visible</p>
           </div>
         </div>
-        <div class="SubCat" *ngFor='let item of currentViewedItems'>
+        <div class="SubCat" *ngFor='let item of currentSelectedItems'>
           <div class="gridder">
             <div class="hidden" *ngIf='item.data.hideItem === true'>Hidden</div>
             <img defer [src]="item.data.pictureLink" *ngIf='item.data.pictureLink' alt="">
@@ -187,7 +187,10 @@
                 <div (click)='deleteItem(item.productID, item.brand, item.category, item)'>Delete</div>
               </div>
             </div>
+
           </div>
+
+
         </div>
         <div class="listEmpty" *ngIf="currentViewedItems.length == 0">
           <p>No items uploaded so far</p>
@@ -230,7 +233,7 @@
           <p>Show Visible</p>
         </div>
       </div>
-      <div *ngFor="let item of currentViewedItems">
+      <div *ngFor="let item of currentSelectedItems">
         <div>
 
           <div class="SubCats">
