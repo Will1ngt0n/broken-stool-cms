@@ -129,7 +129,7 @@
             <h5> Order History ({{orderHistoryLength}})</h5>
             <ion-icon name="close" id="closer" (click)="dismissList()"></ion-icon>
           </div>
-          <div class="items-list" *ngIf='history'>
+          <div class="items-list" *ngIf='history.length > 0'>
             <ion-card *ngFor='let item of history' class="item-card-list" (click)='viewOrderHistory(item)'>
               <p class="floating" *ngIf="item.details.status === 'cancelled'">Cancelled</p>
               <p class="floating" *ngIf="item.details.status !== 'cancelled'">{{item.details.status}}</p>
@@ -140,6 +140,10 @@
 
             </ion-card>
           </div>
+          <ion-card class="nothingHere" *ngIf="history.length == 0">
+            <p>You have no closed orders at the moment...</p>
+          </ion-card>
+
         </div>
         <div class="pending-items">
           <div class="title-top">
@@ -157,6 +161,9 @@
 
               <p>REF: {{item.refNo}}</p>
 
+            </ion-card>
+            <ion-card class="nothingHere" *ngIf="pendingOrders.length == 0">
+              <p>You have no pending orders at the moment...</p>
             </ion-card>
           </div>
         </div>
@@ -193,6 +200,9 @@
               </div>
 
             </ion-card>
+          <ion-card class="nothingHere" *ngIf='allProducts.length == 0 && !inventorySearch'>
+            <p>You have no products on your inventory, upload items on the right side panel to view them here...</p>
+          </ion-card>
           </div>
 
           <div class="items-list" *ngIf='allProducts && searchSideInventory.length !== 0'>

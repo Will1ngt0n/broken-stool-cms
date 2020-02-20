@@ -370,9 +370,9 @@
   background: black
 }
 
-.oneStat{
-  // background: red;
-}
+// .oneStat{
+//   background: red;
+// }
 .oneStat > div:nth-child(1){
   width: 30px !important;
   height: 30px !important;
@@ -380,9 +380,9 @@
   margin-top: -5px !important;
   background: #ffdf5a;
 }
-.twoStat{
+// .twoStat{
   // background: blue;
-}
+// }
 .twoStat > div:nth-child(3){
   width: 30px !important;
   height: 30px !important;
@@ -390,9 +390,9 @@
   margin-top: -5px !important;
   background: #ffdf5a;
 }
-.threeStat{
+// .threeStat{
   // background: #ffdf5a;
-}
+// }
 
 .threeStat > div:nth-child(5){
   width: 30px !important;
@@ -404,12 +404,12 @@
 .threeStat > div:nth-child(3){
   background: #ffdf5a !important;
 }
-.fourStat{
+// .fourStat{
   // background: orange;
-}
-.fourStat > div {
+// }
+// .fourStat > div {
   // background: green;
-}
+// }
 .fourStat > div:nth-child(7){
   width: 30px !important;
   height: 30px !important;
