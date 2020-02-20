@@ -228,9 +228,9 @@
           <ion-icon name="more"></ion-icon>
         </div>
         <div class="filterListS">
-          <p>Show All</p>
-          <p>Show Hidden</p>
-          <p>Show Visible</p>
+          <p (click)='runMeClear()'>Show All</p>
+          <p (click)='runMe()'>Show Hidden</p>
+          <p (click)='runMeNot()'>Show Visible</p>
         </div>
       </div>
       <div *ngFor="let item of currentSelectedItems">
