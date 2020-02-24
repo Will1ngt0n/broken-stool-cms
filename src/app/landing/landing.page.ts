@@ -2258,4 +2258,18 @@ console.log(val);
 
   //   this.checkValidity()
   // }
+
+  adderOpen: boolean = false;
+  isBrand: boolean = false;
+  removeAdder(){
+    this.adderOpen = false;
+  }
+  toggleAdderCat(){
+    this.adderOpen = true;
+    this.isBrand = false;  
+  }
+  toggleAdderBrand(){
+    this.adderOpen = true;
+    this.isBrand = true;
+  }
 }
