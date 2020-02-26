@@ -63,7 +63,7 @@
     padding: 5px;
 
     height: calc(100% - 300px);
-    overflow-y: scroll;
+    overflow-y:auto;
     background: white;
     textarea {
       width: 100%;
@@ -174,7 +174,7 @@ ion-list > div {
   left: 50%;
   top: 55px;
   height: 500px;
-  overflow-y: scroll;
+  overflow-y:auto;
   background: white;
   padding-top: 20px;
   transform: translateX(-50%);
@@ -250,7 +250,7 @@ ion-list > div {
   z-index: 100;
   width: 65%;
   background: white;
-  overflow-y: scroll;
+  overflow-y:auto;
   display: inline-block;
   ::-webkit-scrollbar {
     background: rgb(158, 156, 156);
@@ -260,9 +260,9 @@ ion-list > div {
 #right {
   width: 17.5%;
   height: 100%;
-  background: #f2f2f2;
+  background: white;
   position: relative;
-  overflow-y: scroll;
+  overflow-y:auto;
   overflow-x: hidden;
 }
 ion-searchbar {
@@ -277,18 +277,19 @@ ion-searchbar {
 .side-buttons {
   cursor: pointer;
   width: 100%;
-  height: 50px;
+  height: 85px;
   // margin-top: 2px;
   text-align: center;
-  line-height: 50px;
+  line-height: 85px;
   font-weight: bold;
   color: white;
 }
 .side-buttons:nth-child(even) {
-  background: rgb(155, 155, 155);
+  background: #000433;
+  // color: rgb(68, 68, 68)
 }
 .side-buttons:nth-child(odd) {
-  background: rgb(175, 175, 175);
+  background: rgb(0,3,36);
 }
 .helpDesk {
   cursor: pointer;
@@ -467,7 +468,7 @@ ion-searchbar {
     width: 100%;
     height: calc(100% - 50px);
 
-    overflow-y: scroll;
+    overflow-y:auto;
   }
   ion-card {
     background: white;
@@ -515,7 +516,7 @@ ion-searchbar {
     width: 100%;
     height: calc(100% - 50px);
 
-    overflow-y: scroll;
+    overflow-y:auto;
   }
   ion-card {
     background: white;
@@ -613,7 +614,7 @@ ion-searchbar {
     width: 100%;
     height: calc(100% - 100px);
 
-    overflow-y: scroll;
+    overflow-y:auto;
   }
   ion-card {
     background: white;
@@ -831,6 +832,7 @@ ion-searchbar {
     font-size: 14px;
     font-style: italic;
     padding-left: 10px;
+    padding-bottom: 10px;
   }
   .butuh {
     height: calc(100% - 10px);
@@ -918,7 +920,7 @@ ion-searchbar {
     height: calc(100% - 35px);
     background: white;
     animation: 300ms faderIn;
-    overflow-y: scroll;
+    overflow-y:auto;
     #smallOne,
     #smallTwo,
     #smallThree {
@@ -942,7 +944,7 @@ ion-searchbar {
     .forInventory {
       width: 100%;
       height: calc(100% - 10px);
-      overflow-y: scroll;
+      overflow-y:auto;
     }
   }
   .myItems {
@@ -1112,6 +1114,13 @@ label {
   position: relative;
   cursor: pointer;
   padding: 0px !important;
+}
+ion-col{
+  // border: 2px solid red;
+  // padding: 0;
+  margin: 0;
+  position: relative;
+  // margin-left: -2px;;
 }
 .name-holder {
   width: calc(100% - 10px);
@@ -1434,16 +1443,37 @@ ion-item {
     margin-top: 10px;
     text-align: center;
   }
+  .addBrandName{
+    // border: 1px solid red;
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    position: relative;
+  }
+  #brandImage{
+    // border: 2px solid green;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    color: white;
+    background: #7c0000;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    cursor: pointer;
+    // margin: 10px;
+    // margin-top: 10px !important;
+  }
   .input-spaces {
     padding-top: 10px;
     text-align: center;
     #brand-name {
-      width: 90%;
-      margin: 0 auto;
+      width: calc(95% - 20px);
+      margin: 0;
       height: 40px;
       padding: 5px;
       border: 1px solid grey;
-      border-radius: 5px;
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
     }
   }
   .cats {
@@ -1526,5 +1556,140 @@ ion-item {
   }
   #adder-button:active {
     background: #5a0000;
+  }
+}
+
+.brand-content {
+  width: 100%;
+  height: 100%;
+  // background: red;
+  overflow-y:auto;
+  padding: 5px;
+}
+.specials-bar {
+  width: calc(100% - 20px);
+  // background: blue;
+  margin: 10px auto;
+  // margin-top: 20px;
+}
+.specials-bar > div:nth-child(1) {
+  width: 100%;
+  height: 200px;
+  cursor: pointer;
+  // border: 2px solid red;
+  position: relative;
+  #image-and-text {
+    width: 100%;
+    height: 100%;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    p {
+      // font-weight: bold;
+      color: white;
+      width: 100%;
+      height: 50px;
+      background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+      padding-left: 20px;
+      padding-top: 20px;
+      position: absolute;
+      bottom: -16px;
+      font-family: "Poppins";
+    }
+  }
+}
+.specials-bar > div:nth-child(2) {
+  margin-top: 20px;
+  font-weight: bold;
+  font-family: "Poppins";
+  color: rgb(61, 61, 61);
+}
+
+.brands {
+  width: 100%;
+  display: flex;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  .brandName {
+    width: 100%;
+    height: 300px;
+    // background: blue;
+    // margin: 5px;
+    cursor: pointer;
+    transition: 300ms;
+    padding: 0;
+  }
+  // @media screen and (max-width: 1730px){
+  //  .brandName{
+  //    width: 23%;
+  //  } 
+  // }
+  .brandImage {
+    width: 100%;
+    height: 250px;
+    // background: gray;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: 300ms;
+    }
+  }
+  .brandName:hover {
+    background: rgb(240, 240, 240);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.219) ;
+    padding: 10px;
+    img{
+      height:calc(100% - 10px);
+    }
+  }
+  .brandName-text {
+    padding-top: 10px;
+    text-align: right;
+    color: rgb(54, 54, 54);
+    font-weight: bold;
+    font-family: "Poppins";
+  }
+}
+
+.all-bar {
+  width: calc(100% - 20px);
+  // background: blue;
+  margin: 10px auto;
+  // margin-top: 20px;
+}
+.showAllProducts{
+  width: 100%;
+  height: 50px;
+  background: rgb(255,223,90);
+  cursor: pointer;
+  line-height: 50px;
+  font-family: "Poppins";
+  padding-left: 20px;
+}
+
+#cam-ico, #cat-img{
+  display: none;
+}
+#cate{
+  padding-left: 40px;
+}
+
+.floating-camera{
+  width: 40px;
+  height: 40px;
+  // background: red;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  label{
+    // border: 2px solid green;
+    line-height: 40px;
+    padding-top: 2px;
+    cursor: pointer;
+    color: grey;
   }
 }

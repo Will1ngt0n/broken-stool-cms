@@ -63,7 +63,7 @@
             <!-- <ion-button color="dark" (click)='goBack()'>Go Back</ion-button> -->
             <div class="myStat">
               <p>Order Status</p>
-              <div id="orderStatus" class="oneStat" *ngIf="status === 'received'">
+              <div id="orderStatus" class="circles-container" *ngIf="status === 'received'">
                 <div>1</div>
                 <div></div>
                 <div>2</div>
@@ -213,6 +213,51 @@
           Order Address
         </p>
         <p *ngIf='deliveryAddress' id="address">{{deliveryAddress}}</p>
+        <div class="myStat-small" *ngIf="status">
+          <p>Order Status</p>
+          <div id="orderStatus" class="circles-container" *ngIf="status === 'received'">
+            <div>1</div>
+            <div></div>
+            <div>2</div>
+            <div></div>
+            <div>3</div>
+            <div></div>
+            <div>4</div>
+          </div>
+          <div id="orderStatus" class="twoStat" *ngIf="status === 'processed'">
+            <div>1</div>
+            <div></div>
+            <div>2</div>
+            <div></div>
+            <div>3</div>
+            <div></div>
+            <div>4</div>
+          </div>
+          <div id="orderStatus" class="threeStat" *ngIf="status === 'ready'">
+            <div>1</div>
+            <div></div>
+            <div>2</div>
+            <div></div>
+            <div>3</div>
+            <div></div>
+            <div>4</div>
+          </div>
+          <div id="orderStatus" class="fourStat" *ngIf="status === 'Delivered' || status === 'collected'">
+            <div>1</div>
+            <div></div>
+            <div>2</div>
+            <div></div>
+            <div>3</div>
+            <div></div>
+            <div>4</div>
+          </div>
+          <div id="orderStatus-labels">
+            <div>Received</div>
+            <div>In Progress</div>
+            <div>Ready</div>
+            <div>Delivered</div>
+          </div>
+        </div>
         <div>
           <ion-button color="danger" (click)='cancelOrder()' *ngIf="status === 'received'">Cancel Order</ion-button>
           <ion-button color="warning" (click)='processOrder()' *ngIf="status === 'received'">Process Order</ion-button>

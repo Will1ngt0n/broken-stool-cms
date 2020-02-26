@@ -321,6 +321,22 @@
     color: rgb(49, 49, 49);
   }
 }
+.myStat-small{
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.281);
+  // position: absolute;
+  // bottom: 10px;
+  // left: 10px;
+  width: calc(100% - 20px);
+  margin: 10px auto; 
+  p{
+    font-weight: bold;
+    font-size: 18px;
+    color: rgb(49, 49, 49);
+  }
+}
 #orderStatus{
   // height: 50px;
   width: 100%;

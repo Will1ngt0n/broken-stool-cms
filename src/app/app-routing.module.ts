@@ -7,6 +7,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'sign-in', redirectTo: 'login', pathMatch: 'full' },
   { path: 'kwanga-sub-categories', redirectTo: 'kwanga-sub-categories', pathMatch: 'full' },
+  { path: 'subcategories', redirectTo: 'subcategories', pathMatch: 'full' },
   { path: 'summer-gear', redirectTo: 'summer-gear', pathMatch: 'full' },
   { path: 'winter-gear', redirectTo: 'winter-gear', pathMatch: 'full' },
   { path: 'home/:id', loadChildren: () => import('./home/home.module').then( m => m.HomePageModule),},
@@ -22,9 +23,14 @@ const routes: Routes = [
   { path: 'pending-order', loadChildren: () => import('./pending-order/pending-order.module').then( m => m.PendingOrderPageModule),  canActivate: [AuthGuard]  },
   { path: 'home', redirectTo: 'home/FAQs', pathMatch: 'full' },
 
-  { path: '**', redirectTo: 'home/FAQs', pathMatch: 'full' },  {
+  { path: '**', redirectTo: 'home/FAQs', pathMatch: 'full' },
+  {
     path: 'popover',
     loadChildren: () => import('./popover/popover.module').then( m => m.PopoverPageModule)
+  },
+  {
+    path: 'subcategories',
+    loadChildren: () => import('./subcategories/subcategories.module').then( m => m.SubcategoriesPageModule)
   }
 
 
