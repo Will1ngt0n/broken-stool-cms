@@ -239,8 +239,10 @@ export class LandingPage implements OnInit {
               this.load16CategoryItems()
               this.nativeCategory.nativeElement.disabled = true
               //snapshots
-              this.refreshOrderHistory()
-              this.getPendingOrdersSnap()
+              this.snapTimer = setInterval( () => {
+                this.refreshOrderHistory()
+                this.getPendingOrdersSnap()
+              }, 3000)
               this.loadFormal('Kwanga', 'Formal')
               this.loadTraditional('Kwanga', 'Traditional')
               this.loadSmartCasual('Kwanga', 'Smart Casual')
@@ -281,6 +283,7 @@ export class LandingPage implements OnInit {
       }
     })
   }
+  snapTimer 
   loadRunFunction(){
     this.presentLoading()
     this.getCategories()
@@ -298,8 +301,11 @@ export class LandingPage implements OnInit {
     this.load16CategoryItems()
     this.nativeCategory.nativeElement.disabled = true
     //snapshots
-    this.refreshOrderHistory()
-    this.getPendingOrdersSnap()
+    this.snapTimer = setInterval( () => {
+      this.refreshOrderHistory()
+      this.getPendingOrdersSnap()
+    }, 3000)
+
     this.loadFormal('Kwanga', 'Formal')
     this.loadTraditional('Kwanga', 'Traditional')
     this.loadSmartCasual('Kwanga', 'Smart Casual')
@@ -332,12 +338,14 @@ export class LandingPage implements OnInit {
           this.getPendingOrders()
       
           this.getReadyOrders()
-          this.getOrderHistory()
+          //this.getOrderHistory()
           this.load16CategoryItems()
           this.nativeCategory.nativeElement.disabled = true
           //snapshots
-          this.refreshOrderHistory()
-          this.getPendingOrdersSnap()
+          this.snapTimer = setInterval( () => {
+            this.refreshOrderHistory()
+            this.getPendingOrdersSnap()
+          }, 3000)
           this.loadFormal('Kwanga', 'Formal')
           this.loadTraditional('Kwanga', 'Traditional')
           this.loadSmartCasual('Kwanga', 'Smart Casual')
@@ -944,6 +952,8 @@ export class LandingPage implements OnInit {
   getPendingOrdersSnap() {
     //Running pending orders snap
     return firebase.firestore().collection('Order').onSnapshot(result => {
+      console.log('okay, now we are running pending orders snapshot');
+      
       let pendingOrder : Array<any> = []
       let pendingOrderModified : object = {}
       let add : boolean
@@ -951,7 +961,9 @@ export class LandingPage implements OnInit {
       if(result.docChanges().length > 0){
         for(let key in result.docChanges()){
           let change = result.docChanges()[key]
-          if(change.type === 'modified' ){
+          if(change.type === 'added' ){
+            console.log('orders have been modified');
+
             let refNo = change.doc.id
             let data = change.doc.data()
             let userID = data.userID
@@ -963,11 +975,13 @@ export class LandingPage implements OnInit {
             console.log(pendingOrderModified);
             console.log(this.pendingOrders.length);
             if(this.pendingOrders.length === 0){
-              this.pendingOrders.push(pendingOrderModified)
+              this.pendingOrders.unshift(pendingOrderModified)
               this.pendingOrdersLength = this.pendingOrders.length
               this.loadUserName(userID)
-              return
+              //return
             }else if(this.pendingOrders.length > 0){
+              console.log('i am greater');
+              
                 add = false
                 for(let key in this.pendingOrders){
                   if(this.pendingOrders[key].refNo === pendingOrderModified['refNo']){
@@ -1008,6 +1022,9 @@ export class LandingPage implements OnInit {
             }
             // let index = this.pendingOrders.indexOf(pendingOrder)
             this.pendingOrdersLength = this.pendingOrders.length
+          }else if(change.type === 'added'){
+            console.log('maybe you belong to this nigga');
+            
           }
         }
       }
@@ -1063,6 +1080,8 @@ export class LandingPage implements OnInit {
   }
   refreshOrderHistory(){
     return firebase.firestore().collection('orderHistory').onSnapshot(result => {
+      console.log('okay, running snapshots');
+      
       let closedOrder : Array<any> = []
       let addHistory : boolean
       let refNo
@@ -1083,26 +1102,28 @@ export class LandingPage implements OnInit {
               closedOrder.push({refNo : refNo, details : data})
               if(closedOrder){
             }
+            for(let i in closedOrder){
+              totalPrice = 0
+              numberOfItems = 0
+              grandTotal = 0
+              for(let j in closedOrder[i].details.orders){
+                //console.log(closedOrder[i].details);
+                totalPrice = +totalPrice + +closedOrder[i].details.orders[j].cost * +closedOrder[i].details.orders[j].quantity
+                numberOfItems = +numberOfItems + +closedOrder[i].details.orders[j].quantity
+                if(closedOrder[i].details.deliveryType === 'Delivery'){
+                  grandTotal = Number(totalPrice) + 100
+                }else if(closedOrder[i].details.deliveryType === 'Collection'){
+                  grandTotal = Number(totalPrice)
+                }
+              }
+              closedOrder[i].details.totalPrice = totalPrice
+              closedOrder[i].details.numberOfItems = numberOfItems
+              closedOrder[i].details.grandTotal = grandTotal
+            }
           }
         }
         if(this.history.length === 0){
-          for(let i in closedOrder){
-            totalPrice = 0
-            numberOfItems = 0
-            grandTotal = 0
-            for(let j in closedOrder[i].details.orders){
-              //console.log(closedOrder[i].details);
-              totalPrice = +totalPrice + +closedOrder[i].details.orders[j].cost * +closedOrder[i].details.orders[j].quantity
-              numberOfItems = +numberOfItems + +closedOrder[i].details.orders[j].quantity
-              if(closedOrder[i].details.deliveryType === 'Delivery'){
-                grandTotal = Number(totalPrice) + 100
-              }else if(closedOrder[i].details.deliveryType === 'Collection'){
-                grandTotal = Number(totalPrice)
-              }
-            }
-            closedOrder[i].details.totalPrice = totalPrice
-            closedOrder[i].details.numberOfItems = numberOfItems
-            closedOrder[i].details.grandTotal = grandTotal
+        for(let i in closedOrder){
         this.history.unshift(closedOrder[i])
         this.orderHistoryLength = this.history.length
           }
@@ -1119,22 +1140,6 @@ export class LandingPage implements OnInit {
               }
             }
             if(addHistory === true){
-              totalPrice = 0
-              numberOfItems = 0
-              grandTotal = 0
-              for(let j in closedOrder[i].details.orders){
-                //console.log(closedOrder[i].details);
-                totalPrice = +totalPrice + +closedOrder[i].details.orders[i].cost * +closedOrder[i].details.orders[i].quantity
-                numberOfItems = +numberOfItems + +closedOrder[i].details.orders[i].quantity
-                if(closedOrder[i].details.deliveryType === 'Delivery'){
-                  grandTotal = Number(totalPrice) + 100
-                }else if(closedOrder[i].details.deliveryType === 'Collection'){
-                  grandTotal = Number(totalPrice)
-                }
-              }
-              closedOrder[i].details.totalPrice = totalPrice
-              closedOrder[i].details.numberOfItems = numberOfItems
-              closedOrder[i].details.grandTotal = grandTotal
               this.history.unshift(closedOrder[i])
               this.orderHistoryLength = this.history.length
             }else if(addHistory === false){
@@ -2277,3 +2282,7 @@ console.log(val);
     this.isBrand = true;
   }
 }
+
+
+
+//Check out this.getOrderHistory() { I commented out the other code to check if how snapshots alone work}

@@ -593,7 +593,7 @@ return new Promise((resolve, reject)  => {
       })
   }
   getPendingOrders(){
-    return firebase.firestore().collection('Order').get().then(result => {
+    return firebase.firestore().collection('Order').orderBy('timestamp', 'desc').get().then(result => {
       let pendingOrder = []
      // console.log(result);
       
