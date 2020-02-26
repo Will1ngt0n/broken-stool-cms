@@ -48,13 +48,13 @@
                   </div>
                 </div>                  
               </ion-col>
-              <ion-col size="3">
+              <ion-col size="3" *ngFor='let item of categories'>
                 <div class="brandName">
                   <div class="brandImage">
                     <img src="../../assets/imgs/3d2acdaf95ed9e473ddbb3bd433fed9f.jpg" alt="">
                   </div>
                   <div class="brandName-text">
-                    Lorem Ipsum
+                    {{item.data.name}}
                   </div>
                 </div>                  
               </ion-col>

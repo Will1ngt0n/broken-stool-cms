@@ -28,11 +28,11 @@ this.routeService.getLink().then(result => {
     })
 
   }
-
+  categories
   getCategories(){
     return this.productService.getBrandCategories('Dankie Jesu').then(result => {
       console.log(result);
-      
+      this.categories = result
     })
   }
   back(){

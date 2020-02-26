@@ -877,9 +877,12 @@ return new Promise((resolve, reject)  => {
   }
   getBrandCategories(query){
     return firebase.firestore().collection('category').where('brand', '==', query).get().then(result => {
-      for(let key in result){
-        
+      let products : Array<any> = []
+      for(let key in result.docs){
+        console.log(result.docs[key].data());
+        products.push({data: result.docs[key].data(), productID: result.docs[key].id})
       }
+      return products
     })
   }
 } 
