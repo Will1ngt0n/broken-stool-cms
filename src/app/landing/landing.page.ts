@@ -526,6 +526,10 @@ export class LandingPage implements OnInit {
     }else{
       this.nativeCategory.nativeElement.disabled = false   ////
     }
+    console.log(this.nativeCategory);
+    
+    console.log(this.nativeCategory.nativeElement.value);
+    
     this.checkValidity()
   }
   checkItemName(){
