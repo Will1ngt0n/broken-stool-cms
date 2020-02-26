@@ -16,10 +16,9 @@ export class SubcategoriesPage implements OnInit {
   constructor(private activatedRoute : ActivatedRoute, private routeService : RouteService, private alertController : AlertController, private authService : AuthService, private navCtrl : NavController, public route : Router, public productService : ProductsService) { }
 
   ngOnInit() {
-    this.activatedRoute.queryParams.subscribe(result => {
-      console.log(result);
-      
-    })
+this.routeService.getLink().then(result => {
+  
+})
     this.getCategories()
   }
 

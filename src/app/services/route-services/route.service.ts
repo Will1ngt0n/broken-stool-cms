@@ -16,7 +16,16 @@ export class RouteService {
       resolve ('success')
     })
   }
-
+  storeLink(link){
+    return new Promise( (resolve, reject) => {
+      this.localStorage.store('link', link)
+    })
+  }
+  getLink(){
+    return new Promise( (resolve, reject) => {
+      this.localStorage.retrieve('link')
+    })
+  }
   readParameters(){
     return new Promise((resolve, reject) => {
       let loc = this.loc['_platformLocation'].location.origin

@@ -7,6 +7,7 @@ import { NavController, AlertController, LoadingController } from '@ionic/angula
 import { IonSlides } from '@ionic/angular';
 import * as firebase from 'firebase'
 import { NetworkService } from '../services/network-service/network.service';
+import { RouteService } from '../services/route-services/route.service';
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.page.html',
@@ -139,7 +140,7 @@ export class LandingPage implements OnInit {
   updateName; updatePrice; updateDescription; updateColors: Array<any> = []; updateSizes: Array<any> = []
   pictureUpdate : File
 
-  constructor(private networkService : NetworkService, private alertController: AlertController, public loadingCtrl: LoadingController, public navCtrl: NavController, public route: Router, public authService: AuthService, public productService: ProductsService) {
+  constructor(private routeService : RouteService, private networkService : NetworkService, private alertController: AlertController, public loadingCtrl: LoadingController, public navCtrl: NavController, public route: Router, public authService: AuthService, public productService: ProductsService) {
     //console.log(this.department);
     this.categoryUpdateMatch = false
     this.kwangaSpecialsPicture = undefined
@@ -678,7 +679,10 @@ export class LandingPage implements OnInit {
     console.log(query);
     
     let parameters = query
-    this.route.navigate(['/subcategories', query])
+    this.routeService.storeLink(query)
+      this.route.navigate(['/subcategories', query])
+  
+
   }
 
   loadKwangaItems() {
