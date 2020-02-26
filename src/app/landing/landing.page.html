@@ -104,6 +104,80 @@
         </ion-button>
       </div>
     </div>
+  </div> 
+  <!-- -->
+  <div class="adder-overlay" *ngIf="adderOpen === true">
+    <div class="myDismisser" (click)="removeAdder()"></div>
+    <div class="adder-form" *ngIf="isBrand === true">
+      <div id="header-form">
+        Add a new brand
+        <div class="toDismiss" (click)="removeAdder()">
+          <ion-icon name="close"></ion-icon>
+        </div>
+      </div>
+      <div class="adder-inputs">
+        <div class="input-spaces">
+          <input type="text" placeholder="Brand Name" id="brand-name">
+          <div class="cats">
+           <input type="text" placeholder="Category">    
+           <button>Add</button>        
+          </div>
+          <div class="added-cats">
+
+            <!-- perform the for loop on this div -->
+            <div class="actual-cat">
+              <div class="imageUploader">
+                <input type="file" id="filer">
+                <label for="filer" id="camera-icon">
+                  <ion-icon name="camera"></ion-icon>
+                </label>
+              </div>
+              Sweaters
+              <div class="toRemove">
+                <ion-icon name="close"></ion-icon>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <button id="adder-button">Add Brand</button>
+      </div>
+    </div>
+    <div class="adder-form" *ngIf="isBrand === false">
+      <div id="header-form">
+        Add a new categories
+        <div class="toDismiss" (click)="removeAdder()">
+          <ion-icon name="close"></ion-icon>
+        </div>
+      </div>
+      <div class="adder-inputs">
+        <div class="input-spaces">
+          <!-- <input type="text" placeholder="Brand Name" id="brand-name"> -->
+          <div class="cats">
+           <input type="text" placeholder="Category">    
+           <button>Add</button>        
+          </div>
+          <div class="added-cats">
+
+            <!-- perform the for loop on this div -->
+            <div class="actual-cat">
+              <div class="imageUploader">
+                <input type="file" id="filer">
+                <label for="filer" id="camera-icon">
+                  <ion-icon name="camera"></ion-icon>
+                </label>
+              </div>
+              Sweaters
+              <div class="toRemove">
+                <ion-icon name="close"></ion-icon>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <button id="adder-button">Add Categories</button>
+      </div>
+    </div>
   </div>
   <div class="content-container">
     <div class="nav-bar">
@@ -123,13 +197,13 @@
     </div>
 
     <div class="body-content">
-      <div id="left" padding>
+      <div id="left">
         <div class="history-items">
           <div class="title-top">
             <h5> Order History ({{orderHistoryLength}})</h5>
             <ion-icon name="close" id="closer" (click)="dismissList()"></ion-icon>
           </div>
-          <div class="items-list" *ngIf='history'>
+          <div class="items-list" *ngIf='history.length > 0'>
             <ion-card *ngFor='let item of history' class="item-card-list" (click)='viewOrderHistory(item)'>
               <p class="floating" *ngIf="item.details.status === 'cancelled'">Cancelled</p>
               <p class="floating" *ngIf="item.details.status !== 'cancelled'">{{item.details.status}}</p>
@@ -140,6 +214,10 @@
 
             </ion-card>
           </div>
+          <ion-card class="nothingHere" *ngIf="history.length == 0">
+            <p>You have no closed orders at the moment...</p>
+          </ion-card>
+
         </div>
         <div class="pending-items">
           <div class="title-top">
@@ -157,6 +235,9 @@
 
               <p>REF: {{item.refNo}}</p>
 
+            </ion-card>
+            <ion-card class="nothingHere" *ngIf="pendingOrders.length == 0">
+              <p>You have no pending orders at the moment...</p>
             </ion-card>
           </div>
         </div>
@@ -193,6 +274,9 @@
               </div>
 
             </ion-card>
+          <ion-card class="nothingHere" *ngIf='allProducts.length == 0 && !inventorySearch'>
+            <p>You have no products on your inventory, upload items on the right side panel to view them here...</p>
+          </ion-card>
           </div>
 
           <div class="items-list" *ngIf='allProducts && searchSideInventory.length !== 0'>
@@ -448,14 +532,28 @@
 
         <div class="adding">
           <h4>Add Product</h4>
+          <div class="gridder">
           <select #departmentCombo (change)="changeDepartment($event); checkValidity()">
             <option value='i' *ngFor='let i of departmentOptions' [value]='i'>{{i}}</option>
-
-          </select><br>
-
-          <select #nativeCategory [disabled]='department === "Select Brand"' (change)="changeCategory($event);">
-            <option *ngFor='let x of categoryOptions' [value]='x'>{{x}}</option>
-          </select><br>
+          </select>
+          <div class="add-btn" (click)="toggleAdderBrand()">
+            <p>
+              <ion-icon name="add"></ion-icon>
+            </p>
+ 
+          </div>
+          </div>
+          <div class="gridder">
+            <select #nativeCategory [disabled]='department === "Select Brand"' (change)="changeCategory($event);">
+              <option *ngFor='let x of categoryOptions' [value]='x'>{{x}}</option>
+            </select>
+            <div class="add-btn" (click)="toggleAdderCat()">
+              <p>
+                <ion-icon name="add"></ion-icon>
+              </p>
+   
+            </div>
+          </div>
 
           <input type="text" maxlength='25' class="user-input" placeholder="Product name"
             [disabled]='selectedCategory === "Select Category"' [(ngModel)]='itemName'
@@ -531,6 +629,7 @@
       </div>
     </div>
   </div>
+
   <div class="mobile-view">
     <div class="small-nav">
       <div (click)="showLeftSide()" *ngIf="!miniSearchBarState">
@@ -661,14 +760,31 @@
       </div>
       <div *ngIf="adding === true" class="adding">
         <h4>Add Product</h4>
-        <select #mbdepartmentCombo (change)="changeDepartment($event);">
-          <option value='i' *ngFor='let i of departmentOptions' [value]='i'>{{i}}</option>
+        
+        <div class="gridder">
+          <select #mbdepartmentCombo (change)="changeDepartment($event);">
+            <option value='i' *ngFor='let i of departmentOptions' [value]='i'>{{i}}</option>
+          </select>
+          <div class="add-btn" (click)="toggleAdderBrand()">
+            <p>
+              <ion-icon name="add"></ion-icon>
+            </p>
+ 
+          </div>
+          </div>
 
-        </select><br>
-
-        <select #nativeCategory [disabled]='department === "Select Brand"' (change)="changeCategory($event);">
-          <option *ngFor='let x of categoryOptions' [value]='x'>{{x}}</option>
-        </select><br>
+          
+        <div class="gridder">
+          <select #nativeCategory [disabled]='department === "Select Brand"' (change)="changeCategory($event);">
+            <option *ngFor='let x of categoryOptions' [value]='x'>{{x}}</option>
+          </select>
+          <div class="add-btn" (click)="toggleAdderCat()">
+            <p>
+              <ion-icon name="add"></ion-icon>
+            </p>
+ 
+          </div>
+          </div>
 
         <input type="text" class="user-input" placeholder="Product name" maxlength="25"
           [disabled]='selectedCategory === "Select Category"' [(ngModel)]='itemName'

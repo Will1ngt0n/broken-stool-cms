@@ -147,7 +147,7 @@
             <a (click)='navigate()'>{{title}}</a> / {{currentCategory}}
           </div>
           <div class="optionsBtn" (click)="togglePop()">
-            <ion-icon name="more"></ion-icon>
+            <ion-icon name="funnel"></ion-icon>
           </div>
           <div class="filterList">
             <p (click)='runMeClear()'>Show All</p>
@@ -225,12 +225,12 @@
         </div>
 
         <div class="optionsBtn" (click)="togglePop()">
-          <ion-icon name="more"></ion-icon>
+          <ion-icon name="funnel"></ion-icon>
         </div>
         <div class="filterListS">
-          <p>Show All</p>
-          <p>Show Hidden</p>
-          <p>Show Visible</p>
+          <p (click)='runMeClear()'>Show All</p>
+          <p (click)='runMe()'>Show Hidden</p>
+          <p (click)='runMeNot()'>Show Visible</p>
         </div>
       </div>
       <div *ngFor="let item of currentSelectedItems">
