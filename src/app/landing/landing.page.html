@@ -108,6 +108,7 @@
   <!-- -->
   <div class="adder-overlay" *ngIf="adderOpen === true">
     <div class="myDismisser" (click)="removeAdder()"></div>
+    <!-- -->
     <div class="adder-form" *ngIf="isBrand === true">
       <div id="header-form">
         Add a new brand
@@ -117,21 +118,36 @@
       </div>
       <div class="adder-inputs">
         <div class="input-spaces">
+          <div class="addBrandName">
           <input type="text" placeholder="Brand Name" id="brand-name">
+          <div id="brandImage">
+            <label for="cam-ico">
+              <input type="file" id="cam-ico">
+            <ion-icon name="camera"></ion-icon>
+            </label>
+          </div>
+          </div>
           <div class="cats">
-           <input type="text" placeholder="Category">    
+
+            <div class="floating-camera">
+              <label for="cat-img">
+                <ion-icon name="camera"></ion-icon>
+              </label>
+              <input type="file" id="cat-img">
+            </div>
+           <input type="text" placeholder="Category" id="cate">    
            <button>Add</button>        
           </div>
           <div class="added-cats">
 
             <!-- perform the for loop on this div -->
             <div class="actual-cat">
-              <div class="imageUploader">
+              <!-- <div class="imageUploader">
                 <input type="file" id="filer">
                 <label for="filer" id="camera-icon">
                   <ion-icon name="camera"></ion-icon>
                 </label>
-              </div>
+              </div> -->
               Sweaters
               <div class="toRemove">
                 <ion-icon name="close"></ion-icon>
@@ -143,6 +159,7 @@
         <button id="adder-button">Add Brand</button>
       </div>
     </div>
+     <!-- -->
     <div class="adder-form" *ngIf="isBrand === false">
       <div id="header-form">
         Add a new categories
@@ -154,19 +171,20 @@
         <div class="input-spaces">
           <!-- <input type="text" placeholder="Brand Name" id="brand-name"> -->
           <div class="cats">
-           <input type="text" placeholder="Category">    
+
+            <div class="floating-camera">
+              <label for="cat-img">
+                <ion-icon name="camera"></ion-icon>
+              </label>
+              <input type="file" id="cat-img">
+            </div>
+           <input type="text" placeholder="Category" id="cate">    
            <button>Add</button>        
           </div>
           <div class="added-cats">
 
             <!-- perform the for loop on this div -->
             <div class="actual-cat">
-              <div class="imageUploader">
-                <input type="file" id="filer">
-                <label for="filer" id="camera-icon">
-                  <ion-icon name="camera"></ion-icon>
-                </label>
-              </div>
               Sweaters
               <div class="toRemove">
                 <ion-icon name="close"></ion-icon>
@@ -320,7 +338,49 @@
         </div>
       </div>
       <div id="mid">
-        <div class="slide-specials">
+        <div class="brand-content">
+          <div class="specials-bar">
+            <div>
+              <div id="image-and-text">
+                <p>Sales and Specials</p>
+                <img src="../../assets/imgs/images (2).jpg" alt="">
+              </div>
+            </div>
+            <div>Brands</div>
+          </div>
+          <div class="all-bar">
+            <div class="showAllProducts">
+              View all products
+            </div>
+          </div>
+          <div class="brands">
+            <!-- <div class="brandName">
+              <div class="brandImage">
+                <img src="../../assets/imgs/3d2acdaf95ed9e473ddbb3bd433fed9f.jpg" alt="">
+              </div>
+              <div class="brandName-text">
+                Lorem Ipsum
+              </div>
+            </div> -->
+            <ion-grid class="bigGrid">
+              <ion-row>
+                <ion-col size="3" (click)='viewMore("subcategories")'>
+                  <div class="brandName">
+                    <div class="brandImage">
+                      <img src="../../assets/imgs/3d2acdaf95ed9e473ddbb3bd433fed9f.jpg" alt="">
+                    </div>
+                    <div class="brandName-text">
+                      Lorem Ipsum
+                    </div>
+                  </div>                  
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </div>
+
+
+        <!-- <div class="slide-specials">
           <ion-item (click)='viewSales("viewAll")' color="medium">
             <ion-label id="my-label">Sales &amp; Specials</ion-label>
             <ion-note slot="end" color="primary">
@@ -526,7 +586,7 @@
               <div id="placeholder-s"></div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
       <div id="right">
 
@@ -619,8 +679,8 @@
               [(ngModel)]='newProductCode' (keyup)='checkValidity()'>
             <br>
             <div id="or">or</div>
-            <ion-button id="gen" [disabled]='!generateCode' (click)='autoGenerateCode()'>Generate Code</ion-button>
           </div>
+            <ion-button [disabled]='!generateCode' (click)='autoGenerateCode()' color="warning" expand="full">Generate Code</ion-button>
           <ion-button [disabled]='!addForm' (click)='addProduct()' expand="full" color="success">Add to Stall
           </ion-button>
           <ion-button #btnClearForm [disabled]='!formHasValues' (click)='clearForm()' expand="full" color="danger">Clear
@@ -851,8 +911,8 @@
             [(ngModel)]='newProductCode' (keyup)='checkValidity()'>
           <br>
           <div id="or">or</div>
-          <ion-button id="gen" [disabled]='!generateCode' (click)='autoGenerateCode()'>Generate Code</ion-button>
         </div>
+          <ion-button id="gen" [disabled]='!generateCode' (click)='autoGenerateCode()' expand="full">Generate Code</ion-button>
         <ion-button [disabled]='!addForm' (click)='addProduct()' expand="full" color="success">Add to Stall
         </ion-button>
         <ion-button #btnClearForm [disabled]='!formHasValues' (click)='mbclearForm()' expand="full" color="danger">Clear
@@ -865,7 +925,47 @@
       </div>
       <div class="butuh">
 
-        <ion-button expand="full" class="outerBtns" color="transparent" (click)='viewSales("viewAll")'>
+        <div class="brand-content">
+          <div class="specials-bar">
+            <div>
+              <div id="image-and-text">
+                <p>Sales and Specials</p>
+                <img src="../../assets/imgs/images (2).jpg" alt="">
+              </div>
+            </div>
+            <div>Brands</div>
+          </div>
+          <div class="all-bar">
+            <div class="showAllProducts">
+              View all products
+            </div>
+          </div>
+          <div class="brands">
+            <!-- <div class="brandName">
+              <div class="brandImage">
+                <img src="../../assets/imgs/3d2acdaf95ed9e473ddbb3bd433fed9f.jpg" alt="">
+              </div>
+              <div class="brandName-text">
+                Lorem Ipsum
+              </div>
+            </div> -->
+            <ion-grid class="bigGrid">
+              <ion-row>
+                <ion-col size="6" >
+                  <div class="brandName">
+                    <div class="brandImage">
+                      <img src="../../assets/imgs/3d2acdaf95ed9e473ddbb3bd433fed9f.jpg" alt="">
+                    </div>
+                    <div class="brandName-text">
+                      Lorem Ipsum
+                    </div>
+                  </div>                  
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </div>
+        <!-- <ion-button expand="full" class="outerBtns" color="transparent" (click)='viewSales("viewAll")'>
           <span>Sales &amp; Specials <ion-icon slot="end" name="arrow-forward"></ion-icon></span>
         </ion-button>
         <div class="slide-section">
@@ -914,7 +1014,7 @@
               </div>
             </ion-slide>
           </ion-slides>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

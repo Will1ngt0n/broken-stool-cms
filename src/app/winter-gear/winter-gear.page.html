@@ -8,8 +8,8 @@
         </div>
         <div id="searchbar">
         </div>
-        <div id="admin" (click)='signOutPopup()'>
-          <p>SIGN OUT</p>
+        <div id="admin">
+          <!-- <p (click)='signOutPopup()'>SIGN OUT</p> -->
         </div>
       </div>
     </div>
@@ -25,7 +25,44 @@
             Winter Gear
           </div>
         </div>
-        <div class="SubCat" (click)='navigateForward("Hoodies")'>
+
+        
+          
+        <div class="brands">
+          <!-- <div class="brandName">
+            <div class="brandImage">
+              <img src="../../assets/imgs/3d2acdaf95ed9e473ddbb3bd433fed9f.jpg" alt="">
+            </div>
+            <div class="brandName-text">
+              Lorem Ipsum
+            </div>
+          </div> -->
+          <ion-grid class="bigGrid">
+            <ion-row>
+              <ion-col size="12">
+                <div class="brandName">
+                  <div class="brandImage">
+                    <img src="../../assets/imgs/3d2acdaf95ed9e473ddbb3bd433fed9f.jpg" alt="">
+                  </div>
+                  <div class="brandName-text-head">
+                    View All Dankie Jesu Items
+                  </div>
+                </div>                  
+              </ion-col>
+              <ion-col size="3">
+                <div class="brandName">
+                  <div class="brandImage">
+                    <img src="../../assets/imgs/3d2acdaf95ed9e473ddbb3bd433fed9f.jpg" alt="">
+                  </div>
+                  <div class="brandName-text">
+                    Lorem Ipsum
+                  </div>
+                </div>                  
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+        <!-- <div class="SubCat" (click)='navigateForward("Hoodies")'>
           <h3>Hoodies</h3>
           <img src="../../assets/imgs/Placeholders/Hoodie.png" alt="">
         </div>
@@ -40,7 +77,7 @@
         <div class="SubCat" (click)='navigateForward("Winter Hats")'>
           <h3>Winter Hats</h3>
           <img src="../../assets/imgs/Placeholders/Winter hat.png" alt="">
-        </div>
+        </div> -->
 
       </div>
       <div id="right">
