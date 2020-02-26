@@ -12,12 +12,16 @@ export class ProductsService {
   constructor(public loadingCtrl: LoadingController) {
     this.products = []
   }
-  addItem(department, selectedCategory,  itemName, description, price, size, accessory, summer, color, picture, numberOfProducts, productCode){
-    let object_result 
+  addItem(brand, brandID, selectedCategory, selectedCategoryID, itemName, description, price, size, accessory, summer, color, picture, productCode){
+    let resultID
 return new Promise((resolve, reject)  => {
-      firebase.firestore().collection('Products').doc(department).collection(selectedCategory).add({
+      firebase.firestore().collection('Products').add({
         quantity: 1,
         color: color,
+        brand: brand,
+        brandID: brandID,
+        category: selectedCategory,
+        categoryID: selectedCategoryID,
         productCode: productCode,
         pictureLink: 'none',
         price : Number(price),
@@ -29,29 +33,23 @@ return new Promise((resolve, reject)  => {
         isSummer: summer,
         onSale: false,
         timestamp : firebase.firestore.FieldValue.serverTimestamp(),
-        dateAdded : moment(new Date()).format('LLLL')
+        dateAdded : new Date().getTime()
+      }).then(result => {
+        console.log(result.id);
+        resultID = result.id
+        console.log(resultID);
+        
       })
-    .then(result => { // (**)
-      console.log(result, 'second chain');
-      object_result = result
-      firebase.firestore().collection('NumberOfProducts').doc('MwjotZqh3JPKx0qEcuui').get().then((result : any) => {
-        console.log(result, 'third chain');
-        let number : string = String(Number(result.data().numberOfProducts) + 1)
-        firebase.firestore().collection('NumberOfProducts').doc('MwjotZqh3JPKx0qEcuui').update({
-          numberOfProducts: number
-        })
-      })
-    })
     .then( (result) => { // (***)
       console.log(result, 'fourth chain');
-      let storageRef = firebase.storage().ref('clothes/' + object_result.id)
+      let storageRef = firebase.storage().ref('clothes/' + resultID)
       console.log(picture);
       storageRef.put(picture).then((data : any) => {
         console.log(data, 'fifth chain');
         console.log(data);
         data.ref.getDownloadURL().then(url => {
           console.log(url, 'sixth chain');
-          firebase.firestore().collection('Products').doc(department).collection(selectedCategory).doc(object_result.id).update({
+          firebase.firestore().collection('Products').doc(resultID).update({
             pictureLink: url,
             hideItem: false
           }).then(result => {
@@ -68,7 +66,7 @@ return new Promise((resolve, reject)  => {
   })
 
   }
-  addItems(department, selectedCategory,  itemName, description, price, size, accessory, summer, color, picture, numberOfProducts){
+  addItems(department, selectedCategory,  itemName, description, price, size, accessory, summer, color, picture){
    // console.log(department);
   //  console.log(selectedCategory);
     return firebase.firestore().collection('Products').doc(department).collection(selectedCategory).add({
@@ -101,12 +99,12 @@ return new Promise((resolve, reject)  => {
       //     })
       //   }
       // }
-      firebase.firestore().collection('NumberOfProducts').doc('MwjotZqh3JPKx0qEcuui').get().then(result => {
-        let number : string = String(Number(result.data().numberOfProducts) + 1)
-        firebase.firestore().collection('NumberOfProducts').doc('MwjotZqh3JPKx0qEcuui').update({
-          numberOfProducts: number
-        })
-      })
+      // firebase.firestore().collection('NumberOfProducts').doc('MwjotZqh3JPKx0qEcuui').get().then(result => {
+      //   let number : string = String(Number(result.data().numberOfProducts) + 1)
+      //   firebase.firestore().collection('NumberOfProducts').doc('MwjotZqh3JPKx0qEcuui').update({
+      //     numberOfProducts: number
+      //   })
+      // })
 
       let storageRef = firebase.storage().ref('clothes/' + result.id)
       console.log(picture);
@@ -348,16 +346,16 @@ return new Promise((resolve, reject)  => {
     })
   }
 
-  getNumberOfProducts(){
-    return firebase.firestore().collection('NumberOfProducts').doc('MwjotZqh3JPKx0qEcuui').get().then(result => {
-      console.log(result.data());
-      let number : number = 0
-      number = result.data().numberOfProducts
-      console.log(number);
+  // getNumberOfProducts(){
+  //   return firebase.firestore().collection('NumberOfProducts').doc('MwjotZqh3JPKx0qEcuui').get().then(result => {
+  //     console.log(result.data());
+  //     let number : number = 0
+  //     number = result.data().numberOfProducts
+  //     console.log(number);
       
-      return number
-    })
-  }
+  //     return number
+  //   })
+  // }
   loadCategoryItems(category, brand){
    // console.log(brand);
    // console.log(category);
@@ -391,7 +389,7 @@ return new Promise((resolve, reject)  => {
     
     
     return firebase.firestore().collection('Products').doc(brand).collection(category).doc(productID).delete().then( result => {
-      this.updateNumberOfItems()
+      //this.updateNumberOfItems()
       if(item.data.onSale){
         if(item.data.onSale === true){
           console.log(item.data.onSale);
@@ -400,26 +398,26 @@ return new Promise((resolve, reject)  => {
           })
         }
       }
-      firebase.firestore().collection('NumberOfProducts').doc('MwjotZqh3JPKx0qEcuui').get().then(result => {
-        let number : string = String(Number(result.data().numberOfProducts) - 1)
-        firebase.firestore().collection('NumberOfProducts').doc('MwjotZqh3JPKx0qEcuui').update({
-          numberOfProducts: number
-        })
-      })
+      // firebase.firestore().collection('NumberOfProducts').doc('MwjotZqh3JPKx0qEcuui').get().then(result => {
+      //   let number : string = String(Number(result.data().numberOfProducts) - 1)
+      //   firebase.firestore().collection('NumberOfProducts').doc('MwjotZqh3JPKx0qEcuui').update({
+      //     numberOfProducts: number
+      //   })
+      // })
       return 'Deleted'
     })
   }
-  updateNumberOfItems(){  //Cloud Function?
-    return firebase.firestore().collection('NumberOfProducts').doc('MwjotZqh3JPKx0qEcuui').get().then(result => {
-      let numberOfProducts = result.data().numberOfProducts - 1
-      console.log(numberOfProducts);
+  // updateNumberOfItems(){  //Cloud Function?
+  //   return firebase.firestore().collection('NumberOfProducts').doc('MwjotZqh3JPKx0qEcuui').get().then(result => {
+  //     let numberOfProducts = result.data().numberOfProducts - 1
+  //     console.log(numberOfProducts);
       
-      firebase.firestore().collection('NumberOfProducts').doc('MwjotZqh3JPKx0qEcuui').update({
-        numberOfProducts: numberOfProducts
-      })
-    })
+  //     firebase.firestore().collection('NumberOfProducts').doc('MwjotZqh3JPKx0qEcuui').update({
+  //       numberOfProducts: numberOfProducts
+  //     })
+  //   })
 
-  }
+  // }
   hideProduct(productID, brand, category, item){
     console.log(productID);
     console.log(brand);
@@ -593,7 +591,7 @@ return new Promise((resolve, reject)  => {
       })
   }
   getPendingOrders(){
-    return firebase.firestore().collection('Order').orderBy('timestamp', 'desc').get().then(result => {
+    return firebase.firestore().collection('Order').get().then(result => {
       let pendingOrder = []
      // console.log(result);
       
@@ -814,217 +812,16 @@ return new Promise((resolve, reject)  => {
     })
   }
 
-  load16CategoryItems(){
-    console.log(firebase.firestore());
-    
-    // console.log(brand);
-    // console.log(category);
-    //kwangaCategories: Array<any> = ['Formal', 'Traditional', 'Smart Casual', 'Sports']
-    //dankieJesuCategories: Array<any> = ['Vests', 'Caps', 'Bucket Hats', 'Shorts', 'Crop Tops', 'T-Shirts', 'Bags', 'Sweaters', 'Hoodies', 'Track Suits', 'Beanies']
-    let all_products : Array<any> = []
-    let KFormal : Array<any> = []
-    let KTradiditional : Array<any> = []
-    let KSmartCasual : Array<any> = []
-    let KSports : Array<any> = []
-    let DJVests : Array<any> = []
-    let DJCaps : Array<any> = []
-    let DJBucketHats : Array<any> = []
-    let DJShorts : Array<any> = []
-    let DJCropTops : Array<any> = []
-    let DJTShirts : Array<any> = []
-    let DJBags : Array<any> = []
-    let DJSweaters : Array<any> = []
-    let DJHoodies : Array<any> = []
-    let DJTrackSuits : Array<any> = []
-    let DJBeanies : Array<any> = []
+  loadAllProducts(){
     return new Promise((resolve, reject) => {
-      firebase.firestore().collection('Products').doc('Kwanga').collection('Formal').orderBy('dateAdded', 'desc').get().then(result => {
-              let data : Array<any> = []
-      for(let key in result.docs){
-        let productID = result.docs[key].id
-        let docData = result.docs[key].data() 
-        data.push({productID: productID, data: docData, category: 'Formal', brand: 'Kwanga'})
-        all_products.push({productID: productID, data: docData, category: 'Formal', brand: 'Kwanga'})
-      }
-      KFormal = data
-      }).catch(error => {
-        console.log(error);
-        
-      })
-      .then(result => {
-        firebase.firestore().collection('Products').doc('Kwanga').collection('Traditional').orderBy('dateAdded', 'desc').get().then(result => {
-                let data : Array<any> = []
-      for(let key in result.docs){
-        let productID = result.docs[key].id
-        let docData = result.docs[key].data() 
-        data.push({productID: productID, data: docData, category: 'Traditional', brand: 'Kwanga'})
-        all_products.push({productID: productID, data: docData, category: 'Traditional', brand: 'Kwanga'})
-      }
-      let KTradiditional = data
-        })
-      })
-      .then(result => {
-        firebase.firestore().collection('Products').doc('Kwanga').collection('Smart Casual').orderBy('dateAdded', 'desc').get().then(result => {
-                let data : Array<any> = []
-      for(let key in result.docs){
-        let productID = result.docs[key].id
-        let docData = result.docs[key].data() 
-        data.push({productID: productID, data: docData, category: 'Smart Casual', brand: 'Kwanga'})
-        all_products.push({productID: productID, data: docData, category: 'Smart Casual', brand: 'Kwanga'})
-      }
-      KSmartCasual = data
-        })
-      })
-      .then(result => {
-        firebase.firestore().collection('Products').doc('Kwanga').collection('Sports').orderBy('dateAdded', 'desc').get().then(result => {
-                let data : Array<any> = []
-      for(let key in result.docs){
-        let productID = result.docs[key].id
-        let docData = result.docs[key].data() 
-        data.push({productID: productID, data: docData, category: 'Sports', brand: 'Kwanga'})
-        all_products.push({productID: productID, data: docData, category: 'Sports', brand: 'Kwanga'})
-      }
-      KSports = data
-        })
-      })
-      .then(result => {
-        firebase.firestore().collection('Products').doc('Dankie Jesu').collection('Vests').orderBy('dateAdded', 'desc').get().then(result => {
-                let data : Array<any> = []
-      for(let key in result.docs){
-        let productID = result.docs[key].id
-        let docData = result.docs[key].data() 
-        data.push({productID: productID, data: docData, category: 'Vests', brand: 'Dankie Jesu'})
-        all_products.push({productID: productID, data: docData, category: 'Vests', brand: 'Dankie Jesu'})
-      }
-      DJVests = data
-        })
-      })
-      .then(result => {
-        firebase.firestore().collection('Products').doc('Dankie Jesu').collection('Caps').orderBy('dateAdded', 'desc').get().then(result => {
-                let data : Array<any> = []
-      for(let key in result.docs){
-        let productID = result.docs[key].id
-        let docData = result.docs[key].data() 
-        data.push({productID: productID, data: docData, category: 'Caps', brand: 'Dankie Jesu'})
-        all_products.push({productID: productID, data: docData, category: 'Caps', brand: 'Dankie Jesu'})
-      }
-      DJCaps = data
-        })
-      })
-      .then(result => {
-        firebase.firestore().collection('Products').doc('Dankie Jesu').collection('Bucket Hats').orderBy('dateAdded', 'desc').get().then(result => {
-                let data : Array<any> = []
-      for(let key in result.docs){
-        let productID = result.docs[key].id
-        let docData = result.docs[key].data() 
-        data.push({productID: productID, data: docData, category: 'Bucket Hats', brand: 'Dankie Jesu'})
-        all_products.push({productID: productID, data: docData, category: 'Bucket Hats', brand: 'Dankie Jesu'})
-      }
-      DJBucketHats = data
-        })
-      })
-      .then(result => {
-        firebase.firestore().collection('Products').doc('Dankie Jesu').collection('Shorts').orderBy('dateAdded', 'desc').get().then(result => {
-                let data : Array<any> = []
-      for(let key in result.docs){
-        let productID = result.docs[key].id
-        let docData = result.docs[key].data() 
-        data.push({productID: productID, data: docData, category: 'Shorts', brand: 'Dankie Jesu'})
-        all_products.push({productID: productID, data: docData, category: 'Shorts', brand: 'Dankie Jesu'})
-      }
-      DJShorts = data
-        })
-      })
-      .then(result => {
-        firebase.firestore().collection('Products').doc('Dankie Jesu').collection('Crop Tops').orderBy('dateAdded', 'desc').get().then(result => {
-                let data : Array<any> = []
-      for(let key in result.docs){
-        let productID = result.docs[key].id
-        let docData = result.docs[key].data() 
-        data.push({productID: productID, data: docData, category: 'Crop Tops', brand: 'Dankie Jesu'})
-        all_products.push({productID: productID, data: docData, category: 'Crop Tops', brand: 'Dankie Jesu'})
-      }
-      DJCropTops = data
-        })
-      })
-      .then(result => {
-        firebase.firestore().collection('Products').doc('Dankie Jesu').collection('T-Shirts').orderBy('dateAdded', 'desc').get().then(result => {
-                let data : Array<any> = []
-      for(let key in result.docs){
-        let productID = result.docs[key].id
-        let docData = result.docs[key].data() 
-        data.push({productID: productID, data: docData, category: 'T-Shirts', brand: 'Dankie Jesu'})
-        all_products.push({productID: productID, data: docData, category: 'T-Shirts', brand: 'Dankie Jesu'})
-      }
-      DJTShirts = data
-        })
-      })
-      .then(result => {
-        firebase.firestore().collection('Products').doc('Dankie Jesu').collection('Bags').orderBy('dateAdded', 'desc').get().then(result => {
-                let data : Array<any> = []
-      for(let key in result.docs){
-        let productID = result.docs[key].id
-        let docData = result.docs[key].data() 
-        data.push({productID: productID, data: docData, category: 'Bags', brand: 'Dankie Jesu'})
-        all_products.push({productID: productID, data: docData, category: 'Bags', brand: 'Dankie Jesu'})
-      }
-      DJBags = data
-        })
-      })
-      .then(result => {
-        firebase.firestore().collection('Products').doc('Dankie Jesu').collection('Sweaters').orderBy('dateAdded', 'desc').get().then(result => {
-                let data : Array<any> = []
-      for(let key in result.docs){
-        let productID = result.docs[key].id
-        let docData = result.docs[key].data() 
-        data.push({productID: productID, data: docData, category: 'Sweaters', brand: 'Dankie Jesu'})
-        all_products.push({productID: productID, data: docData, category: 'Sweaters', brand: 'Dankie Jesu'})
-      }
-      DJSweaters = data
-        })
-      })
-      .then(result => {
-        firebase.firestore().collection('Products').doc('Dankie Jesu').collection('Hoodies').orderBy('dateAdded', 'desc').get().then(result => {
-                let data : Array<any> = []
-      for(let key in result.docs){
-        let productID = result.docs[key].id
-        let docData = result.docs[key].data() 
-        data.push({productID: productID, data: docData, category: 'Hoodies', brand: 'Dankie Jesu'})
-        all_products.push({productID: productID, data: docData, category: 'Hoodies', brand: 'Dankie Jesu'})
-      }
-      DJHoodies = data
-        })
-      })
-      .then(result => {
-        firebase.firestore().collection('Products').doc('Dankie Jesu').collection('Track Suits').orderBy('dateAdded', 'desc').get().then(result => {
-                let data : Array<any> = []
-      for(let key in result.docs){
-        let productID = result.docs[key].id
-        let docData = result.docs[key].data() 
-        data.push({productID: productID, data: docData, category: 'Track Suits', brand: 'Dankie Jesu'})
-        all_products.push({productID: productID, data: docData, category: 'Track Suits', brand: 'Dankie Jesu'})
-      }
-      DJTrackSuits = data
-        })
-      })
-      .then(result => {
-        firebase.firestore().collection('Products').doc('Dankie Jesu').collection('Beanies').orderBy('dateAdded', 'desc').get().then(result => {
-                let data : Array<any> = []
-      for(let key in result.docs){
-        let productID = result.docs[key].id
-        let docData = result.docs[key].data() 
-        data.push({productID: productID, data: docData, category: 'Beanies', brand: 'Dankie Jesu'})
-        all_products.push({productID: productID, data: docData, category: 'Beanies', brand: 'Dankie Jesu'})
-      }
-      DJBeanies = data
-      console.log(all_products)
-      if(all_products.length === 0){
-        resolve(null)
-      }else if(all_products.length > 0){
-        resolve(all_products)
-      }
-      reject('why, I think i have some major problems')
-        })
+      firebase.firestore().collection('Products').orderBy('dateAdded', 'desc').get().then(result => {
+        let data : Array<any> = []
+        for(let key in result.docs){
+          let productID = result.docs[key].id
+          let docData = result.docs[key].data() 
+          data.push({productID: productID, data: docData, category: docData['category'], categoryID: docData['categoryID'], brand: docData['brand'], brandID: docData['brandID']})
+        }
+        resolve(data)
       }).catch(error => {
         console.log(error);
         
@@ -1037,9 +834,13 @@ return new Promise((resolve, reject)  => {
       let all : Array<any> = []
       firebase.firestore().collection('brands').get().then(result => {
         for(let key in result.docs){
-          brands.push(result.docs[key].data().name)
+          brands.push({ brandID: result.docs[key].id, name :result.docs[key].data().name})
         }
         console.log(brands);
+        if(brands.length === 0){
+          console.log('empty');
+          resolve(null)
+        }
       })
       .then( log => {
         firebase.firestore().collection('category').get().then(result => {
@@ -1049,15 +850,18 @@ return new Promise((resolve, reject)  => {
           for(let key in brands){
             categoryList = []
             for(let i in result.docs){
-              let text = result.docs[i].data().brand
+
+              let categoryID = result.docs[i].id
+              let brandID = result.docs[i].data().brandID
               let category = result.docs[i].data().name
               let isSummer = result.docs[i].data().isSummer
               let isAccessory = result.docs[i].data().isAccessory
+              console.log(brandID);
               let now = {category : category, isSummer: isSummer}
-              if(text === brands[key]){
+              if(brandID === brands[key].brandID){
                 console.log(now);
                 
-                categoryList.push({category : category, isSummer: isSummer, isAccessory : isAccessory})
+                categoryList.push({category : category, isSummer: isSummer, isAccessory : isAccessory, categoryID: categoryID})
               }
             }
             all.push({brand: brands[key], categoryList})
@@ -1066,6 +870,16 @@ return new Promise((resolve, reject)  => {
           }
         })
       })
+    })
+  }
+  load16CategoryItems(){
+    return null
+  }
+  getBrandCategories(query){
+    return firebase.firestore().collection('category').where('brand', '==', query).get().then(result => {
+      for(let key in result){
+        
+      }
     })
   }
 } 

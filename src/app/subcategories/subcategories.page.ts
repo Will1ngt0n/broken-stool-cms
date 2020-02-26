@@ -1,9 +1,10 @@
 import { Component, OnInit} from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NavController, AlertController } from '@ionic/angular';
 import { ProductsService } from '../services/products-services/products.service';
 import { AuthService } from '../services/auth-services/auth.service';
 import { RouteService } from '../services/route-services/route.service';
+import { Action } from 'rxjs/internal/scheduler/Action';
 
 @Component({
   selector: 'app-subcategories',
@@ -11,10 +12,15 @@ import { RouteService } from '../services/route-services/route.service';
   styleUrls: ['./subcategories.page.scss'],
 })
 export class SubcategoriesPage implements OnInit {
-
-  constructor(private routeService : RouteService, private alertController : AlertController, private authService : AuthService, private navCtrl : NavController, public route : Router, public productService : ProductsService) { }
+  query
+  constructor(private activatedRoute : ActivatedRoute, private routeService : RouteService, private alertController : AlertController, private authService : AuthService, private navCtrl : NavController, public route : Router, public productService : ProductsService) { }
 
   ngOnInit() {
+    this.activatedRoute.queryParams.subscribe(result => {
+      console.log(result);
+      
+    })
+    this.getCategories()
   }
 
   navigateForward(value){
@@ -22,6 +28,13 @@ export class SubcategoriesPage implements OnInit {
       this.route.navigate(['/items-list', value])
     })
 
+  }
+
+  getCategories(){
+    return this.productService.getBrandCategories('Dankie Jesu').then(result => {
+      console.log(result);
+      
+    })
   }
   back(){
     this.route.navigate(['/landing'])

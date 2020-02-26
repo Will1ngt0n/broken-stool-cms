@@ -119,7 +119,7 @@
       <div class="adder-inputs">
         <div class="input-spaces">
           <div class="addBrandName">
-          <input type="text" placeholder="Brand Name" id="brand-name">
+          <input type="text" placeholder="Brand Name" id="brand-name" [(ngModel)]='newBrand'>
           <div id="brandImage">
             <label for="cam-ico">
               <input type="file" id="cam-ico">
@@ -133,22 +133,22 @@
               <label for="cat-img">
                 <ion-icon name="camera"></ion-icon>
               </label>
-              <input type="file" id="cat-img">
+              <input type="file" id="cat-img" (change)='addPictureToNewCategory($event, item)'>
             </div>
-           <input type="text" placeholder="Category" id="cate">    
-           <button>Add</button>        
+           <input type="text" placeholder="Category" id="cate" [(ngModel)]='newCategory'>    
+           <button (click)='addNewCategoryToArray()'>Add</button>        
           </div>
           <div class="added-cats">
 
             <!-- perform the for loop on this div -->
-            <div class="actual-cat">
+            <div class="actual-cat" *ngFor='let item of newBrandCategories'>
               <!-- <div class="imageUploader">
                 <input type="file" id="filer">
                 <label for="filer" id="camera-icon">
                   <ion-icon name="camera"></ion-icon>
                 </label>
               </div> -->
-              Sweaters
+              {{item.name}}
               <div class="toRemove">
                 <ion-icon name="close"></ion-icon>
               </div>
@@ -156,13 +156,13 @@
           </div>
 
         </div>
-        <button id="adder-button">Add Brand</button>
+        <button id="adder-button" (click)='addBrand()'>Add Brand</button>
       </div>
     </div>
      <!-- -->
     <div class="adder-form" *ngIf="isBrand === false">
       <div id="header-form">
-        Add a new categories
+        Add new categories
         <div class="toDismiss" (click)="removeAdder()">
           <ion-icon name="close"></ion-icon>
         </div>
@@ -176,16 +176,16 @@
               <label for="cat-img">
                 <ion-icon name="camera"></ion-icon>
               </label>
-              <input type="file" id="cat-img">
+              <input type="file" id="cat-img" (click)='addPictureToNewCategory($event)'>
             </div>
-           <input type="text" placeholder="Category" id="cate">    
-           <button>Add</button>        
+           <input type="text" placeholder="Category" id="cate" [(ngModel)]='newCategory'>    
+           <button (click)='addNewCategoryToArray()'>Add</button>        
           </div>
           <div class="added-cats">
 
             <!-- perform the for loop on this div -->
-            <div class="actual-cat">
-              Sweaters
+            <div class="actual-cat" *ngFor='let item of newBrandCategories'>
+              {{item.name}}
               <div class="toRemove">
                 <ion-icon name="close"></ion-icon>
               </div>
@@ -193,7 +193,7 @@
           </div>
 
         </div>
-        <button id="adder-button">Add Categories</button>
+        <button id="adder-button" (click)='addCategoryToBrand()'>Add Categories</button>
       </div>
     </div>
   </div>
@@ -363,13 +363,13 @@
             </div> -->
             <ion-grid class="bigGrid">
               <ion-row>
-                <ion-col size="3" (click)='viewMore("subcategories")'>
+                <ion-col size="3" (click)='viewMore(item.name)' *ngFor='let item of brands'>
                   <div class="brandName">
                     <div class="brandImage">
                       <img src="../../assets/imgs/3d2acdaf95ed9e473ddbb3bd433fed9f.jpg" alt="">
                     </div>
                     <div class="brandName-text">
-                      Lorem Ipsum
+                      {{item.name}}
                     </div>
                   </div>                  
                 </ion-col>

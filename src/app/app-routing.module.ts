@@ -7,7 +7,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'sign-in', redirectTo: 'login', pathMatch: 'full' },
   { path: 'kwanga-sub-categories', redirectTo: 'kwanga-sub-categories', pathMatch: 'full' },
-  { path: 'subcategories', redirectTo: 'subcategories', pathMatch: 'full' },
+  { path: 'subcategories/:id', redirectTo: 'subcategories', pathMatch: 'full' },
   { path: 'summer-gear', redirectTo: 'summer-gear', pathMatch: 'full' },
   { path: 'winter-gear', redirectTo: 'winter-gear', pathMatch: 'full' },
   { path: 'home/:id', loadChildren: () => import('./home/home.module').then( m => m.HomePageModule),},
