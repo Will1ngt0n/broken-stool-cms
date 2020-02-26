@@ -223,8 +223,7 @@
           </div>
           <div class="items-list" *ngIf='history.length > 0'>
             <ion-card *ngFor='let item of history' class="item-card-list" (click)='viewOrderHistory(item)'>
-              <p class="floating" *ngIf="item.details.status === 'cancelled'">Cancelled</p>
-              <p class="floating" *ngIf="item.details.status !== 'cancelled'">{{item.details.status}}</p>
+              <p class="floating" *ngIf="item.details.status">{{item.details.status}}</p>
               <p><b>{{item.details.userID}}</b></p>
               <p>{{item.details.grandTotal | currency : 'R'}}</p>
               <p>REF: {{item.refNo}}</p>
@@ -343,7 +342,7 @@
             <div>
               <div id="image-and-text">
                 <p>Sales and Specials</p>
-                <img src="../../assets/imgs/images (2).jpg" alt="">
+                <img src="../../assets/imgs/Placeholders/b.jpg" alt="">
               </div>
             </div>
             <div>Brands</div>
@@ -930,7 +929,7 @@
             <div>
               <div id="image-and-text">
                 <p>Sales and Specials</p>
-                <img src="../../assets/imgs/images (2).jpg" alt="">
+                <img src="../../assets/imgs/Placeholders/Smart Casual.jpg" alt="">
               </div>
             </div>
             <div>Brands</div>

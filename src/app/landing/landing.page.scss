@@ -260,7 +260,7 @@ ion-list > div {
 #right {
   width: 17.5%;
   height: 100%;
-  background: #f2f2f2;
+  background: white;
   position: relative;
   overflow-y:auto;
   overflow-x: hidden;
@@ -277,18 +277,19 @@ ion-searchbar {
 .side-buttons {
   cursor: pointer;
   width: 100%;
-  height: 50px;
+  height: 85px;
   // margin-top: 2px;
   text-align: center;
-  line-height: 50px;
+  line-height: 85px;
   font-weight: bold;
   color: white;
 }
 .side-buttons:nth-child(even) {
-  background: rgb(155, 155, 155);
+  background: #000433;
+  // color: rgb(68, 68, 68)
 }
 .side-buttons:nth-child(odd) {
-  background: rgb(175, 175, 175);
+  background: rgb(0,3,36);
 }
 .helpDesk {
   cursor: pointer;
@@ -1662,7 +1663,7 @@ ion-item {
 .showAllProducts{
   width: 100%;
   height: 50px;
-  background: rgb(206, 206, 206);
+  background: rgb(255,223,90);
   cursor: pointer;
   line-height: 50px;
   font-family: "Poppins";
