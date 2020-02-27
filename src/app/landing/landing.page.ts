@@ -2241,6 +2241,7 @@ console.log(val);
     this.newCategory = ''
     this.categoryAdder = false
   }
+
   toggleAdderCat(){
     if(this.department === 'Select Brand'){
       this.productAlert('Please select a brand to add a category to', 'No brand selected')
@@ -2250,8 +2251,20 @@ console.log(val);
     }
 
   }
-  toggleAdderBrand(){
+  brandMessage = "";
+  toggleAdderBrand(event){
+    this.brandMessage = event
     this.adderOpen = true;
     this.isBrand = true;
+  }
+
+  editbrand(event){
+    alert(event)
+    this.toggleAdderBrand('Edit the ' + event + " ")
+  }
+  deleteBrand(){
+    let n = 1
+    console.log("this deletes the entire brand " + n + 1);
+    
   }
 }
