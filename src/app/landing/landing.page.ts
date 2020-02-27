@@ -253,7 +253,7 @@ export class LandingPage implements OnInit {
       }else{
         for(let key in this.categoryList){
           this.departmentOptions.push(this.categoryList[key].brand.name)
-          this.brands.push({name: this.categoryList[key].brand.name, brandID: this.categoryList[key].brand.brandID})
+          this.brands.push({name: this.categoryList[key].brand.name, brandID: this.categoryList[key].brand.brandID, pictureLink: this.categoryList[key].brand.pictureLink})
         }
         console.log(this.brands);
         
@@ -676,12 +676,13 @@ export class LandingPage implements OnInit {
     this.navCtrl.navigateForward(['sales-specials'], navOptions)
   }
 
-  viewMore(query) {
+  viewMore(query, item) {
     console.log(query);
+    console.log(item);
     
     let parameters = query
-    this.routeService.storeLink(query)
-      this.route.navigate(['/subcategories', query])
+    this.routeService.storeBrandInfo(item)
+    this.route.navigate(['/subcategories', query])
   
 
   }
@@ -2111,16 +2112,30 @@ console.log(val);
   newBrandCategories : Array<any> = []
   addBrand(){
     console.log(this.newBrandCategories);
+    console.log(this.newBrandImage);
+    console.log(this.newBrand);
+    let resultID
     
     return firebase.firestore().collection('brands').add({
-      name : this.newBrand
-    }).then(result => {
-      let id = result.id
+      name : this.newBrand,
+      pictureLink: 'undefined'
+    })
+    .then(result => {
+      resultID = result.id
+      firebase.storage().ref('brands/' + resultID).put(this.newBrandImage).then(data => {
+        data.ref.getDownloadURL().then(url => {
+          firebase.firestore().collection('brands').doc(resultID).update({
+            pictureLink: url
+          })
+        })
+      })
+    })
+    .then(result => {
       for(let key in this.newBrandCategories){
         let picture = this.newBrandCategories[key].picture
         firebase.firestore().collection('category').add({
           brand: this.newBrand,
-          brandID: id,
+          brandID: resultID,
           name: this.newBrandCategories[key].name,
           isSummer : this.newBrandCategories[key].isSummer,
           isAccessory : this.newBrandCategories[key].isAccessory
@@ -2229,7 +2244,28 @@ console.log(val);
     
     
   }
+  brandPicEdit : boolean = false
+  brandEditPic
+  brandEdit 
+  enableBrandPicEdit(event, item){
+    if(item !== null){
+      console.log(item);
+      this.brandEdit = item
+    }
+    if(event === 'close'){
+      this.brandPicEdit = false
+    }else if(event === 'open'){
+      this.brandPicEdit = true
+    }
+    console.log(this.brandPicEdit);
+    
+    //this.brandPicEdit = true
+  }
+  savePic(){
+    return this.productService.savePicToExistingBrand(this.brandEdit['brandID'], this.newBrandImage).then(result => {
 
+    })
+  }
   removeFromNewBrandsArray(name){
     for(let key in this.newBrandCategories){
       if(name === this.newBrandCategories[key].name){
@@ -2256,6 +2292,7 @@ console.log(val);
     this.newCategory = ''
     this.categoryAdder = false
   }
+
   toggleAdderCat(){
     if(this.department === 'Select Brand'){
       this.productAlert('Please select a brand to add a category to', 'No brand selected')
@@ -2265,8 +2302,20 @@ console.log(val);
     }
 
   }
-  toggleAdderBrand(){
+  brandMessage = "";
+  toggleAdderBrand(event){
+    this.brandMessage = event
     this.adderOpen = true;
     this.isBrand = true;
+  }
+
+  editbrand(event){
+    alert(event)
+    this.toggleAdderBrand('Edit the ' + event + " ")
+  }
+  deleteBrand(){
+    let n = 1
+    console.log("this deletes the entire brand " + n + 1);
+    
   }
 }

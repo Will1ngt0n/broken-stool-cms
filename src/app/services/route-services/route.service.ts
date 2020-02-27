@@ -16,17 +16,22 @@ export class RouteService {
       resolve ('success')
     })
   }
-  storeLink(link){
+  //required for subcategories page, storing all brand info available from landing page || saved in subcategories
+  storeBrandInfo(info){
     return new Promise( (resolve, reject) => {
-      this.localStorage.store('link', link)
+      let loc = this.loc['_platformLocation'].location.origin
+      this.localStorage.store('brandInfo:' + loc, info)
     })
   }
-  getLink(){
+    //required for subcategories page, getting all brand info available on subcategories page || viewed in subcategories
+  getBrandInfo(){
     return new Promise( (resolve, reject) => {
-      this.localStorage.retrieve('link')
+      let loc = this.loc['_platformLocation'].location.origin
+      resolve (this.localStorage.retrieve('brandInfo:' + loc))
     })
   }
 
+  //required by the items-list page, for checking difference between "All brands view" or "selected brand view"  || saved in subcategory page
   storeBrandItemsListParameters(data){
     return new Promise( (resolve, reject) => {
       let loc = this.loc['_platformLocation'].location.origin
@@ -34,6 +39,7 @@ export class RouteService {
       resolve('success')
     })
   }
+  //required by the items-list page, for checking difference between "All brands view" or "selected brand view"  || viewed in items-list
   readBrandItemsListParameters(){
     return new Promise( (resolve, reject) => {
       let loc = this.loc['_platformLocation'].location.origin

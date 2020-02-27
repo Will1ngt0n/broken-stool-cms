@@ -19,6 +19,12 @@ export class SubcategoriesPage implements OnInit {
   ngOnInit() {
     console.log(this.activatedRoute.snapshot.paramMap.get('id'));
     this.currentBrand = this.activatedRoute.snapshot.paramMap.get('id')
+    this.routeService.getBrandInfo().then(result => {
+      console.log(result);
+      this.pictureLink = result['pictureLink']
+      console.log(this.pictureLink);
+      
+    })
     this.getCategories(this.currentBrand)
   }
 

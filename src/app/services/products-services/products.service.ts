@@ -834,7 +834,7 @@ return new Promise((resolve, reject)  => {
       let all : Array<any> = []
       firebase.firestore().collection('brands').get().then(result => {
         for(let key in result.docs){
-          brands.push({ brandID: result.docs[key].id, name :result.docs[key].data().name})
+          brands.push({ brandID: result.docs[key].id, name :result.docs[key].data().name, pictureLink : result.docs[key].data().pictureLink})
         }
         console.log(brands);
         if(brands.length === 0){
@@ -883,6 +883,17 @@ return new Promise((resolve, reject)  => {
         products.push({data: result.docs[key].data(), productID: result.docs[key].id})
       }
       return products
+    })
+  }
+  savePicToExistingBrand(brandID, picture){
+    return new Promise( (resolve,reject) => {
+      firebase.storage().ref('brands/' + brandID).put(picture).then(data => {
+        data.ref.getDownloadURL().then(url => {
+          firebase.firestore().collection('brands').doc(brandID).update({
+            pictureLink: url
+          })
+        })
+      })
     })
   }
 } 
