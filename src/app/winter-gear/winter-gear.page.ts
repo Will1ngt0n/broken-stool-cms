@@ -100,9 +100,9 @@ export class WinterGearPage implements OnInit {
     this.route.navigate(['/landing'])
   }
   navigateForward(value){
-    return this.routeService.storeParemeter(value, 'Dankie Jesu', 'Winter Gear', 'winter-gear').then(result => {
-      this.route.navigate(['/items-list', value])
-    })
+    // return this.routeService.storeParemeter(value, 'Dankie Jesu', 'Winter Gear', 'winter-gear').then(result => {
+    //   this.route.navigate(['/items-list', value])
+    // })
   }
 
   showPendingList() {

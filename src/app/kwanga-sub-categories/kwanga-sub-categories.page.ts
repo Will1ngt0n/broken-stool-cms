@@ -98,9 +98,9 @@ export class KwangaSubCategoriesPage implements OnInit {
   }
 
   navigateForward(value){
-    return this.routeService.storeParemeter(value, 'Kwanga', 'Kwanga Gear', 'kwanga-sub-categories').then(result => {
-      this.route.navigate(['/items-list', value])
-    })
+    // return this.routeService.storeParemeter(value, 'Kwanga', 'Kwanga Gear', 'kwanga-sub-categories').then(result => {
+    //   this.route.navigate(['/items-list', value])
+    // })
   }
 ​
   showPendingList(){

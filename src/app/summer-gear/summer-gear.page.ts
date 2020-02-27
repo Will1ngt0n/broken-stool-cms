@@ -103,9 +103,9 @@ export class SummerGearPage implements OnInit {
   }
 
   navigateForward(value){
-    return this.routeService.storeParemeter(value, 'Dankie Jesu', 'Summer Gear', 'summer-gear').then(result => {
-      this.route.navigate(['/items-list', value])
-    })
+    // return this.routeService.storeParemeter(value, 'Dankie Jesu', 'Summer Gear', 'summer-gear').then(result => {
+    //   this.route.navigate(['/items-list', value])
+    // })
 
   }
   back(){

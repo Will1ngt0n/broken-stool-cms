@@ -172,20 +172,20 @@
               <ion-col size="12" id="makeSmaller">
                 <div class="brandName-top">
                   <div class="brandImage">
-                    <img src="../../assets/imgs/3d2acdaf95ed9e473ddbb3bd433fed9f.jpg" alt="">
+                    <img [src]="pictureLink" alt="">
                   </div>
                   <div class="brandName-text-head">
-                    <a (click)='navigate()'>{{title}}</a> <b href="" *ngIf="currentCategory">/ {{currentCategory}}</b>
+                    <a (click)='navigate()'>{{title}}</a> <b href="" *ngIf="currentCategory"> / {{currentCategory}}</b>
                   </div>
                 </div>                  
               </ion-col>
-              <ion-col size="3" (click)='navigateForward("T-Shirts")'>
+              <ion-col size="3" (click)='navigateForward(item.data.name)' *ngFor='let item of currentSelectedItems'>
                 <div class="brandName">
                   <div class="brandImage">
-                    <img src="../../assets/imgs/3d2acdaf95ed9e473ddbb3bd433fed9f.jpg" alt="">
+                    <img [src]="item.data.pictureLink" alt="">
                   </div>
                   <div class="brandName-text">
-                    Lorem Ipsum
+                    {{item.data.name}}
                   </div>
                 </div>                  
               </ion-col>

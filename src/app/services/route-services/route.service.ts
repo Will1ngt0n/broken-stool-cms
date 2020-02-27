@@ -8,11 +8,11 @@ export class RouteService {
   link
   parameters : object 
   constructor( private localStorage : LocalStorageService, private loc : Location) { }
-  storeParemeter (category, brand, title, link){
+  storeParemeter (item){
     return new Promise((resolve, reject) => {
-      this.parameters = {category: category, brand: brand, title: title, link: link}
+     // this.parameters = {category: category, brand: brand, title: title, link: link}
       let loc = this.loc['_platformLocation'].location.origin
-      this.localStorage.store('parameters:' + loc, this.parameters)
+      this.localStorage.store('parameters:' + loc, item)
       resolve ('success')
     })
   }
@@ -24,6 +24,20 @@ export class RouteService {
   getLink(){
     return new Promise( (resolve, reject) => {
       this.localStorage.retrieve('link')
+    })
+  }
+
+  storeBrandItemsListParameters(data){
+    return new Promise( (resolve, reject) => {
+      let loc = this.loc['_platformLocation'].location.origin
+      this.localStorage.store('allCategories:' + loc, data)
+      resolve('success')
+    })
+  }
+  readBrandItemsListParameters(){
+    return new Promise( (resolve, reject) => {
+      let loc = this.loc['_platformLocation'].location.origin
+      resolve(this.localStorage.retrieve('allCategories:' + loc))
     })
   }
   readParameters(){

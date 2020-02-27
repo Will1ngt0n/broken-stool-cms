@@ -176,7 +176,7 @@
               <label for="cat-img">
                 <ion-icon name="camera"></ion-icon>
               </label>
-              <input type="file" id="cat-img" (click)='addPictureToNewCategory($event)'>
+              <input type="file" id="cat-img" (change)='addPictureToNewCategory($event)'>
             </div>
            <input type="text" placeholder="Category" id="cate" [(ngModel)]='newCategory'>    
            <button (click)='addNewCategoryToArray()'>Add</button>        
@@ -363,10 +363,11 @@
             </div> -->
             <ion-grid class="bigGrid">
               <ion-row>
-                <ion-col size="3" (click)='viewMore(item.name)' *ngFor='let item of brands'>
+                <ion-col size="3" *ngFor='let item of brands'>
                   <div class="brandName">
                     <div class="brandImage">
-                      <img src="../../assets/imgs/3d2acdaf95ed9e473ddbb3bd433fed9f.jpg" alt="">
+                      <input type="file"  (change)='changeBrandImage($event, item)'>
+                      <img src="../../assets/imgs/3d2acdaf95ed9e473ddbb3bd433fed9f.jpg" alt=""  (click)='viewMore(item.name)'>
                     </div>
                     <div class="brandName-text">
                       {{item.name}}

@@ -109,6 +109,16 @@ export class ItemsListPage implements OnInit, OnDestroy {
 
   constructor(private popover: PopoverController, private networkService : NetworkService, private routeService : RouteService, private loc: Location, public loadingCtrl: LoadingController, private alertController: AlertController, private authService: AuthService, private activatedRoute: ActivatedRoute, private productsService: ProductsService, public route: Router) {
     this.today = moment(new Date()).format('YYYY-MM-DD')
+    this.isConnected = true
+    this.isOnline = true
+    this.isCached = true
+    this.colors = { red: '' }
+    this.accessory = false;
+    this.summer = false;
+    this.department = undefined
+    this.addForm = false
+    this.formHasValues = false
+    this.promoButtonEnabled = false
 
   }
 
@@ -239,7 +249,12 @@ export class ItemsListPage implements OnInit, OnDestroy {
           this.isOnline = true
           this.isCached = true
           clearInterval(this.timer)
-          this.loadCategoryItemsSnap(this.currentCategory, this.brand)
+          if(this.para !== 'All'){
+            this.loadCategoryItemsSnap(this.currentCategory)
+          }else if(this.para === 'All'){
+            this.loadAllBrandProducts(this.para)
+          }
+
         }else{
           this.isConnected = false
         }
@@ -344,18 +359,42 @@ export class ItemsListPage implements OnInit, OnDestroy {
 
   }
   //Loading items from the category and brand the user just clicked on in the previous pages
-
-  loadCategoryItemsSnap(category, brand){
-    this.presentLoading()
-    return firebase.firestore().collection('Products').doc(brand).collection(category).orderBy('timestamp', 'desc').onSnapshot(result => {
+  loadAllBrandProducts(para){
+    return firebase.firestore().collection('Products').where('brand', '==', para).orderBy('timestamp', 'desc').onSnapshot(result => {
       let data : Array<any> = []
       for(let key in result.docs){
         let productID = result.docs[key].id
         let docData = result.docs[key].data()
-        data.push({productID: productID, data: docData, category: category, brand: brand})
+        data.push({productID: productID, data: docData, category: docData.name, brand: docData.brand})
       }
       this.currentViewedItems = data
       this.currentSelectedItems = data
+      console.log(this.currentViewedItems);
+      
+      //console.log(data);
+      if(this.pageLoader){
+        this.loadingCtrl.dismiss()
+        this.pageLoader = false
+        //clearInterval(this.timer)
+      }this.loadingCtrl.dismiss()
+      if(data.length !== 0){
+        return data
+      }
+    })
+  }
+  loadCategoryItemsSnap(category){
+    this.presentLoading()
+    return firebase.firestore().collection('Products').where('category', '==', category).orderBy('timestamp', 'desc').onSnapshot(result => {
+      let data : Array<any> = []
+      for(let key in result.docs){
+        let productID = result.docs[key].id
+        let docData = result.docs[key].data()
+        data.push({productID: productID, data: docData, category: category, brand: docData.brand})
+      }
+      this.currentViewedItems = data
+      this.currentSelectedItems = data
+      console.log(this.currentViewedItems);
+      
       //console.log(data);
       if(this.pageLoader){
         this.loadingCtrl.dismiss()
@@ -453,107 +492,66 @@ export class ItemsListPage implements OnInit, OnDestroy {
     })   
   }
   brand
+  pictureLink
+  para
   //////native to this page
   isOnline : boolean
   isConnected : boolean
   isCached : boolean
   pageLoader : boolean
   ngOnInit() {
-    if(navigator.onLine){
-      return this.networkService.getUID().then( result => {
-        if(result === true){
-          this.isConnected = true
-          this.isOnline = true
-          this.isCached = true
-          this.colors = { red: '' }
-          this.accessory = false;
-          this.summer = false;
-          this.department = undefined
-          this.addForm = false
-          this.formHasValues = false
-          this.promoButtonEnabled = false
-         // this.orderItems()
-         // this.getInventory()
-          if(this.currentCategory !== '' && this.currentCategory !== undefined && this.brand !== '' && this.brand !== undefined){
-            this.getSnaps(this.currentCategory, this.brand)
-          }else {            
-          }
-          this.promoUdpate = ''
-          this.activatedRoute.params.subscribe(result => {
-            console.log(result);
-            
-            console.log(result.id);
-            let para = result.id
-            let exists : boolean
-            let reroute : boolean
-            let parameters = [
-              {category: 'Formal', brand: 'Kwanga', title: 'Kwanga', link: 'kwanga-sub-categories'},
-              {category: 'Tradtional', brand: 'Kwanga', title: 'Kwanga', link: 'kwanga-sub-categories'},
-              {category: 'Smart Casual', brand: 'Kwanga', title: 'Kwanga', link: 'kwanga-sub-categories'},
-              {category: 'Sports', brand: 'Kwanga', title: 'Kwanga', link: 'kwanga-sub-categories'},
-              {category: 'Vests', brand: 'Dankie Jesu', title: 'Summer Gear', link: 'summer-gear'},
-              {category: 'Caps', brand: 'Dankie Jesu', title: 'Summer Gear', link: 'summer-gear'},
-              {category: 'Bucket Hats', brand: 'Dankie Jesu', title: 'Summer Gear', link: 'summer-gear'},
-              {category: 'Shorts', brand: 'Dankie Jesu', title: 'Summer Gear', link: 'summer-gear'},
-              {category: 'Crop Tops', brand: 'Dankie Jesu', title: 'Summer Gear', link: 'summer-gear'},
-              {category: 'T-Shirts', brand: 'Dankie Jesu', title: 'Summer Gear', link: 'summer-gear'},
-              {category: 'Bags', brand: 'Dankie Jesu', title: 'Summer Gear', link: 'summer-gear'},
-              {category: 'Sweaters', brand: 'Dankie Jesu', title: 'Winter Gear', link: 'winter-gear'},
-              {category: 'Hoodies', brand: 'Dankie Jesu', title: 'Winter Gear', link: 'winter-gear'},
-              {category: 'Track Suits', brand: 'Dankie Jesu', title: 'Winter Gear', link: 'winter-gear'},
-              {category: 'Beanies', brand: 'Dankie Jesu', title: 'Winter Gear', link: 'winter-gear'},
-            ]
-            // for(let key in parameters){
-            //   if(parameters[key].category === para){
-            //     reroute = false
-            //     break
-            //   }else{
-            //     reroute = true
-            //   }
-            // }
-            // if(para === 'all-hidden-items'){
-            //   console.log(true);
-            //   this.runMe()
-            // }
-            // let cutPara = para.split('+')
-            // console.log(cutPara);
-            // let firstPara =  cutPara[0]
-            // console.log(firstPara);
-            
-            // console.log(para);
-            // console.log((this.link + '-hidden-items'));
-            
-            // if(para === (this.link + '-hidden-items')){
-            //   console.log(this.link,  true);
-              
-            // }
-            this.load16CategoryItems()
-            return this.routeService.readParameters().then((result : object)=> {
-              console.log(result);
-                this.currentCategory = result['category']
-                let brand = result['brand']
-                this.brand = brand
-                this.title = result['title']
-                console.log(this.title)
-                this.link = String(result['link'])
-                if(reroute === true){
-                  this.loc.replaceState('items-list/' + this.currentCategory)
-                }
-                this.loadCategoryItemsSnap(this.currentCategory, brand)
-                if(para === (this.link + '-hidden-items')){
-                  console.log(this.link,  true);
-                  
-                }
-            })
+    this.activatedRoute.params.subscribe(result => {
+      console.log(result);
+      
+      console.log(result.id);
+      let para = result.id
+      this.para = result.id
+      let exists : boolean
+      let reroute : boolean
+      //this.load16CategoryItems()
+      if(navigator.onLine){
+        return this.networkService.getUID().then( result => {
+          if(result === true){
+            if(para === 'All'){
+              this.routeService.readBrandItemsListParameters().then(result => {
+                console.log(result);
+                
+                this.title = result['data'].name
+                this.pictureLink = result['data'].pictureLink
+                this.currentCategory = para + ' ' + this.title + ' products'
+                this.loadAllBrandProducts(this.title)
+              })
+            }else if(para !== 'All'){
+              this.routeService.readParameters().then(result => {
+                console.log(result);
+                this.title = result['data'].brand
+                this.currentCategory = result['data'].name
+                this.pictureLink = result['data'].pictureLink
+                console.log(this.currentCategory);
+                this.loadCategoryItemsSnap(para)
+              })
+            }
 
-          })
-        }else{
-          this.isConnected = false
-        }
-      })  
-    }else{
-      this.isOnline = false
-    }
+
+           // this.orderItems()
+           // this.getInventory()
+            if(this.currentCategory !== '' && this.currentCategory !== undefined && this.brand !== '' && this.brand !== undefined){
+              this.getSnaps(this.currentCategory, this.brand)
+            }else {            
+            }
+            this.promoUdpate = ''
+  
+          }else{
+            this.isConnected = false
+          }
+        })  
+      }else{
+        this.isOnline = false
+      }
+
+
+    })
+
 
   }
   ionViewWillEnter(){
@@ -576,7 +574,7 @@ export class ItemsListPage implements OnInit, OnDestroy {
     this.route.navigate(['/landing'])
   }
   navigate() {
-    this.route.navigate(['/' + this.link])
+    this.route.navigate(['/subcategories', this.title])
   }
   enableEndDateInput(){
     if(this.editStartDate){
@@ -1097,6 +1095,8 @@ export class ItemsListPage implements OnInit, OnDestroy {
     }
     console.log(this.hiddenItems);
     this.currentSelectedItems = this.hiddenItems
+    console.log(this.currentSelectedItems);
+    
     this.togglePop()
   }
   visibleItems : Array<any> = []

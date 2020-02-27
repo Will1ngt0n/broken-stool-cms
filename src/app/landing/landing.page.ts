@@ -444,6 +444,7 @@ export class LandingPage implements OnInit {
         }
       }
     })
+    this.sortProducts()
     clearInterval(this.refreshTimer)
   }
 
@@ -1985,7 +1986,7 @@ console.log(val);
       }
       this.nativeCategory.nativeElement.disabled = false 
     }
-    this.categoryOptions.push('Add Category')
+    //this.categoryOptions.push('Add Category')
    // this.departmentCombo.nativeElement.selectedIndex = 0
     this.checkValidity()
   }
@@ -2143,8 +2144,12 @@ console.log(val);
   categoryPicture
   addPictureToNewCategory(event){
     console.log(event);
+    let ev = event.target.files[0]
+    console.log(ev);
     
     this.categoryPicture = <File>event.target.files[0]
+    console.log(this.categoryPicture);
+    
     // for(let key in this.newBrandCategories){
     //   if(name === this.newBrandCategories[key].name){
     //     console.log(name, ' == ', this.newBrandCategories[key].name);
@@ -2170,6 +2175,8 @@ console.log(val);
   //adding new categories to existing brand
   addCategoryToBrand(){
     console.log(this.department);
+    console.log(this.categoryList[0].brand.name);
+    
     for(let key in this.categoryList){
       if(this.categoryList[key].brand.name === this.department){
         console.log(this.categoryList);
@@ -2180,7 +2187,7 @@ console.log(val);
           let picture = this.newBrandCategories[i].picture
           firebase.firestore().collection('category').add({
             brand: this.department,
-            brandID: this.categoryList[i].brand.brandID,
+            brandID: this.categoryList[key].brand.brandID,
             name: this.newBrandCategories[i].name,
             isSummer : this.newBrandCategories[i].isSummer,
             isAccessory : this.newBrandCategories[i].isAccessory
@@ -2229,6 +2236,14 @@ console.log(val);
         this.newBrandCategories.splice(Number(key), 1)
       }
     }
+  }
+  newBrandImage
+  changeBrandImage(event, item){
+    console.log(item);
+    this.newBrandImage = <File>event.target.files[0]
+    console.log(this.newBrandImage);
+    
+    
   }
 
   categoryAdder : boolean = false //boolean value to check if newBrandCategories has all values required to send to firebase

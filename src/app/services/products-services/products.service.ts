@@ -360,7 +360,7 @@ return new Promise((resolve, reject)  => {
    // console.log(brand);
    // console.log(category);
     
-    return firebase.firestore().collection('Products').doc(brand).collection(category).orderBy('dateAdded', 'desc').get().then(result => {
+    return firebase.firestore().collection('Products').doc(brand).collection(category).orderBy('timestamp', 'desc').get().then(result => {
       //console.log(result.docs);
       //console.log(result);
       let data : Array<any> = []
