@@ -856,12 +856,13 @@ return new Promise((resolve, reject)  => {
               let category = result.docs[i].data().name
               let isSummer = result.docs[i].data().isSummer
               let isAccessory = result.docs[i].data().isAccessory
+              let pictureLink = result.docs[i].data().pictureLink
               console.log(brandID);
               let now = {category : category, isSummer: isSummer}
               if(brandID === brands[key].brandID){
                 console.log(now);
                 
-                categoryList.push({category : category, isSummer: isSummer, isAccessory : isAccessory, categoryID: categoryID})
+                categoryList.push({category : category, isSummer: isSummer, isAccessory : isAccessory, categoryID: categoryID, pictureLink: pictureLink})
               }
             }
             all.push({brand: brands[key], categoryList})

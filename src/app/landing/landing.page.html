@@ -126,13 +126,13 @@
           <ion-icon name="close"></ion-icon>
         </div>
       </div>
-      <div class="adder-inputs">
+      <div class="adder-inputs" *ngIf='addNewBrand'>
         <div class="input-spaces">
           <div class="addBrandName">
           <input type="text" placeholder="Brand Name" id="brand-name" [(ngModel)]='newBrand'>
           <div id="brandImage">
             <label for="cam-ico">
-              <input type="file" id="cam-ico" (change)='changeBrandImage($event, null)'>
+              <input type="file" id="cam-ico" (change)='changeBrandImage($event, null)' [disabled]='!newBrand'>
             <ion-icon name="camera"></ion-icon>
             </label>
           </div>
@@ -143,10 +143,10 @@
               <label for="cat-img">
                 <ion-icon name="camera"></ion-icon>
               </label>
-              <input type="file" id="cat-img" (change)='addPictureToNewCategory($event, item)'>
+              <input type="file" id="cat-img" (change)='addPictureToNewCategory($event, item)' [disabled]='!newCategory'>
             </div>
-           <input type="text" placeholder="Category" id="cate" [(ngModel)]='newCategory'>    
-           <button (click)='addNewCategoryToArray()'>Add</button>        
+           <input type="text" placeholder="Category" id="cate" [(ngModel)]='newCategory' [disabled]='!newBrand'>    
+           <button (click)='addNewCategoryToArray()' [disabled]='!newCategory || !categoryPicture || !newBrand'>Add</button>        
           </div>
           <div class="added-cats">
 
@@ -154,13 +154,50 @@
             <div class="actual-cat" *ngFor='let item of newBrandCategories'>
               {{item.name}}
               <div class="toRemove">
-                <ion-icon name="close"></ion-icon>
+                <ion-icon name="close" (click)='removeFromNewBrandsArray(item.name)'></ion-icon>
               </div>
             </div>
           </div>
 
         </div>
-        <button id="adder-button" (click)='addBrand()'>Add Brand</button>
+        <button id="adder-button" (click)='addBrand()' [disabled]='!newCategory || !newBrand || newBrandCategories.length === 0'>Add Brand</button>
+      </div>
+      <div class="adder-inputs" *ngIf='!addNewBrand'>
+        <div class="input-spaces">
+          <div class="addBrandName">
+          <input type="text" placeholder="Brand Name" id="brand-name" [(ngModel)]='currentBrandName'>
+          <div id="brandImage">
+            <label for="cam-ico">
+              <input type="file" id="cam-ico" (change)='changeBrandImage($event, null)' [disabled]='!currentBrandName'>
+            <ion-icon name="camera"></ion-icon>
+            </label>
+          </div>
+          </div>
+          <div class="cats">
+
+            <div class="floating-camera">
+              <label for="cat-img">
+                <ion-icon name="camera"></ion-icon>
+              </label>
+              <input type="file" id="cat-img" (change)='addPictureToNewCategory($event, item)' [disabled]='!newCategory || !currentBrandName'>
+            </div>
+           <input type="text" placeholder="Category" id="cate" [(ngModel)]='newCategory' [disabled]='!currentBrandName'>    
+           <button (click)='addNewCategoryToArray()' [disabled]='!currentBrandName'>Add</button>        
+          </div>
+          <div class="added-cats">
+
+            <!-- perform the for loop on this div -->
+            <div class="actual-cat" *ngFor='let item of newBrandCategories'>
+              {{item.name}}
+              <input type='file' (change)='changeCategoryPicture($event, item)'>
+              <div class="toRemove">
+                <ion-icon name="close" (click)='removeFromNewBrandsArray(item.name)'></ion-icon>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <button id="adder-button" (click)='saveEditedBrand()'>Save Brand</button>
       </div>
     </div>
      <!-- -->
@@ -191,13 +228,13 @@
             <div class="actual-cat" *ngFor='let item of newBrandCategories'>
               {{item.name}}
               <div class="toRemove">
-                <ion-icon name="close"></ion-icon>
+                <ion-icon name="close"  (click)='removeFromNewBrandsArray(item.name)'></ion-icon>
               </div>
             </div>
           </div>
 
         </div>
-        <button id="adder-button" (click)='addCategoryToBrand()'>Add Categories</button>
+        <button id="adder-button" (click)='addCategoryToBrand()' [disabled]='newBrandCategories.length === 0'>Add Categories</button>
       </div>
     </div>
   </div>
@@ -380,7 +417,7 @@
                         <div (click)='enableBrandPicEdit("open", item)'>
                           <ion-icon name='camera'></ion-icon>
                         </div>
-                        <div (click)="editbrand(item.name)">
+                        <div (click)="editbrand(item.name, item)">
                           <ion-icon name="create"></ion-icon>
                         </div>
                       </div>
@@ -615,7 +652,7 @@
           <select #departmentCombo (change)="changeDepartment($event); checkValidity()">
             <option value='i' *ngFor='let i of departmentOptions' [value]='i'>{{i}}</option>
           </select>
-          <div class="add-btn" (click)="toggleAdderBrand('Add a new ')">
+          <div class="add-btn" (click)="toggleAdderBrand('Add a new')">
             <p>
               <ion-icon name="add"></ion-icon>
             </p>

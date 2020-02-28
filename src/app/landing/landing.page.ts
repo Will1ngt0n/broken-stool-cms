@@ -8,6 +8,7 @@ import { IonSlides } from '@ionic/angular';
 import * as firebase from 'firebase'
 import { NetworkService } from '../services/network-service/network.service';
 import { RouteService } from '../services/route-services/route.service';
+import { LoginPage } from '../login/login.page';
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.page.html',
@@ -166,6 +167,8 @@ export class LandingPage implements OnInit {
     this.isOnline = false
     this.isCached = false
     this.isConnected = false
+
+    this.newBrandImage = undefined
     console.log(new Date().getTime());
     
     // this.pageLoader = false
@@ -2150,9 +2153,12 @@ console.log(val);
           })
         })
       }
+      this.newBrand = ''
+      this.newBrandImage = undefined
       this.newBrandCategories = []
       this.adderOpen = false
       this.isBrand = false
+      
     })
 
   }
@@ -2180,6 +2186,23 @@ console.log(val);
     this.validateNewCategoryItems()
     //console.log();
     
+  }
+  changeCategoryPicture(event, item){
+    console.log(event);
+    console.log(item);
+    
+    for(let key in this.newBrandCategories){
+      if(item.name === this.newBrandCategories[key].name){
+        this.newBrandCategories[key].pictureLink = <File>event.target.files[0]
+      }
+      if(this.newBrandCategories[key].pictureLink.name){
+        console.log(this.newBrandCategories[key].pictureLink);
+        
+        'its a string'
+      }else{
+        'its not a string'
+      }
+    }
   }
   addNewCategoryToArray(){
     console.log('sdfsfsffs');
@@ -2267,6 +2290,8 @@ console.log(val);
     })
   }
   removeFromNewBrandsArray(name){
+    console.log(name);
+    
     for(let key in this.newBrandCategories){
       if(name === this.newBrandCategories[key].name){
         this.newBrandCategories.splice(Number(key), 1)
@@ -2282,9 +2307,153 @@ console.log(val);
     
   }
 
+  saveEditedBrand(){
+    let brandID = this.currentBrand['brandID']
+    let addedCategories : Array<any> = []
+    let deletedCategories : Array<any> = []
+    let editedCategories : Array<any> = []
+    let exists : boolean
+    let deleted : boolean
+    let edited : boolean
+
+    //If categories exist in previous array
+    for(let key in this.newBrandCategories){
+      exists = false
+      edited = false
+      for(let i in this.currentBrandCategories){
+        if(this.newBrandCategories[key].categoryID === this.currentBrandCategories[i].categoryID){
+          if(this.newBrandCategories[key] === this.currentBrandCategories[i]){
+            edited = false
+            break
+          }else if(this.newBrandCategories[key] !== this.currentBrandCategories[i]){
+            edited = true
+          }
+
+          if(edited === true){
+            editedCategories.push(this.newBrandCategories[key])
+          }
+        }
+        if(this.newBrandCategories[key].name === this.currentBrandCategories[i].name){
+          exists = true;
+          break
+        }else{
+          exists = false
+        }
+      }
+      if(exists === false){
+        addedCategories.push(this.newBrandCategories[key])
+      }
+    }
+
+    //Checking if new array has missing items that were in the previous array
+    for(let key in this.currentBrandCategories){
+      deleted = false
+      for(let i in this.newBrandCategories){
+        if(this.currentBrandCategories[key].name === this.newBrandCategories[i].name){
+          deleted = false
+          break
+        }else{
+          deleted = true
+        }
+      }
+      if(deleted === true){
+        deletedCategories.push(this.currentBrandCategories[key])
+      }
+    }
+    console.log(deletedCategories);
+    console.log(addedCategories);
+    ////////////////////////////////////////////
+    ///////////////////////////////////////////
+    //////////////////////////////////////////
+    
+
+    if((this.currentBrand['name'] === this.currentBrandName) && (this.newBrandImage === undefined) && (deletedCategories.length === 0) && (addedCategories.length === 0) && (editedCategories.length === 0)){
+      console.log('nothing has been changed');
+      
+    }else{
+      return new Promise( (resolve, reject) => {
+        if(this.currentBrand['name'] !== this.currentBrandName){
+          return firebase.firestore().collection('brands').doc(brandID).update({
+            name: this.currentBrandName
+          }).then(result => {
+            
+          })
+        }
+      }).then(result => {
+        if(this.newBrandImage !== undefined){
+          return firebase.storage().ref('brands/' + brandID).put(this.newBrandImage).then(data => {
+            data.ref.getDownloadURL().then(url => {
+              firebase.firestore().collection('brands').doc(brandID).update({
+                pictureLink : url
+              })
+            })
+          })
+        }
+      }).then( result => {
+        if(addedCategories.length > 0){
+          for(let i in addedCategories){
+            console.log(addedCategories[i].picture);
+            let picture = addedCategories[i].picture
+            firebase.firestore().collection('category').add({
+              brand: this.department,
+              brandID: brandID,
+              name: addedCategories[i].name,
+              isSummer : addedCategories[i].isSummer,
+              isAccessory : addedCategories[i].isAccessory
+            }).then( result => {
+              let categoryID = result.id
+              firebase.storage().ref('category/' + categoryID).put(picture).then( (data : any) => {
+                data.ref.getDownloadURL().then(url => {
+                  firebase.firestore().collection('category').doc(categoryID).update({
+                    pictureLink : url
+                  })
+                })
+              })
+            })
+          }
+        }
+      }).then( result => {
+        if(deletedCategories.length > 0){
+          for(let i in deletedCategories){
+            console.log(deletedCategories[i].picture);
+            let picture = deletedCategories[i].picture
+            let categoryID = deletedCategories[i].categoryID
+            firebase.firestore().collection('category').doc(categoryID).delete().then(result => {
+
+            })
+          }
+        }
+      }).then( result => {
+        if(editedCategories.length > 0){
+          for(let i in editedCategories){
+            let categoryID = editedCategories[i].categoryID
+            if(editedCategories[i].pictureLink.name){
+              let picture = editedCategories[i].pictureLink
+              firebase.storage().ref('category/' + categoryID).put(picture).then(data => {
+                data.ref.getDownloadURL().then(url => {
+                  editedCategories[i].pictureLink = url
+                })
+              })
+            }
+            let timer = setInterval( () => {
+              if(!editedCategories[i].pictureLink.name){
+                let newData = editedCategories[i]
+                firebase.firestore().collection('category').doc(categoryID).update({
+                  newData
+                })
+              }
+              clearInterval(timer)
+            }, 3000)
+          }
+        }
+      })
+    }
+  }
+
   categoryAdder : boolean = false //boolean value to check if newBrandCategories has all values required to send to firebase
   adderOpen: boolean = false;
   isBrand: boolean = false;
+  addNewBrand : boolean = false
   removeAdder(){
     this.adderOpen = false;
     this.newBrand = ''
@@ -2300,17 +2469,43 @@ console.log(val);
       this.adderOpen = true;
       this.isBrand = false;  
     }
-
   }
   brandMessage = "";
   toggleAdderBrand(event){
     this.brandMessage = event
     this.adderOpen = true;
     this.isBrand = true;
+    if(event === 'Add a new'){
+      this.addNewBrand = true
+    }else{
+      this.addNewBrand = false
+    }
   }
-
-  editbrand(event){
+  currentBrand : object = {name: '', brandID: ''}
+  currentBrandName : string = ''
+  currentBrandCategories : Array<any> = []
+  editbrand(event, item){
+    console.log(item);
+    console.log(this.categoryList);
+    
+    this.currentBrand['name'] = event
+    this.currentBrand['brandID'] = item.brandID
+    console.log(this.currentBrand);
+    this.currentBrandName = event
     alert(event)
+    for(let key in this.categoryList){
+      if(event === this.categoryList[key].brand.name){
+        console.log(this.categoryList[key].brand.name);
+        for(let i in this.categoryList[key].categoryList){
+          this.currentBrandCategories.push({name: this.categoryList[key].categoryList[i].category, isSummer: this.categoryList[key].categoryList[i].isSummer, isAccessory: this.categoryList[key].categoryList[i].isAccessory, pictureLink: this.categoryList[key].categoryList[i].pictureLink, categoryID: this.categoryList[key].categoryList[i].categoryID})
+          this.newBrandCategories.push({name: this.categoryList[key].categoryList[i].category, isSummer: this.categoryList[key].categoryList[i].isSummer, isAccessory: this.categoryList[key].categoryList[i].isAccessory, pictureLink: this.categoryList[key].categoryList[i].pictureLink, categoryID: this.categoryList[key].categoryList[i].categoryID})
+        }
+        console.log(this.currentBrandCategories);
+        console.log(this.newBrandCategories);
+        
+        
+      }
+    }
     this.toggleAdderBrand('Edit the ' + event + " ")
   }
   deleteBrand(){
