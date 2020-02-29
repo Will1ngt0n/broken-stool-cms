@@ -294,6 +294,7 @@ export class LandingPage implements OnInit {
       this.refreshProducts()
       this.refreshOrderHistory()
       this.getPendingOrdersSnap()
+      this.refreshBrands()
     }, 3000)
 
   }
@@ -449,6 +450,116 @@ export class LandingPage implements OnInit {
     })
     this.sortProducts()
     clearInterval(this.refreshTimer)
+  }
+  refreshBrands(){
+    console.log('running brand snapshots');
+    
+    firebase.firestore().collection('brands').onSnapshot( result => {
+      console.log(result);
+      
+      let brands : Array<any> = []
+      let addItem : boolean = false
+      for(let key in result.docChanges()){
+        let change = result.docChanges()[key]
+        if(change.type === 'added'){
+          for(let i in this.brands){
+            if(this.brands[i].brandID === change.doc.id){
+              addItem = false
+              break
+            }else if(this.brands[i].brandID !== change.doc.id){
+              addItem = true
+            }
+          }
+          if(addItem = true){
+            brands.push({ brandID: change.doc.id, name :change.doc.data().name, pictureLink : change.doc.data().pictureLink})
+          }
+        }else if(change.type === 'modified'){
+          for(let i in this.brands){
+            if(this.brands[i].brandID === change.doc.id){
+              console.log('we found a match in snapshots');
+              console.log(change.doc.data());
+              console.log(this.brands[i].brandID, change.doc.id);
+              
+              this.brands[i] = { brandID: change.doc.id, name :change.doc.data().name, pictureLink : change.doc.data().pictureLink}
+              console.log(this.brands[i]);
+              
+            }
+          }
+        }else if(change.type === 'removed'){
+          for(let i in this.brands){
+            if(this.brands[i].brandID === change.doc.id){
+              this.brands.splice(Number(i), 1)
+            }
+          }
+        }
+
+      }
+    })
+  }
+  refreshCategories(){
+    firebase.firestore().collection('category').onSnapshot(result => {
+      //          this.brands.push({name: this.categoryList[key].brand.name, brandID: this.categoryList[key].brand.brandID, pictureLink: this.categoryList[key].brand.pictureLink})
+      for(let key in result.docChanges()){
+        let change = result.docChanges()[key]
+        let addItem : boolean = false
+        if(change.type === 'added'){
+          for(let key in this.categoryList){
+            if(this.categoryList[key].brand.brandID === change.doc.data().brandID){
+              console.log(this.categoryList[key].brand.name);
+              for(let i in this.categoryList[key].categoryList){
+                if(this.categoryList[key].categoryList[i].categoryID === change.doc.id){
+                  addItem = false
+                  break
+                }else if(this.categoryList[key].categoryList[i].categoryID === change.doc.id){
+                  addItem = true
+                }
+                //this.currentBrandCategories.push({name: this.categoryList[key].categoryList[i].category, isSummer: this.categoryList[key].categoryList[i].isSummer, isAccessory: this.categoryList[key].categoryList[i].isAccessory, pictureLink: this.categoryList[key].categoryList[i].pictureLink, categoryID: this.categoryList[key].categoryList[i].categoryID})
+                //this.newBrandCategories.push({name: this.categoryList[key].categoryList[i].category, isSummer: this.categoryList[key].categoryList[i].isSummer, isAccessory: this.categoryList[key].categoryList[i].isAccessory, pictureLink: this.categoryList[key].categoryList[i].pictureLink, categoryID: this.categoryList[key].categoryList[i].categoryID})
+              }
+              if(addItem = true){
+                this.categoryList.push({name: change.doc.data().name, isSummer: change.doc.data().isSummer, isAccessory: change.doc.data().isAccessory, pictureLink: change.doc.data().pictureLink, categoryID: change.doc.id})
+              }
+              console.log(this.currentBrandCategories);
+              console.log(this.newBrandCategories);
+              
+              
+            }
+          }
+        }else if(change.type === 'modified'){
+          for(let key in this.categoryList){
+            if(this.categoryList[key].brand.brandID === change.doc.data().brandID){
+              for(let i in this.categoryList[key].categoryList){
+                if(this.categoryList[key].categoryList[i].categoryID === change.doc.id){
+                  this.categoryList[key].categoryList[i] = {name: change.doc.data().name, isSummer: change.doc.data().isSummer, isAccessory: change.doc.data().isAccessory, pictureLink: change.doc.data().pictureLink, categoryID: change.doc.id}
+                }
+              }
+            }
+          }
+        }
+        else if(change.type === 'removed'){
+          for(let key in this.categoryList){
+            if(this.categoryList[key].brand.brandID === change.doc.data().brandID){
+              for(let i in this.categoryList[key].categoryList){
+                if(this.categoryList[key].categoryList[i].categoryID === change.doc.id){
+                  this.categoryList[key].categoryList.splice(Number(i), 1)
+
+
+                }
+              }
+              //Use below code if the other one above doesnt work
+
+              // let newArray = this.categoryList[key].categoryList
+              // for(let j in newArray){
+              //   if(newArray[j].categoryID === change.doc.id){
+              //     newArray.splice(Number(j), 1)
+              //   }
+              // }
+              // this.categoryList[key].categoryList = newArray
+            }
+          }
+        }
+      }
+    })
   }
 
   updateForm : boolean
@@ -2304,152 +2415,179 @@ console.log(val);
     this.newBrandImage = <File>event.target.files[0]
     console.log(this.newBrandImage);
 
-  setTimeout(() => {
-    this.savePic()
-  }, 300);
+  // setTimeout(() => {
+  //   this.savePic()
+  // }, 300);
     
   }
   saveEditedBrand(){
-    let brandID = this.currentBrand['brandID']
-    let addedCategories : Array<any> = []
-    let deletedCategories : Array<any> = []
-    let editedCategories : Array<any> = []
-    let exists : boolean
-    let deleted : boolean
-    let edited : boolean
-
-    //If categories exist in previous array
-    for(let key in this.newBrandCategories){
-      exists = false
-      edited = false
-      for(let i in this.currentBrandCategories){
-        if(this.newBrandCategories[key].categoryID === this.currentBrandCategories[i].categoryID){
-          if(this.newBrandCategories[key] === this.currentBrandCategories[i]){
-            edited = false
-            break
-          }else if(this.newBrandCategories[key] !== this.currentBrandCategories[i]){
-            edited = true
-          }
-
-          if(edited === true){
-            editedCategories.push(this.newBrandCategories[key])
-          }
-        }
-        if(this.newBrandCategories[key].name === this.currentBrandCategories[i].name){
-          exists = true;
-          break
-        }else{
-          exists = false
-        }
-      }
-      if(exists === false){
-        addedCategories.push(this.newBrandCategories[key])
-      }
-    }
-
-    //Checking if new array has missing items that were in the previous array
-    for(let key in this.currentBrandCategories){
-      deleted = false
-      for(let i in this.newBrandCategories){
-        if(this.currentBrandCategories[key].name === this.newBrandCategories[i].name){
-          deleted = false
-          break
-        }else{
-          deleted = true
-        }
-      }
-      if(deleted === true){
-        deletedCategories.push(this.currentBrandCategories[key])
-      }
-    }
-    console.log(deletedCategories);
-    console.log(addedCategories);
-    ////////////////////////////////////////////
-    ///////////////////////////////////////////
-    //////////////////////////////////////////
-    
-
-    if((this.currentBrand['name'] === this.currentBrandName) && (this.newBrandImage === undefined) && (deletedCategories.length === 0) && (addedCategories.length === 0) && (editedCategories.length === 0)){
-      console.log('nothing has been changed');
-      
-    }else{
-      return new Promise( (resolve, reject) => {
-        if(this.currentBrand['name'] !== this.currentBrandName){
-          return firebase.firestore().collection('brands').doc(brandID).update({
-            name: this.currentBrandName
-          }).then(result => {
+    return new Promise( (resolve, reject) => {
+      let brandID = this.currentBrand['brandID']
+      let addedCategories : Array<any> = []
+      let deletedCategories : Array<any> = []
+      let editedCategories : Array<any> = []
+      let exists : boolean
+      let deleted : boolean
+      let edited : boolean
+  
+      //If categories exist in previous array
+      for(let key in this.newBrandCategories){
+        exists = true
+        edited = false
+        for(let i in this.currentBrandCategories){
+          if(this.newBrandCategories[key].categoryID === this.currentBrandCategories[i].categoryID){
+            if((this.newBrandCategories[key].name === this.currentBrandCategories[i].name) && (this.newBrandCategories[key].pictureLink === this.currentBrandCategories[i].pictureLink) && (this.newBrandCategories[key].isAccessory === this.currentBrandCategories[i].isAccessory) && (this.newBrandCategories[key].isSummer === this.currentBrandCategories[i].isSummer)){
+              console.log('there is a match');
+              
+              edited = false
+              break
+            }else if((this.newBrandCategories[key].name !== this.currentBrandCategories[i].name) || (this.newBrandCategories[key].pictureLink !== this.currentBrandCategories[i].pictureLink) || (this.newBrandCategories[key].isAccessory !== this.currentBrandCategories[i].isAccessory) || (this.newBrandCategories[key].isSummer !== this.currentBrandCategories[i].isSummer)){
+              console.log(this.newBrandCategories[key]);
+              console.log(this.currentBrandCategories[i]);
+              
+              
+              edited = true
+            }
             
-          })
+
+          }
+          if(this.newBrandCategories[key].categoryID){
+            console.log(this.newBrandCategories[key]);
+            console.log(this.currentBrandCategories[i]);
+            
+            
+            exists = true;
+            break
+          }else{
+            console.log(this.currentBrandCategories[i]);
+            console.log(this.newBrandCategories[key]);
+            
+            
+            exists = false
+          }
         }
-      }).then(result => {
-        if(this.newBrandImage !== undefined){
-          return firebase.storage().ref('brands/' + brandID).put(this.newBrandImage).then(data => {
-            data.ref.getDownloadURL().then(url => {
-              firebase.firestore().collection('brands').doc(brandID).update({
-                pictureLink : url
-              })
+        if(edited === true){
+          editedCategories.push(this.newBrandCategories[key])
+        }
+        console.log(exists);
+        
+        if(exists === false){
+          addedCategories.push(this.newBrandCategories[key])
+          console.log('added new items');
+          
+        }
+        console.log(addedCategories);
+        
+      }
+  
+      
+      
+      //Checking if new array has missing items that were in the previous array
+      for(let key in this.currentBrandCategories){
+        deleted = false
+        for(let i in this.newBrandCategories){
+          if(this.currentBrandCategories[key].name === this.newBrandCategories[i].name){
+            deleted = false
+            break
+          }else{
+            deleted = true
+          }
+        }
+        if(deleted === true){
+          deletedCategories.push(this.currentBrandCategories[key])
+        }
+      }
+      console.log(editedCategories);
+      console.log(addedCategories);
+      console.log(deletedCategories);
+      ////////////////////////////////////////////
+      ///////////////////////////////////////////
+      //////////////////////////////////////////
+      
+  
+      if((this.currentBrand['name'] === this.currentBrandName) && (this.newBrandImage === undefined) && (deletedCategories.length === 0) && (addedCategories.length === 0) && (editedCategories.length === 0)){
+        console.log('nothing has been changed');
+        
+      }else{
+          if(this.currentBrand['name'] !== this.currentBrandName){
+            return firebase.firestore().collection('brands').doc(brandID).update({
+              name: this.currentBrandName
+            }).then(result => {
+              
             })
-          })
-        }
-      }).then( result => {
-        if(addedCategories.length > 0){
-          for(let i in addedCategories){
-            console.log(addedCategories[i].picture);
-            let picture = addedCategories[i].picture
-            firebase.firestore().collection('category').add({
-              brand: this.department,
-              brandID: brandID,
-              name: addedCategories[i].name,
-              isSummer : addedCategories[i].isSummer,
-              isAccessory : addedCategories[i].isAccessory
-            }).then( result => {
-              let categoryID = result.id
-              firebase.storage().ref('category/' + categoryID).put(picture).then( (data : any) => {
-                data.ref.getDownloadURL().then(url => {
-                  firebase.firestore().collection('category').doc(categoryID).update({
-                    pictureLink : url
+          }
+  
+          if(this.newBrandImage !== undefined){
+            this.productService.savePicToExistingBrand(brandID, this.newBrandImage).then(result => {
+              console.log('saved');
+              
+            })
+          }
+          console.log(addedCategories.length);
+          
+          if(addedCategories.length > 0){
+            for(let i in addedCategories){
+              console.log(addedCategories[i].picture);
+              let picture = addedCategories[i].picture
+              firebase.firestore().collection('category').add({
+                brand: this.currentBrandName,
+                brandID: brandID,
+                name: addedCategories[i].name,
+                isSummer : addedCategories[i].isSummer,
+                isAccessory : addedCategories[i].isAccessory
+              }).then( result => {
+                let categoryID = result.id
+                firebase.storage().ref('category/' + categoryID).put(picture).then( (data : any) => {
+                  data.ref.getDownloadURL().then(url => {
+                    firebase.firestore().collection('category').doc(categoryID).update({
+                      pictureLink : url
+                    })
                   })
                 })
               })
-            })
+            }
           }
-        }
-      }).then( result => {
-        if(deletedCategories.length > 0){
-          for(let i in deletedCategories){
-            console.log(deletedCategories[i].picture);
-            let picture = deletedCategories[i].picture
-            let categoryID = deletedCategories[i].categoryID
-            firebase.firestore().collection('category').doc(categoryID).delete().then(result => {
-
-            })
-          }
-        }
-      }).then( result => {
-        if(editedCategories.length > 0){
-          for(let i in editedCategories){
-            let categoryID = editedCategories[i].categoryID
-            if(editedCategories[i].pictureLink.name){
-              let picture = editedCategories[i].pictureLink
-              firebase.storage().ref('category/' + categoryID).put(picture).then(data => {
-                data.ref.getDownloadURL().then(url => {
-                  editedCategories[i].pictureLink = url
-                })
+  
+          if(deletedCategories.length > 0){
+            for(let i in deletedCategories){
+              console.log(deletedCategories[i].picture);
+              let picture = deletedCategories[i].picture
+              let categoryID = deletedCategories[i].categoryID
+              firebase.firestore().collection('category').doc(categoryID).delete().then(result => {
+  
               })
             }
-            let timer = setInterval( () => {
-              if(!editedCategories[i].pictureLink.name){
-                let newData = editedCategories[i]
-                firebase.firestore().collection('category').doc(categoryID).update({
-                  newData
+          }
+  
+          if(editedCategories.length > 0){
+            for(let i in editedCategories){
+              let categoryID = editedCategories[i].categoryID
+              if( (editedCategories[i].pictureLink !== undefined) && editedCategories[i].pictureLink.name){
+                let picture = editedCategories[i].pictureLink
+                firebase.storage().ref('category/' + categoryID).put(picture).then(data => {
+                  data.ref.getDownloadURL().then(url => {
+                    editedCategories[i].pictureLink = url
+                  })
                 })
               }
-              clearInterval(timer)
-            }, 3000)
+              let timer = setInterval( () => {
+                if(!editedCategories[i].pictureLink.name){
+                  let newData = editedCategories[i]
+                  firebase.firestore().collection('category').doc(categoryID).update({
+                    name: editedCategories[i].name,
+                    brand: this.currentBrandName,
+                    isSummer: editedCategories[i].isSummer,
+                    isAccessory: editedCategories[i].isAccessory,
+                    pictureLink: editedCategories[i].pictureLink
+                  })
+                }
+                clearInterval(timer)
+              }, 3000)
+            }
           }
-        }
+      }
       })
-    }
+
   }
 
   categoryAdder : boolean = false //boolean value to check if newBrandCategories has all values required to send to firebase
@@ -2485,6 +2623,7 @@ console.log(val);
   }
   currentBrand : object = {name: '', brandID: ''}
   currentBrandName : string = ''
+  currentBrandID : string = ''
   currentBrandCategories : Array<any> = []
   editbrand(event, item){
     console.log(item);
@@ -2494,7 +2633,9 @@ console.log(val);
     this.currentBrand['brandID'] = item.brandID
     console.log(this.currentBrand);
     this.currentBrandName = event
-    alert(event)
+    this.currentBrandID = item.brandID
+    this.newBrandImage = undefined
+    //alert(event)
     for(let key in this.categoryList){
       if(event === this.categoryList[key].brand.name){
         console.log(this.categoryList[key].brand.name);

@@ -182,7 +182,7 @@
               <input type="file" id="cat-img" (change)='addPictureToNewCategory($event, item)' [disabled]='!newCategory || !currentBrandName'>
             </div>
            <input type="text" placeholder="Category" id="cate" [(ngModel)]='newCategory' [disabled]='!currentBrandName'>    
-           <button (click)='addNewCategoryToArray()' [disabled]='!currentBrandName || !newCategory'>Add</button>        
+           <button (click)='addNewCategoryToArray()' [disabled]='!currentBrandName || !newCategory || !categoryPicture'>Add</button>        
           </div>
           <div class="added-cats">
 

@@ -897,4 +897,15 @@ return new Promise((resolve, reject)  => {
       })
     })
   }
+
+  deleteBrand(brandID){
+    return firebase.firestore().collection('brands').doc(brandID).delete().then(result => {
+      return 'success'
+    })
+  }
+  deleteCategory(categoryID){
+    return firebase.firestore().collection('category').doc(categoryID).delete().then(result => {
+      return 'Success'
+    })
+  }
 } 
