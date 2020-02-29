@@ -1,13 +1,13 @@
 <ion-content>
 
-  <div *ngIf='brandPicEdit'>
+  <!-- <div *ngIf='brandPicEdit'>
     <div>
       <ion-icon name='close' (click)='enableBrandPicEdit("close", null)'></ion-icon>
     </div>
-    <input type="file"  (change)='changeBrandImage($event, item)'>
+   
 
     <button (click)='savePic()'>Save</button>
-  </div>
+  </div> -->
 
   <ion-fab vertical="bottom" id="myFab" horizontal="end" slot="fixed">
     <ion-fab-button (click)='signOutPopup()'>
@@ -415,7 +415,11 @@
                           <ion-icon name="trash"></ion-icon>
                         </div>
                         <div (click)='enableBrandPicEdit("open", item)'>
-                          <ion-icon name='camera'></ion-icon>
+                          <input type="file" style="display: none" id={{item.name}} (change)='changeBrandImage($event, item)'>
+                          <label for="{{item.name}}">
+                            <ion-icon name='camera'></ion-icon>
+                          </label>
+                          
                         </div>
                         <div (click)="editbrand(item.name, item)">
                           <ion-icon name="create"></ion-icon>

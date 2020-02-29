@@ -2303,10 +2303,12 @@ console.log(val);
     console.log(item);
     this.newBrandImage = <File>event.target.files[0]
     console.log(this.newBrandImage);
-    
+
+  setTimeout(() => {
+    this.savePic()
+  }, 300);
     
   }
-
   saveEditedBrand(){
     let brandID = this.currentBrand['brandID']
     let addedCategories : Array<any> = []
