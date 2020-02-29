@@ -189,7 +189,12 @@
             <!-- perform the for loop on this div -->
             <div class="actual-cat" *ngFor='let item of newBrandCategories'>
               {{item.name}}
-              <input type='file' (change)='changeCategoryPicture($event, item)'>
+              
+              <label style="border: 2px solid red;
+              height: 20px;" for="{{item.name}}">
+                  <ion-icon name="camera"></ion-icon>
+              </label>
+              <input type='file' style="display: none" id={{item.name}} (change)='changeCategoryPicture($event, item)'>
               <div class="toRemove">
                 <ion-icon name="close" (click)='removeFromNewBrandsArray(item.name)'></ion-icon>
               </div>
