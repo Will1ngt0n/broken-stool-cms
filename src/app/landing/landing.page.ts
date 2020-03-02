@@ -2651,9 +2651,12 @@ console.log(val);
     }
     this.toggleAdderBrand('Edit the ' + event + " ")
   }
-  deleteBrand(){
-    let n = 1
-    console.log("this deletes the entire brand " + n + 1);
+  deleteBrand(brandID){
+    console.log(brandID);
+    
+    return this.productService.deleteBrand(brandID).then(result => {
+      
+    })
     
   }
 }

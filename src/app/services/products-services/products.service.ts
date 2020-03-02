@@ -899,8 +899,11 @@ return new Promise((resolve, reject)  => {
   }
 
   deleteBrand(brandID){
-    return firebase.firestore().collection('brands').doc(brandID).delete().then(result => {
-      return 'success'
+    return firebase.firestore().collection('brands').doc(brandID).update({
+      deleteQueue: true
+    }).then(result => {
+      console.log(result);
+      
     })
   }
   deleteCategory(categoryID){

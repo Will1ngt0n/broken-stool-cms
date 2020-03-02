@@ -416,7 +416,7 @@
                     </div>
                     <div id="user-options-opts">
                       <div id="user-opt-buttons">
-                        <div (click)="deleteBrand()">
+                        <div (click)="deleteBrand(item.brandID)">
                           <ion-icon name="trash"></ion-icon>
                         </div>
                         <div (click)='enableBrandPicEdit("open", item)'>
@@ -1023,7 +1023,7 @@
                     </div>
                     <div id="user-options-opts">
                       <div id="user-opt-buttons">
-                        <div (click)="deleteBrand()">
+                        <div (click)="deleteBrand(item)">
                           <ion-icon name="trash"></ion-icon>
                         </div>
                         <div (click)="editbrand(item.name)">
