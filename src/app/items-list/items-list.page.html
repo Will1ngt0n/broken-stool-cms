@@ -20,6 +20,10 @@
         <input type="number" placeholder="Percentile % (e.g 20)" [(ngModel)]='editPercentage'
           (keyup)='calculateSalePrice($event);'>
           <p *ngIf="salePrice">Sale Price {{salePrice}}</p>
+          <div class="gridded-inputs-labels">
+            <p style="width: 50%;">Start Date</p>
+            <p style="width: 50%;">End Date</p>
+          </div>
         <div class="gridded-inputs">
           <input type="date" placeholder="Start Date" [(ngModel)]='editStartDate' [min]='today'
             (change)='enableEndDateInput()' /><input [disabled]='!editStartDate' type="date" placeholder="End Date"
@@ -175,12 +179,44 @@
                     <img [src]="pictureLink" alt="">
                   </div>
                   <div class="brandName-text-head">
-                    <a (click)='navigate()'>{{title}}</a> <b href="" *ngIf="currentCategory"> / {{currentCategory}}</b>
+                    <!-- <a (click)='navigate()'>{{title}}</a> -->
+                    <b href="" *ngIf="currentCategory">  {{currentCategory}}</b>
                   </div>
                 </div>                  
               </ion-col>
-              <ion-col size="3" (click)='navigateForward(item.data.name)' *ngFor='let item of currentSelectedItems'>
+              <ion-col size="3" *ngFor='let item of currentSelectedItems'>
                 <div class="brandName">
+                  <div class="onPromo" *ngIf="item.data.onSale === true">
+                    On Promotion
+                  </div>
+                  <div class="myOptions">
+                    <div class="chooseOneLabels">
+                      <div class="myLabels">Hide</div>
+                      <div class="myLabels">Edit</div>
+                      <div class="myLabels">Promo</div>
+                      <div class="myLabels">Del</div>
+                    </div>
+                    <div class="chooseOne">
+                      <div (click)='showItem(item.productID, item.brand, item.category, item)' *ngIf='item.data.hideItem === true'>
+                        <ion-icon name="eye"></ion-icon>
+                      </div>
+                      <div (click)='hideItem(item.productID, item.brand, item.category, item)' *ngIf='item.data.hideItem === false'>
+                        <ion-icon name="eye-off"></ion-icon>
+                      </div>
+                      <div (click)="toggleUpdate(item.productID, item.brand, item.category, item.data.name, item.data.description, item.data.price, item.data.pictureLink, item.data.size, item.data.color)">
+                        <ion-icon name="create"></ion-icon>                        
+                      </div>
+                      <div *ngIf="item.data.onSale === false" (click)="showPromo(item.productID, item.brand, item.category, item.data.name, item.data.description, item.data.price, item.data.pictureLink, item)">
+                        <ion-icon name="flash"></ion-icon>
+                      </div>
+                      <div *ngIf="item.data.onSale === true"  (click)="alreadyOnSale()">
+                        <ion-icon name="flash"></ion-icon>
+                      </div>
+                      <div (click)='deleteItem(item.productID, item.brand, item.category, item)'>
+                        <ion-icon name="md-trash"></ion-icon>
+                      </div>
+                    </div>
+                  </div>
                   <div class="brandImage">
                     <img [src]="item.data.pictureLink" alt="">
                   </div>

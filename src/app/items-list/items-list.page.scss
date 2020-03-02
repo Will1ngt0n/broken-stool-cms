@@ -64,7 +64,7 @@
 #item-image {
   width: 100%;
   height: 300px;
-  object-fit: cover;
+  object-fit: contain;
 }
 .item-detail {
   font-size: 14px;
@@ -169,6 +169,29 @@ textarea {
     line-height: 35px;
   }
 }
+.gridded-inputs-labels {
+  display: flex;
+  margin-top: 10px;
+  margin-bottom: -15px;
+  input:nth-child(1) {
+    margin-right: 2.5px;
+    margin-top: 0;
+    width: 49%;
+  }
+  input:nth-child(2) {
+    margin-left: 2.5px;
+    margin-top: 0;
+    width: 49%;
+  }
+  ion-button {
+    width: 48%;
+    text-transform: capitalize;
+    border-radius: 0px;
+    margin: 0 auto;
+    height: 35px;
+    line-height: 35px;
+  }
+}
 .nav-bar {
   width: 100%;
   height: 60px;
@@ -214,7 +237,7 @@ textarea {
     width: 40px;
     height: 40px;
     border-radius: 50px;
-    object-fit: cover;
+    object-fit: contain;
     transform: translateY(10px);
   }
 }
@@ -458,7 +481,7 @@ ion-searchbar {
     img {
       width: 70px;
       height: 70px;
-      object-fit: cover;
+      object-fit: contain;
       position: absolute;
       right: 5px;
     }
@@ -519,7 +542,7 @@ ion-searchbar {
   img {
     width: 150px;
     height: 150px;
-    object-fit: cover;
+    object-fit: contain;
   }
   #info {
     padding-left: 10px;
@@ -722,7 +745,7 @@ ion-searchbar {
     img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
     }
     h4 {
       font-weight: bolder;
@@ -788,7 +811,7 @@ ion-searchbar {
     img {
       width: 100%;
       height: 200px;
-      object-fit: cover;
+      object-fit: contain;
       border: 5px;
     }
     #nameOfItem {
@@ -876,7 +899,7 @@ ion-searchbar {
     img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
     }
   }
   .SubCats > div:nth-child(2) {
@@ -1102,7 +1125,7 @@ a{
     img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
     }
     p {
       // font-weight: bold;
@@ -1135,16 +1158,19 @@ a{
     height: 250px;
     // background: blue;
     // margin: 5px;
-    cursor: pointer;
+    // cursor: pointer;
     transition: 300ms;
     padding: 0;
+    border: .5px solid rgba(0, 0, 0, 0.178);
+    border-radius: 5px;
+    overflow: hidden ;
   }
   .brandName-top {
     width: 100%;
     height: 150px;
     // background: blue;
     // margin: 5px;
-    cursor: pointer;
+    // cursor: pointer;
     transition: 300ms;
     padding: 0;
   }
@@ -1169,7 +1195,7 @@ a{
     img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       transition: 300ms;
     }
   }
@@ -1185,6 +1211,13 @@ a{
       left: 15px;
       bottom: 15px;
     }
+    .myOptions{
+      transition-delay: 300ms;
+      opacity: 1;
+    }
+    .chooseOne{
+      margin-top: 10px;
+    }
   }
   .brandName-text {
     padding: 5px;
@@ -1198,7 +1231,9 @@ a{
     width: calc(100% - 10px);
     transition: 300ms;
     transition-delay: 300ms;
-    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5))
+    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
   }
   .brandName-text-head{
     padding: 10px;
@@ -1214,6 +1249,11 @@ a{
     transition-delay: 300ms;
     background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
     font-size: 3vh;
+  }
+  @media screen and (min-height: 1024px){
+    .brandName-text-head{
+      font-size: 30px;
+    }
   }
 }
 
@@ -1231,4 +1271,104 @@ a{
   line-height: 50px;
   font-family: "Poppins";
   padding-left: 20px;
+}
+#makeSmaller{
+  cursor: default !important
+}
+
+.myOptions{
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.452);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  opacity: 0;
+  transition: 300ms;
+  display: flex;
+  flex-direction: column;
+  // justify-content: center;
+}
+.chooseOne{
+  width: calc(100% - 20px);
+  margin: 0px auto;
+  margin-top: -100px;
+  height: 60px;
+  // background: red;
+  // border: 1px solid white;
+  border-radius: 5px;
+  display: flex;
+  transition: 300ms;
+  transition-delay: 200ms;
+}
+.chooseOneLabels{
+  width: calc(100% - 20px);
+  margin: 0px auto;
+  margin-top: 10px;
+  // height: 20px;
+  // background: red;
+  // border: 1px solid white;
+  border-radius: 5px;
+  display: flex;
+}
+@media screen and (max-width: 1145px){
+  .chooseOneLabels{
+    display: none;
+  }
+}
+.chooseOneLabels > div {
+  width: 20%;
+  height: 100%;
+  margin: 0 auto;
+  text-align: center;
+  // line-height: 60px;
+  font-size: 20px;
+  cursor: pointer;
+  color: white;
+}
+.chooseOne > div {
+  width: 20%;
+  height: 100%;
+  margin: 0 auto;
+  text-align: center;
+  line-height: 60px;
+  font-size: 20px;
+  cursor: pointer;
+  color: white;
+  border: 1px solid white;
+  border-radius: 10px;
+}
+.toViewItem{
+  border: 1px solid white;
+  border-radius: 5px;
+  font-size: 12px;
+  color: white;
+  text-align: center;
+  width: 150px;
+  margin: 10px auto;
+  cursor: pointer;
+}
+.myLabels{
+  font-size: 10px !important;
+}
+.onPromo{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: white;
+  background: black;
+  padding: 5px;
+}
+
+@keyframes slideInUP {
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+ion-col{
+  overflow: hidden;
 }
