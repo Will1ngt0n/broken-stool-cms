@@ -2649,11 +2649,12 @@ console.log(val);
         
       }
     }
-    this.toggleAdderBrand('Edit the ' + event + " ")
+    this.toggleAdderBrand('Edit ' + event + "'s  ")
   }
-  deleteBrand(){
+  deleteBrand(item){
     let n = 1
-    console.log("this deletes the entire brand " + n + 1);
+    console.log("this deletes the entire " + item.name + " brand");
+    console.log(item);
     
   }
 }
