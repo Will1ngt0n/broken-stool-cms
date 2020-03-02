@@ -2604,7 +2604,7 @@ console.log(val);
 
   toggleAdderCat(){
     if(this.department === 'Select Brand'){
-      this.productAlert('Please select a brand to add a category to', 'No brand selected')
+      this.productAlert('Please select or add a brand to add a category to.', 'No brand selected')
     }else{
       this.adderOpen = true;
       this.isBrand = false;  

@@ -22,7 +22,8 @@
             <ion-icon name="home"></ion-icon>
           </ion-button>
           <div class="page-title">
-            Summer Gear
+            <!-- Summer Gear -->
+            {{currentBrand}}
           </div>
         </div>
 
@@ -48,12 +49,12 @@
                   </div>
                 </div>                  
               </ion-col>
-              <ion-col size="3" *ngFor='let item of categories'>
+              <ion-col size="3" *ngFor='let item of categories' (click)='navigateForward(item)'>
                 <div class="brandName">
                   <div class="brandImage">
                     <img [src]='item.data.pictureLink' alt="">
                   </div>
-                  <div class="brandName-text" (click)='navigateForward(item)'>
+                  <div class="brandName-text">
                     {{item.data.name}}
                   </div>
                 </div>                  
