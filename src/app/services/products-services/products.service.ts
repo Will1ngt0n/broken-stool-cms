@@ -67,64 +67,10 @@ return new Promise((resolve, reject)  => {
   })
 
   }
-  addItems(department, selectedCategory,  itemName, description, price, size, accessory, summer, color, picture){
-   // console.log(department);
-  //  console.log(selectedCategory);
-    return firebase.firestore().collection('Products').doc(department).collection(selectedCategory).add({
-      quantity: 1,
-      color: color,
-      // brand: department,
-      // category: selectedCategory,
-      pictureLink: 'none',
-      price : Number(price),
-      size : size,
-      name : itemName,
-      hideItem : true,
-      description : description,
-      isAccessory: accessory,
-      isSummer: summer,
-      onSale: false,
-      timestamp : firebase.firestore.FieldValue.serverTimestamp(),
-      dateAdded : moment(new Date()).format('LLLL')
-    }).then(result => {
-    //  console.log(result);
-      
-      // if(department === 'Dankie Jesu'){
-      //   if(summer === true){
-      //     firebase.firestore().collection('Brands').doc(department).collection('Summer').doc(result.id).set({
-      //       timestamp : firebase.firestore.FieldValue.serverTimestamp()
-      //     })
-      //   }else if(summer === false){
-      //     firebase.firestore().collection('Brands').doc(department).collection('Winter').doc(result.id).set({
-      //       timestamp : firebase.firestore.FieldValue.serverTimestamp()
-      //     })
-      //   }
-      // }
-      // firebase.firestore().collection('NumberOfProducts').doc('MwjotZqh3JPKx0qEcuui').get().then(result => {
-      //   let number : string = String(Number(result.data().numberOfProducts) + 1)
-      //   firebase.firestore().collection('NumberOfProducts').doc('MwjotZqh3JPKx0qEcuui').update({
-      //     numberOfProducts: number
-      //   })
-      // })
 
-      let storageRef = firebase.storage().ref('clothes/' + result.id)
-      console.log(picture);
-      
-      storageRef.put(picture).then((data) => {
-        console.log(data);
-        data.ref.getDownloadURL().then(url => {
-          firebase.firestore().collection('Products').doc(department).collection(selectedCategory).doc(result.id).update({
-            pictureLink: url,
-            hideItem: false
-          })
-        })
-        console.log('Saved');
-      })
-    })
-  }
 
   getAllSales(brand, category){
-    return firebase.firestore().collection('Specials').doc(brand).collection(category).get().then(result => {
+    return firebase.firestore().collection('Specials').get().then(result => {
       let sales : Array<any> = []
       for(let key in result.docs){
         
@@ -139,7 +85,7 @@ return new Promise((resolve, reject)  => {
   
   }
   getProduct(brand, category, productID, data){
-    return firebase.firestore().collection('Products').doc(brand).collection(category).doc(productID).get().then(product => {
+    return firebase.firestore().collection('Products').doc(productID).get().then(product => {
       let productData : Object = {}
       let sales : Array<any> = []
       //console.log(product.data());
@@ -293,7 +239,7 @@ return new Promise((resolve, reject)  => {
     })
   }
   hideItem(productID, item){
-    return firebase.firestore().collection('Specials').doc(item.data.brand).collection(item.data.category).doc(productID).update({
+    return firebase.firestore().collection('Specials').doc(productID).update({
       hideItem : true
     }).then(result => {
      // console.log(result);
@@ -301,14 +247,14 @@ return new Promise((resolve, reject)  => {
   }
 
   showItem(productID, item){
-    return firebase.firestore().collection('Specials').doc(item.data.brand).collection(item.data.category).doc(productID).update({
+    return firebase.firestore().collection('Specials').doc(productID).update({
       hideItem : false
     }).then(result => {
      // console.log(result);
     })
   }
   updateSpecialsItem(productID, item, newPrice, newPricePercentage, newStartDate, newEndDate){
-    return firebase.firestore().collection('Specials').doc(item.data.brand).collection(item.data.category).doc(productID).update({
+    return firebase.firestore().collection('Specials').doc(productID).update({
       saleprice: Number(newPrice),
       endDate: newEndDate,
       startDate: newStartDate,
@@ -427,7 +373,7 @@ return new Promise((resolve, reject)  => {
     console.log(category);
     console.log(item);
     
-    return firebase.firestore().collection('Products').doc(brand).collection(category).doc(productID).update({
+    return firebase.firestore().collection('Products').doc(productID).update({
       hideItem : true
     }).then(result => {
      // console.log(result);
@@ -452,7 +398,7 @@ return new Promise((resolve, reject)  => {
     
     
     
-    return firebase.firestore().collection('Products').doc(brand).collection(category).doc(productID).update({
+    return firebase.firestore().collection('Products').doc(productID).update({
       hideItem : false
     }).then(result => {
      // console.log(result);
@@ -486,7 +432,7 @@ return new Promise((resolve, reject)  => {
               console.log(result);
               result.ref.getDownloadURL()
               .then(url => {
-                firebase.firestore().collection('Products').doc(itemBrand).collection(itemCategory).doc(itemID).update({
+                firebase.firestore().collection('Products').doc(itemID).update({
                  pictureLink: url,
                   hideItem: false
                 })
@@ -507,7 +453,7 @@ return new Promise((resolve, reject)  => {
 
   }
   updateItem(itemID, itemBrand, itemCategory, itemPrice, itemDescription, itemName, sizes){
-    return firebase.firestore().collection('Products').doc(itemBrand).collection(itemCategory).doc(itemID).update({
+    return firebase.firestore().collection('Products').doc(itemID).update({
       price : Number(itemPrice),
       description : itemDescription,
       name : itemName,
@@ -523,7 +469,7 @@ return new Promise((resolve, reject)  => {
 
       })
     }
-    return firebase.firestore().collection('Products').doc(brand).collection(category).doc(productID).update({
+    return firebase.firestore().collection('Products').doc(productID).update({
       price : Number(itemPrice),
       description : itemDescription,
       name : itemName

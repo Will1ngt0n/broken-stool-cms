@@ -996,7 +996,7 @@
             <div>
               <div id="image-and-text">
                 <p>Sales and Specials</p>
-                <img src="../../assets/imgs/Placeholders/Smart Casual.jpg" alt="">
+                <img src="../../assets/imgs/Placeholders/b.jpg" alt="">
               </div>
             </div>
             <div>Brands</div>
@@ -1017,7 +1017,7 @@
             </div> -->
             <ion-grid class="bigGrid">
               <ion-row>
-                <ion-col size="6" (click)='viewMore(item.name)' *ngFor='let item of brands'>
+                <!-- <ion-col size="6" (click)='viewMore(item.name)' *ngFor='let item of brands'>
                   <div class="brandName-smaller">
                     <div class="brandImage">
                       <img src="../../assets/imgs/3d2acdaf95ed9e473ddbb3bd433fed9f.jpg" alt="">
@@ -1032,9 +1032,38 @@
                         </div>
                       </div>
                     </div>
-                    <!-- <div id="user-options" (click)='viewMore(item.name)'>
-                    </div> -->
                     <div class="brandName-text">
+                      {{item.name}}
+                    </div>
+                  </div>                  
+                </ion-col> -->
+                
+                <ion-col size="6" *ngFor='let item of brands'>
+                  <div class="brandName-smaller">
+                    <div class="brandImage" (click)='viewMore(item.name, item)'>
+                      <img [src]="item.pictureLink" alt="">
+                    </div>
+                    <div id="user-options-opts">
+                      <div id="user-opt-buttons">
+                        <div (click)="deleteBrand(item)">
+                          <ion-icon name="trash"></ion-icon>
+                        </div>
+                        <div (click)='enableBrandPicEdit("open", item)'>
+                          <input type="file" accept="image/x-png,image/jpeg" style="display: none" id={{item.name}} (change)='changeBrandImage($event, item)'>
+                          <label for="{{item.name}}">
+                            <ion-icon name='camera'></ion-icon>
+                          </label>
+                          
+                        </div>
+                        <div (click)="editbrand(item.name, item)">
+                          <ion-icon name="create"></ion-icon>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <div id="user-options" (click)='viewMore(item.name)'>
+                      <input type="file" accept="image/x-png,image/jpeg"  (change)='changeBrandImage($event, item)'>
+                    </div> -->
+                    <div class="brandName-text" (click)='viewMore(item.name)'>
                       {{item.name}}
                     </div>
                   </div>                  

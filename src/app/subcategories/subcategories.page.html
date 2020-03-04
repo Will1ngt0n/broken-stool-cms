@@ -114,36 +114,41 @@
         </div>
         
         <div class="brands">
-          <!-- <div class="brandName">
-            <div class="brandImage">
-              <img src="../../assets/imgs/3d2acdaf95ed9e473ddbb3bd433fed9f.jpg" alt="">
-            </div>
-            <div class="brandName-text">
-              Lorem Ipsum
-            </div>
-          </div> -->
           <ion-grid class="bigGrid">
             <ion-row>
-              <ion-col size="12">
+              <ion-col size="12" (click)='navigateForward("All")'>
                 <div class="brandName">
                   <div class="brandImage">
-                    <img src="../../assets/imgs/3d2acdaf95ed9e473ddbb3bd433fed9f.jpg" alt="">
+                    <img [src]="pictureLink" alt="">
                   </div>
                   <div class="brandName-text-head">
-                    View All Dankie Jesu Items
+                    View All {{currentBrand}} Items
                   </div>
                 </div>                  
               </ion-col>
-              <ion-col size="6">
+              <ion-col size="6" *ngFor='let item of categories' (click)='navigateForward(item)'>
                 <div class="brandName-small">
                   <div class="brandImage">
-                    <img src="../../assets/imgs/3d2acdaf95ed9e473ddbb3bd433fed9f.jpg" alt="">
+                    <img [src]='item.data.pictureLink' alt="">
+                    
                   </div>
+                  {{item.data.pictureLink}}
                   <div class="brandName-text">
-                    Lorem Ipsum
+                    {{item.data.name}}
                   </div>
                 </div>                  
               </ion-col>
+              
+              <!-- <ion-col size="3" *ngFor='let item of categories' (click)='navigateForward(item)'>
+                <div class="brandName">
+                  <div class="brandImage">
+                    <img alt="">
+                  </div>
+                  <div class="brandName-text">
+                    
+                  </div>
+                </div>                  
+              </ion-col> -->
             </ion-row>
           </ion-grid>
         </div>

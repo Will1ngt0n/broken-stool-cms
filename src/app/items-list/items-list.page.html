@@ -6,8 +6,10 @@
         <ion-icon name="close"></ion-icon>
       </ion-button>
       <p id="topic-item"><b>{{promoUdpate}}</b></p>
-      <img *ngIf='itemImageLink' [src]="itemImageLink" alt="" id="item-image">
-      <img *ngIf='!itemImageLink' src="../../assets/imgs/images.jpg" alt="" id="item-image">
+      <div class="theItemsImage">
+        <img *ngIf='itemImageLink' [src]="itemImageLink" alt="" id="item-image">
+        <img *ngIf='!itemImageLink' src="../../assets/imgs/images.jpg" alt="" id="item-image">
+      </div>
       <div class="item-data">
         <h3>{{itemName}}</h3>
         <p class="item-detail">
@@ -19,11 +21,11 @@
         </p>
         <input type="number" placeholder="Percentile % (e.g 20)" [(ngModel)]='editPercentage'
           (keyup)='calculateSalePrice($event);'>
-          <p *ngIf="salePrice">Sale Price {{salePrice}}</p>
-          <div class="gridded-inputs-labels">
-            <p style="width: 50%;">Start Date</p>
-            <p style="width: 50%;">End Date</p>
-          </div>
+        <p *ngIf="salePrice">Sale Price {{salePrice}}</p>
+        <div class="gridded-inputs-labels">
+          <p style="width: 50%;">Start Date</p>
+          <p style="width: 50%;">End Date</p>
+        </div>
         <div class="gridded-inputs">
           <input type="date" placeholder="Start Date" [(ngModel)]='editStartDate' [min]='today'
             (change)='enableEndDateInput()' /><input [disabled]='!editStartDate' type="date" placeholder="End Date"
@@ -40,8 +42,10 @@
         <ion-icon name="close"></ion-icon>
       </ion-button>
       <p id="topic-item"><b>{{promoUdpate}}</b></p>
-      <img *ngIf='!itemImageLink' src="../../assets/imgs/images.jpg" alt="" id="item-image">
-      <img *ngIf='itemImageLink' [src]="itemImageLink" alt="" id="item-image">
+      <div class="theItemsImage">
+        <img *ngIf='itemImageLink' [src]="itemImageLink" alt="" id="item-image">
+        <img *ngIf='!itemImageLink' src="../../assets/imgs/images.jpg" alt="" id="item-image">
+      </div>
       <div class="item-data">
         <h3>{{updateName}}</h3>
         <p class="item-detail">
@@ -114,9 +118,10 @@
         </div>
         <input type="text" placeholder="Item Name" (keyup)='findMatch($event)' [(ngModel)]='updateName' /><br />
         ​<span id="exists" *ngIf="categoryMatch === true">This item already exists on this category</span>
-        <input type="number" placeholder="Price" [(ngModel)]='updatePrice' (keyup)='updatePrices()'/>
+        <input type="number" placeholder="Price" [(ngModel)]='updatePrice' (keyup)='updatePrices()' />
         <br />
-        <textarea placeholder="Item Description" rows="3" [(ngModel)]='updateDescription' (keyup)='updateDescriptions()'></textarea>
+        <textarea placeholder="Item Description" rows="3" [(ngModel)]='updateDescription'
+          (keyup)='updateDescriptions()'></textarea>
         <div class="gridded-inputs">
           <ion-button color="danger" (click)="dismissPromo()">Cancel</ion-button>
           <ion-button color="success" (click)='updateItem()' [disabled]='!updateForm'>Update</ion-button>
@@ -160,8 +165,8 @@
           </div>
         </div>
 
-        
-          
+
+
         <div class="brands">
           <!-- <div class="brandName">
             <div class="brandImage">
@@ -180,11 +185,16 @@
                   </div>
                   <div class="brandName-text-head">
                     <!-- <a (click)='navigate()'>{{title}}</a> -->
-                    <b href="" *ngIf="currentCategory">  {{currentCategory}}</b>
+                    <b href="" *ngIf="currentCategory"> {{currentCategory}}</b>
                   </div>
-                </div>                  
+                </div>
               </ion-col>
               <ion-col size="3" *ngFor='let item of currentSelectedItems'>
+                <div class="big-on-sale">
+                  <p><b>{{item.data.price | currency : 'R'}}</b></p>
+                  <p id="new-price" *ngIf="item.data.onSale === true"><b>{{item.data.price | currency : 'R'}}</b></p>
+                  <p id="old-price" *ngIf="item.data.onSale === true"><b>{{item.data.price | currency : 'R'}}</b></p>
+                </div>
                 <div class="brandName">
                   <div class="onPromo" *ngIf="item.data.onSale === true">
                     On Promotion
@@ -197,19 +207,23 @@
                       <div class="myLabels">Del</div>
                     </div>
                     <div class="chooseOne">
-                      <div (click)='showItem(item.productID, item.brand, item.category, item)' *ngIf='item.data.hideItem === true'>
+                      <div (click)='showItem(item.productID, item.brand, item.category, item)'
+                        *ngIf='item.data.hideItem === true'>
                         <ion-icon name="eye"></ion-icon>
                       </div>
-                      <div (click)='hideItem(item.productID, item.brand, item.category, item)' *ngIf='item.data.hideItem === false'>
+                      <div (click)='hideItem(item.productID, item.brand, item.category, item)'
+                        *ngIf='item.data.hideItem === false'>
                         <ion-icon name="eye-off"></ion-icon>
                       </div>
-                      <div (click)="toggleUpdate(item.productID, item.brand, item.category, item.data.name, item.data.description, item.data.price, item.data.pictureLink, item.data.size, item.data.color)">
-                        <ion-icon name="create"></ion-icon>                        
+                      <div
+                        (click)="toggleUpdate(item.productID, item.brand, item.category, item.data.name, item.data.description, item.data.price, item.data.pictureLink, item.data.size, item.data.color)">
+                        <ion-icon name="create"></ion-icon>
                       </div>
-                      <div *ngIf="item.data.onSale === false" (click)="showPromo(item.productID, item.brand, item.category, item.data.name, item.data.description, item.data.price, item.data.pictureLink, item)">
+                      <div *ngIf="item.data.onSale === false"
+                        (click)="showPromo(item.productID, item.brand, item.category, item.data.name, item.data.description, item.data.price, item.data.pictureLink, item)">
                         <ion-icon name="flash"></ion-icon>
                       </div>
-                      <div *ngIf="item.data.onSale === true"  (click)="alreadyOnSale()">
+                      <div *ngIf="item.data.onSale === true" (click)="alreadyOnSale()">
                         <ion-icon name="flash"></ion-icon>
                       </div>
                       <div (click)='deleteItem(item.productID, item.brand, item.category, item)'>
@@ -223,7 +237,7 @@
                   <div class="brandName-text">
                     {{item.data.name}}
                   </div>
-                </div>                  
+                </div>
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -265,7 +279,7 @@
 
 
         </div> -->
-        
+
         <div class="listEmpty" *ngIf="currentViewedItems.length == 0">
           <p>No items uploaded so far</p>
           <div id="noItems">
@@ -312,28 +326,28 @@
 
           <div class="SubCats">
             <div>
-            <div class="hidden" *ngIf='item.data.hideItem === true'>Hidden</div>
+              <div class="hidden" *ngIf='item.data.hideItem === true'>Hidden</div>
               <img defer [src]="item.data.pictureLink" *ngIf='item.data.pictureLink' alt="">
               <img src="../../assets/imgs/images.jpg" *ngIf="!item.data.pictureLink" alt="">
             </div>
             <div>
               <h5>{{item.data.name}}</h5>
-              <p *ngIf="item.data.onSale === false"><b>R {{item.data.price | currency : 'R'}}</b></p>
+              <p *ngIf="item.data.onSale === false"><b>{{item.data.price | currency : 'R'}}</b></p>
               <div class="on-sale" *ngIf="item.data.onSale === true">
-                <p id="new-price"><b>R {{item.data.saleprice | currency : 'R'}}</b></p>
-                <p id="old-price"><b>R {{item.data.price | currency : 'R'}}</b></p>
+                <p id="new-price"><b>{{item.data.saleprice | currency : 'R'}}</b></p>
+                <p id="old-price"><b>{{item.data.price | currency : 'R'}}</b></p>
               </div>
               <p class="description">{{item.data.description}}</p>
               <br>
               <div class="opts">
                 <div>
-                  <button icon-only  *ngIf="item.data.onSale === false"
+                  <button icon-only *ngIf="item.data.onSale === false"
                     (click)="showPromo(item.productID, item.brand, item.category, item.data.name, item.data.description, item.data.price, item.data.pictureLink, item)">
                     <ion-icon name="flash"></ion-icon>
                   </button>
-                  <button icon-only *ngIf="item.data.onSale === true"
-                  (click)="alreadyOnSale()"><ion-icon name="flash"></ion-icon>
-                </button>
+                  <button icon-only *ngIf="item.data.onSale === true" (click)="alreadyOnSale()">
+                    <ion-icon name="flash"></ion-icon>
+                  </button>
                 </div>
                 <div>
                   <button icon-only

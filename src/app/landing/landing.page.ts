@@ -2685,7 +2685,7 @@ console.log(val);
         
       }
     }
-    this.toggleAdderBrand('Edit the ' + event + " ")
+    this.toggleAdderBrand('Edit ' + event + "'s  ")
   }
   deleteBrand(brandID){
     console.log(brandID);
