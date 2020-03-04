@@ -272,7 +272,7 @@ export class LandingPage implements OnInit {
   loadRunFunction(){
     console.log('mememeemee');
     
-    this.presentLoading()
+   // this.presentLoading()
     this.getCategories()
     this.loadAllProducts()
     this.pageLoader = true
@@ -470,20 +470,35 @@ export class LandingPage implements OnInit {
               addItem = true
             }
           }
+          console.log(addItem);
+          
           if(addItem = true){
             brands.push({ brandID: change.doc.id, name :change.doc.data().name, pictureLink : change.doc.data().pictureLink})
           }
         }else if(change.type === 'modified'){
+          let addToBrandsToo : boolean = false
+          let removeFromBrands : boolean = false
           for(let i in this.brands){
             if(this.brands[i].brandID === change.doc.id){
-              console.log('we found a match in snapshots');
-              console.log(change.doc.data());
-              console.log(this.brands[i].brandID, change.doc.id);
+
+              if(change.doc.data().deleteQueue === false){
+                console.log('we found a match in snapshots');
+                console.log(change.doc.data());
+                console.log(this.brands[i].brandID, change.doc.id);
+                
+                this.brands[i] = { brandID: change.doc.id, name :change.doc.data().name, pictureLink : change.doc.data().pictureLink}
+                console.log(this.brands[i]);
+              }else if(change.doc.data().deleteQueue === true){
+                this.brands.splice(Number(i), 1)
+              }
+              addToBrandsToo = false
               
-              this.brands[i] = { brandID: change.doc.id, name :change.doc.data().name, pictureLink : change.doc.data().pictureLink}
-              console.log(this.brands[i]);
-              
+            }else if(this.brands[i].brandID !== change.doc.id){
+              addToBrandsToo = true
             }
+          }
+          if(addToBrandsToo === true){
+            this.brands.unshift({ brandID: change.doc.id, name :change.doc.data().name, pictureLink : change.doc.data().pictureLink})
           }
         }else if(change.type === 'removed'){
           for(let i in this.brands){
@@ -650,6 +665,23 @@ export class LandingPage implements OnInit {
     }
     this.checkValidity()
   }
+  productCodeMatch : boolean
+  checkCode(event : any){
+
+    let code = event.target.value
+    console.log(this.allProducts);
+    
+    for(let key in this.allProducts){
+      if(code === this.allProducts[key].data.productCode){
+        
+        
+        this.productCodeMatch = true
+        break
+      }else{
+        this.productCodeMatch = false
+      }
+    }
+  }
   myUpload = "../../assets/imgs/default.png";
   uploaderImage = document.getElementsByClassName("adder") as HTMLCollectionOf <HTMLElement>;
   uploadedImage = document.getElementsByClassName("imageChanged") as HTMLCollectionOf <HTMLElement>;
@@ -724,6 +756,7 @@ export class LandingPage implements OnInit {
     this.myUpload = "../../assets/imgs/default.png"
     this.newProductCode = ''
     this.generateCode = false
+    this.productCodeMatch = false
     this.fileInput.nativeElement.value = ''
 
     if(this.departmentCombo){
@@ -782,12 +815,13 @@ export class LandingPage implements OnInit {
     this.selectedCategory = 'Select Category'
   }
   //Routing to sales page
-  viewSales(query) {
-    console.log(query);
-    let navOptions = {
-      queryParams: { query: query }
-    }
-    this.navCtrl.navigateForward(['sales-specials'], navOptions)
+  viewSales() {
+    this.route.navigate(['sales-specials'])
+    // console.log(query);
+    // let navOptions = {
+    //   queryParams: { query: query }
+    // }
+    // this.navCtrl.navigateForward(['sales-specials'], navOptions)
   }
 
   viewMore(query, item) {
@@ -2232,7 +2266,8 @@ console.log(val);
     
     return firebase.firestore().collection('brands').add({
       name : this.newBrand,
-      pictureLink: 'undefined'
+      pictureLink: 'undefined',
+      deleteQueue: false
     })
     .then(result => {
       resultID = result.id
@@ -2252,7 +2287,8 @@ console.log(val);
           brandID: resultID,
           name: this.newBrandCategories[key].name,
           isSummer : this.newBrandCategories[key].isSummer,
-          isAccessory : this.newBrandCategories[key].isAccessory
+          isAccessory : this.newBrandCategories[key].isAccessory,
+          deleteQueue: false
         }).then( result => {
           let categoryID = result.id
           firebase.storage().ref('category/' + categoryID).put(picture).then( (data : any) => {
@@ -2658,5 +2694,21 @@ console.log(val);
       
     })
     
+  }
+  viewAll(){
+    console.log(this.brands);
+    let parameter : object = {data: {}}
+    for(let key in this.brands){
+      if(this.brands[key].name === 'Dankie Jesu'){
+        parameter['data'].pictureLink = this.brands[key].pictureLink
+        break
+      }else{
+        parameter['data'].pictureLink = this.brands[0].pictureLink
+      }
+    }
+    parameter['data'].name = 'Inventory'
+    console.log(parameter);
+    this.routeService.storeInventoryParameter(parameter)
+    this.route.navigate(['items-list', 'Inventory'])
   }
 }

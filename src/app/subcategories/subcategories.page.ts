@@ -4,6 +4,7 @@ import { NavController, AlertController } from '@ionic/angular';
 import { ProductsService } from '../services/products-services/products.service';
 import { AuthService } from '../services/auth-services/auth.service';
 import { RouteService } from '../services/route-services/route.service';
+import * as firebase from 'firebase'
 
 @Component({
   selector: 'app-subcategories',
@@ -12,6 +13,7 @@ import { RouteService } from '../services/route-services/route.service';
 })
 export class SubcategoriesPage implements OnInit {
   currentBrand : string = ''
+  currentBrandID : string = ''
   pictureLink
 
   constructor(private activatedRoute : ActivatedRoute, private routeService : RouteService, private alertController : AlertController, private authService : AuthService, private navCtrl : NavController, public route : Router, public productService : ProductsService) { }
@@ -19,13 +21,17 @@ export class SubcategoriesPage implements OnInit {
   ngOnInit() {
     console.log(this.activatedRoute.snapshot.paramMap.get('id'));
     this.currentBrand = this.activatedRoute.snapshot.paramMap.get('id')
+    console.log(this.currentBrand);
+    
     this.routeService.getBrandInfo().then(result => {
       console.log(result);
       this.pictureLink = result['pictureLink']
       console.log(this.pictureLink);
-      
+      this.currentBrandID = result['brandID']
+      this.getCategories(this.currentBrandID)
+      this.getCategoriesSnap(this.currentBrandID)
     })
-    this.getCategories(this.currentBrand)
+
   }
 
   navigateForward(item : any){
@@ -37,6 +43,7 @@ export class SubcategoriesPage implements OnInit {
       let parameter : object = {data: {}}
       parameter['data'].pictureLink = this.pictureLink
       parameter['data'].name = this.currentBrand
+      parameter['data'].brandID = this.currentBrandID
       console.log(parameter);
       
       this.routeService.storeBrandItemsListParameters(parameter).then(result => {
@@ -59,6 +66,96 @@ export class SubcategoriesPage implements OnInit {
     return this.productService.getBrandCategories(query).then(result => {
       console.log(result);
       this.categories = result
+    })
+  }
+  getCategoriesSnap(currentBrandID){
+    console.log('getting snaps');
+    
+    return firebase.firestore().collection('category').where('brandID', '==', currentBrandID).onSnapshot(data => {
+      
+      
+      for(let key in data.docChanges()){
+        let change = data.docChanges()[key]
+        let addToCategories : boolean = false
+        if(change.type === 'added'){
+          if(this.categories.length === 0){
+            if(change.doc.data().deleteQueue === false){
+              console.log('well this is nt working');
+              
+              addToCategories = true
+            }else{
+              console.log('this might be working');
+              
+              addToCategories = false
+            }
+          }else{
+            console.log('lengthu');
+            
+            for(let i in this.categories){
+              if(this.categories[i].categoryID === change.doc.id){
+                if(change.doc.data().deleteQueue === false){
+                  this.categories[i] = {data: change.doc.data(), categoryID: change.doc.id}
+                }else if(change.doc.data().deleteQueue === true){
+                  this.categories.splice(Number(i), 1)
+                }
+                addToCategories = false
+                break
+              }else if(this.categories[i].categoryID !== change.doc.id){
+                console.log(change.doc.id);
+                
+                if(change.doc.data().deleteQueue === true){
+                  addToCategories = false
+                  console.log(true);
+                  
+                }else if(change.doc.data().deleteQueue === false){
+                  addToCategories = true
+                }
+  
+              }
+            }
+          }
+
+          if(addToCategories === true){
+            console.log('hahaha me too');
+            
+            this.categories.unshift({data: change.doc.data(), categoryID: change.doc.id})
+          }
+        }else if(change.type === 'modified'){
+          console.log('modified');
+          
+          let addToCategoriesToo : boolean = false
+          if(this.categories.length === 0){
+            if(change.doc.data().deleteQueue === true){
+              addToCategoriesToo = false
+            }else{
+              addToCategoriesToo = true
+            }
+          }
+          for(let i in this.categories){
+            console.log(i, ' in this.categories');
+            
+            if(this.categories[i].categoryID === change.doc.id){
+              if(change.doc.data().deleteQueue === true){
+                this.categories.splice(Number(i), 1)
+              }else if(change.doc.data().deleteQueue === false){
+                this.categories[i] === {data: change.doc.data(), categoryID: change.doc.id}
+              }
+              addToCategoriesToo = false
+              break
+            }else if(this.categories[i].categoryID !== change.doc.id){
+              if(change.doc.data().deleteQueue === true){
+                addToCategoriesToo = false
+              }else{
+                addToCategoriesToo = true
+              }
+
+            }
+          }
+          if(addToCategoriesToo === true){
+            this.categories.unshift({data: change.doc.data(), categoryID: change.doc.id})
+          }
+        }
+      }
     })
   }
   back(){

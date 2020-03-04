@@ -385,7 +385,7 @@
       <div id="mid">
         <div class="brand-content">
           <div class="specials-bar">
-            <div>
+            <div (click)='viewSales()'>
               <div id="image-and-text">
                 <p>Sales and Specials</p>
                 <img src="../../assets/imgs/Placeholders/b.jpg" alt="">
@@ -393,8 +393,8 @@
             </div>
             <div>Brands</div>
           </div>
-          <div class="all-bar">
-            <div class="showAllProducts">
+          <div class="all-bar" (click)='viewAll()'>
+            <div class="showAllProducts" >
               View all products
             </div>
           </div>
@@ -741,12 +741,13 @@
           </div>
           <div>
             <input id="generate-code" type='text' [disabled]='!generateCode' placeholder="Product Code"
-              [(ngModel)]='newProductCode' (keyup)='checkValidity()'>
+              [(ngModel)]='newProductCode' (change)='checkCode($event)'>
             <br>
+            <span *ngIf='productCodeMatch'>A product with this product code already exists</span>
             <div id="or">or</div>
           </div>
             <ion-button [disabled]='!generateCode' (click)='autoGenerateCode()' color="warning" expand="full">Generate Code</ion-button>
-          <ion-button [disabled]='!addForm' (click)='addProduct()' expand="full" color="success">Add to Stall
+          <ion-button [disabled]='!addForm || productCodeMatch' (click)='addProduct()' expand="full" color="success">Add to Stall
           </ion-button>
           <ion-button #btnClearForm [disabled]='!formHasValues' (click)='clearForm()' expand="full" color="danger">Clear
             Form</ion-button>

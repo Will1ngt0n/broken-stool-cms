@@ -28,6 +28,7 @@ return new Promise((resolve, reject)  => {
         size : size,
         name : itemName,
         hideItem : true,
+        deleteQueue: false,
         description : description,
         isAccessory: accessory,
         isSummer: summer,
@@ -388,7 +389,9 @@ return new Promise((resolve, reject)  => {
     console.log(item);
     
     
-    return firebase.firestore().collection('Products').doc(brand).collection(category).doc(productID).delete().then( result => {
+    return firebase.firestore().collection('Products').doc(productID).update({
+      deleteItem : true
+    }).then( result => {
       //this.updateNumberOfItems()
       if(item.data.onSale){
         if(item.data.onSale === true){
@@ -467,7 +470,7 @@ return new Promise((resolve, reject)  => {
   updateItemsListItem(itemID, itemBrand, itemCategory, itemPrice, itemDescription, itemName, sizes, picture, colors){
     console.log(picture,' I am pictrue');
     return new Promise( (resolve, reject) => {
-      firebase.firestore().collection('Products').doc(itemBrand).collection(itemCategory).doc(itemID).update({
+      firebase.firestore().collection('Products').doc(itemID).update({
         price : Number(itemPrice),
         description : itemDescription,
         name : itemName,
@@ -702,7 +705,7 @@ return new Promise((resolve, reject)  => {
 
   }
   updateQuantity(brand, category, productID, quantity){
-    return firebase.firestore().collection('Products').doc(brand).collection(category).doc(productID).update({
+    return firebase.firestore().collection('Products').doc(productID).update({
       quantity: quantity
     }).then( result => {
       return result
@@ -814,7 +817,7 @@ return new Promise((resolve, reject)  => {
 
   loadAllProducts(){
     return new Promise((resolve, reject) => {
-      firebase.firestore().collection('Products').orderBy('dateAdded', 'desc').get().then(result => {
+      firebase.firestore().collection('Products').where('deleteQueue', '==', false).orderBy('dateAdded', 'desc').get().then(result => {
         let data : Array<any> = []
         for(let key in result.docs){
           let productID = result.docs[key].id
@@ -832,7 +835,7 @@ return new Promise((resolve, reject)  => {
     return new Promise( (resolve, reject) => {
       let brands : Array<any> = []
       let all : Array<any> = []
-      firebase.firestore().collection('brands').get().then(result => {
+      firebase.firestore().collection('brands').where('deleteQueue', '==', false).get().then(result => {
         for(let key in result.docs){
           brands.push({ brandID: result.docs[key].id, name :result.docs[key].data().name, pictureLink : result.docs[key].data().pictureLink})
         }
@@ -843,7 +846,7 @@ return new Promise((resolve, reject)  => {
         }
       })
       .then( log => {
-        firebase.firestore().collection('category').get().then(result => {
+        firebase.firestore().collection('category').where('deleteQueue', '==', false).get().then(result => {
           let name : string = ''
           let isSummer : string = ''
           let categoryList : Array<any> = []
@@ -877,13 +880,15 @@ return new Promise((resolve, reject)  => {
     return null
   }
   getBrandCategories(query){
-    return firebase.firestore().collection('category').where('brand', '==', query).get().then(result => {
-      let products : Array<any> = []
+    console.log(query);
+    
+    return firebase.firestore().collection('category').where('brandID', '==', query).where('deleteQueue', '==', false).get().then(result => {
+      let categories : Array<any> = []
       for(let key in result.docs){
         console.log(result.docs[key].data());
-        products.push({data: result.docs[key].data(), productID: result.docs[key].id})
+        categories.push({data: result.docs[key].data(), categoryID: result.docs[key].id})
       }
-      return products
+      return categories
     })
   }
   savePicToExistingBrand(brandID, picture){
@@ -911,4 +916,5 @@ return new Promise((resolve, reject)  => {
       return 'Success'
     })
   }
+
 } 

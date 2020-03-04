@@ -358,14 +358,32 @@ export class ItemsListPage implements OnInit, OnDestroy {
   loadViewedCategory() {
 
   }
-  //Loading items from the category and brand the user just clicked on in the previous pages
-  loadAllBrandProducts(para){
-    return firebase.firestore().collection('Products').where('brand', '==', para).orderBy('timestamp', 'desc').onSnapshot(result => {
+  loadInventory(){
+    return firebase.firestore().collection('Products').orderBy('timestamp', 'desc').onSnapshot(result => {
       let data : Array<any> = []
       for(let key in result.docs){
-        let productID = result.docs[key].id
-        let docData = result.docs[key].data()
-        data.push({productID: productID, data: docData, category: docData.name, brand: docData.brand})
+        if(result.docs[key].data().deleteQueue === false){
+          let productID = result.docs[key].id
+          let docData = result.docs[key].data()
+          data.push({productID: productID, data: docData, category: docData.name, brand: docData.brand})
+        }
+      }
+      this.currentViewedItems = data
+      this.currentSelectedItems = data
+      console.log(this.currentViewedItems);
+    })
+  }
+  //Loading items from the category and brand the user just clicked on in the previous pages
+  loadAllBrandProducts(brandID){
+    return firebase.firestore().collection('Products').where('brandID', '==', brandID).orderBy('timestamp', 'desc').onSnapshot(result => {
+      let data : Array<any> = []
+      for(let key in result.docs){
+        if(result.docs[key].data().deleteQueue === false){
+          let productID = result.docs[key].id
+          let docData = result.docs[key].data()
+          data.push({productID: productID, data: docData, category: docData.name, brand: docData.brand})
+        }
+
       }
       this.currentViewedItems = data
       this.currentSelectedItems = data
@@ -384,12 +402,15 @@ export class ItemsListPage implements OnInit, OnDestroy {
   }
   loadCategoryItemsSnap(category){
     this.presentLoading()
-    return firebase.firestore().collection('Products').where('category', '==', category).orderBy('timestamp', 'desc').onSnapshot(result => {
+    return firebase.firestore().collection('Products').where('categoryID', '==', category).orderBy('timestamp', 'desc').onSnapshot(result => {
       let data : Array<any> = []
       for(let key in result.docs){
-        let productID = result.docs[key].id
-        let docData = result.docs[key].data()
-        data.push({productID: productID, data: docData, category: category, brand: docData.brand})
+        if(result.docs[key].data().deleteQueue === false){
+          let productID = result.docs[key].id
+          let docData = result.docs[key].data()
+          data.push({productID: productID, data: docData, category: category, brand: docData.brand})
+        }
+
       }
       this.currentViewedItems = data
       this.currentSelectedItems = data
@@ -512,23 +533,40 @@ export class ItemsListPage implements OnInit, OnDestroy {
       if(navigator.onLine){
         return this.networkService.getUID().then( result => {
           if(result === true){
-            if(para === 'All'){
-              this.routeService.readBrandItemsListParameters().then(result => {
+            if(para === 'Inventory'){
+              this.routeService.readInventoryParameter().then(result => {
                 console.log(result);
                 
                 this.title = result['data'].name
                 this.pictureLink = result['data'].pictureLink
+                console.log(result['data'].name);
+                
+                console.log(this.pictureLink);
+                
+                this.currentCategory = para
+                this.loadInventory()
+                this.loadInventorySnaps()
+              })
+            }else if(para === 'All'){
+              this.routeService.readBrandItemsListParameters().then(result => {
+                console.log(result);
+                let brandID = result['data'].brandID
+                this.title = result['data'].name
+                this.pictureLink = result['data'].pictureLink
                 this.currentCategory = para + ' ' + this.title + ' products'
-                this.loadAllBrandProducts(this.title)
+                this.loadAllBrandProducts(brandID)
               })
             }else if(para !== 'All'){
               this.routeService.readParameters().then(result => {
                 console.log(result);
                 this.title = result['data'].brand
+                let categoryID = result['categoryID']
+                console.log(categoryID);
+                
                 this.currentCategory = result['data'].name
                 this.pictureLink = result['data'].pictureLink
                 console.log(this.currentCategory);
-                this.loadCategoryItemsSnap(para)
+                this.loadCategoryItemsSnap(categoryID)
               })
             }
 
@@ -1074,6 +1112,28 @@ export class ItemsListPage implements OnInit, OnDestroy {
       //this.loadingCtrl.dismiss()
       //this.pageLoader = false
     }
+    })
+  }
+
+  loadInventorySnaps(){
+    return firebase.firestore().collection('Products').onSnapshot(data => {
+      for(let key in data.docChanges()){
+        this.ngOnInit()
+        let change = data.docChanges()[key]
+        if(change.type === 'added'){
+          let addToInventory : boolean = false
+          if(this.inventory.length === 0){
+            if(change.doc.data().deleteQueue === true){
+              addToInventory = false
+            }else{
+              addToInventory = true
+            }
+          }else if(this.inventory.length !== 0){
+
+          }
+        }
+        
+      }
     })
   }
   runMeClear(){

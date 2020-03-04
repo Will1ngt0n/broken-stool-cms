@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LocalStorageService } from 'ngx-webstorage';
 import { Location } from '@angular/common'
+import { promise } from 'protractor';
 @Injectable({
   providedIn: 'root'
 })
@@ -50,6 +51,19 @@ export class RouteService {
     return new Promise((resolve, reject) => {
       let loc = this.loc['_platformLocation'].location.origin
       resolve (this.localStorage.retrieve('parameters:' + loc))
+    })
+  }
+  storeInventoryParameter(data){
+    return new Promise( (resolve, reject) => {
+      let loc = this.loc['_platformLocation'].location.origin
+      this.localStorage.store('inventoryParameters:' + loc, data)
+      resolve('success')
+    })
+  }
+  readInventoryParameter(){
+    return new Promise( (resolve, reject) => {
+      let loc = this.loc['_platformLocation'].location.origin
+      resolve(this.localStorage.retrieve('inventoryParameters:' + loc))
     })
   }
 }
