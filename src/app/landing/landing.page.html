@@ -224,6 +224,7 @@
               </label>
               <input type="file" accept="image/x-png,image/jpeg" id="cat-img" (change)='addPictureToNewCategory($event)'>
             </div>
+            <input type='checkbox' (change)='enableSeasonalWear($event)'> Summer wear
            <input type="text" placeholder="Category" id="cate" [(ngModel)]='newCategory'>    
            <button (click)='addNewCategoryToArray()'>Add</button>        
           </div>

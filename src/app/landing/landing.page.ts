@@ -251,6 +251,8 @@ export class LandingPage implements OnInit {
       let category
       console.log(result);
       this.categoryList = result
+      this.departmentOptions = ['Select Brand']
+      this.brands = []
       if(result === null){
 
       }else{
@@ -258,14 +260,18 @@ export class LandingPage implements OnInit {
           this.departmentOptions.push(this.categoryList[key].brand.name)
           this.brands.push({name: this.categoryList[key].brand.name, brandID: this.categoryList[key].brand.brandID, pictureLink: this.categoryList[key].brand.pictureLink})
         }
+        console.log('this are all the department options');
+        
         console.log(this.brands);
         
       }
-
+      if(this.saveBrand === true){
+        this.departmentCombo.nativeElement.value = this.brandBeforeSave
+      }
       //this.departmentOptions.push('Add brand')
 
       console.log(this.categoryOptions);
-      
+     // clearInterval(this.categoryTimer)
     })
   }
   refreshTimer
@@ -290,12 +296,13 @@ export class LandingPage implements OnInit {
     this.nativeCategory.nativeElement.disabled = true
     //snapshots
 
-    this.refreshTimer= setInterval( () => {
+
       this.refreshProducts()
       this.refreshOrderHistory()
       this.getPendingOrdersSnap()
       this.refreshBrands()
-    }, 3000)
+      this.refreshCategories()
+
 
   }
   reload() {
@@ -345,7 +352,7 @@ export class LandingPage implements OnInit {
     }
   }
   loadAllProducts(){
-    // this.presentLoading()
+    this.presentLoading()
     // this.pageLoader = true
     return this.productService.loadAllProducts().then((result : any) => {
       console.log(result);
@@ -372,10 +379,10 @@ export class LandingPage implements OnInit {
       let brand : string = ''
       let item : Array<any> = []
       for(let key in result.docChanges()){
-        console.log(result.docChanges()[key]);
+        //console.log(result.docChanges()[key]);
         let change = result.docChanges()[key]
         if(change.type === 'modified'){
-          console.log('yuno');
+         // console.log('yuno');
           let oldIndex = change.oldIndex
           if(oldIndex === -1){
             data = {}
@@ -402,17 +409,17 @@ export class LandingPage implements OnInit {
             
           }
         }else if(change.type === 'removed'){
-          console.log('removed');
+          //console.log('removed');
           
           data = {}
           productID = change.doc.id
-          console.log(productID);
+         // console.log(productID);
           
           for(let key in this.allProducts){
             if(productID === this.allProducts[key].productID){
-              console.log(this.allProducts);
+            //  console.log(this.allProducts);
               
-              console.log('matching productID');
+           //   console.log('matching productID');
               
               this.allProducts.splice(Number(key), 1)
               this.inventoryLength = this.allProducts.length
@@ -420,7 +427,7 @@ export class LandingPage implements OnInit {
           }
         }else{
           let addItem : boolean
-          console.log('added new item');
+          //console.log('added new item');
           data = {}
           productID = change.doc.id
           docData = change.doc.data()
@@ -437,12 +444,12 @@ export class LandingPage implements OnInit {
             addItem = true
           }
           if(addItem === true){
-            console.log(true);
+          //  console.log(true);
                         
             this.allProducts.unshift(data)
             this.inventoryLength = this.allProducts.length
           }else{
-            console.log(false);
+          //  console.log(false);
 
           }
         }
@@ -511,52 +518,80 @@ export class LandingPage implements OnInit {
       }
     })
   }
+  saveBrand : boolean = false
+  brandBeforeSave : string = ''
+  categoryTimer
   refreshCategories(){
+    console.log('we are getting them snapshots');
+    
     firebase.firestore().collection('category').onSnapshot(result => {
+      // this.saveBrand = true
+      // this.brandBeforeSave = this.department
+      // for(let key in this.categoryList){
+        
+      // }
+      // this.categoryTimer = setInterval(() => {
+      //   //this.getCategories()
+      //   clearInterval(this.categoryTimer)
+      // }, 3000)
+
+
       //          this.brands.push({name: this.categoryList[key].brand.name, brandID: this.categoryList[key].brand.brandID, pictureLink: this.categoryList[key].brand.pictureLink})
       for(let key in result.docChanges()){
         let change = result.docChanges()[key]
         let addItem : boolean = false
         if(change.type === 'added'){
-          for(let key in this.categoryList){
-            if(this.categoryList[key].brand.brandID === change.doc.data().brandID){
-              console.log(this.categoryList[key].brand.name);
-              for(let i in this.categoryList[key].categoryList){
-                if(this.categoryList[key].categoryList[i].categoryID === change.doc.id){
+          for(let j in this.categoryList){
+            if(this.categoryList[j].brand.brandID === change.doc.data().brandID){
+              console.log(this.categoryList[j].brand.name);
+              for(let i in this.categoryList[j].categoryList){
+                console.log(this.categoryList[j].categoryList[i].categoryID);
+                
+                if(this.categoryList[j].categoryList[i].categoryID === change.doc.id){
                   addItem = false
                   break
-                }else if(this.categoryList[key].categoryList[i].categoryID === change.doc.id){
+                }else if(this.categoryList[j].categoryList[i].categoryID !== change.doc.id){
+                  console.log('additem is equal === ', addItem);
+                  
                   addItem = true
                 }
                 //this.currentBrandCategories.push({name: this.categoryList[key].categoryList[i].category, isSummer: this.categoryList[key].categoryList[i].isSummer, isAccessory: this.categoryList[key].categoryList[i].isAccessory, pictureLink: this.categoryList[key].categoryList[i].pictureLink, categoryID: this.categoryList[key].categoryList[i].categoryID})
                 //this.newBrandCategories.push({name: this.categoryList[key].categoryList[i].category, isSummer: this.categoryList[key].categoryList[i].isSummer, isAccessory: this.categoryList[key].categoryList[i].isAccessory, pictureLink: this.categoryList[key].categoryList[i].pictureLink, categoryID: this.categoryList[key].categoryList[i].categoryID})
               }
-              if(addItem = true){
-                this.categoryList.push({name: change.doc.data().name, isSummer: change.doc.data().isSummer, isAccessory: change.doc.data().isAccessory, pictureLink: change.doc.data().pictureLink, categoryID: change.doc.id})
+              
+              if(addItem === true){
+                console.log('addItem is not true');
+                
+                this.categoryList[j].categoryList.push({category: change.doc.data().name, isSummer: change.doc.data().isSummer, isAccessory: change.doc.data().isAccessory, pictureLink: change.doc.data().pictureLink, categoryID: change.doc.id})
               }
               console.log(this.currentBrandCategories);
               console.log(this.newBrandCategories);
+              console.log(this.categoryList);
               
               
             }
           }
         }else if(change.type === 'modified'){
-          for(let key in this.categoryList){
-            if(this.categoryList[key].brand.brandID === change.doc.data().brandID){
-              for(let i in this.categoryList[key].categoryList){
-                if(this.categoryList[key].categoryList[i].categoryID === change.doc.id){
-                  this.categoryList[key].categoryList[i] = {name: change.doc.data().name, isSummer: change.doc.data().isSummer, isAccessory: change.doc.data().isAccessory, pictureLink: change.doc.data().pictureLink, categoryID: change.doc.id}
+          for(let j in this.categoryList){
+            if(this.categoryList[j].brand.brandID === change.doc.data().brandID){
+              for(let i in this.categoryList[j].categoryList){
+                if(this.categoryList[j].categoryList[i].categoryID === change.doc.id){
+                  this.categoryList[j].categoryList[i] = {category: change.doc.data().name, isSummer: change.doc.data().isSummer, isAccessory: change.doc.data().isAccessory, categoryID: change.doc.id, pictureLink: change.doc.data().pictureLink}
+                  if(this.department === this.categoryList[j].brand.name){
+                    console.log('changes made');
+                    this.categoryOptions.push(change.doc.data().name)
+                  }
                 }
               }
             }
           }
         }
         else if(change.type === 'removed'){
-          for(let key in this.categoryList){
-            if(this.categoryList[key].brand.brandID === change.doc.data().brandID){
-              for(let i in this.categoryList[key].categoryList){
-                if(this.categoryList[key].categoryList[i].categoryID === change.doc.id){
-                  this.categoryList[key].categoryList.splice(Number(i), 1)
+          for(let j in this.categoryList){
+            if(this.categoryList[j].brand.brandID === change.doc.data().brandID){
+              for(let i in this.categoryList[j].categoryList){
+                if(this.categoryList[j].categoryList[i].categoryID === change.doc.id){
+                  this.categoryList[j].categoryList.splice(Number(i), 1)
 
 
                 }
@@ -1834,7 +1869,7 @@ export class LandingPage implements OnInit {
       console.log(this.isOnline);
       console.log(this.isCached);
       this.timer = setInterval( () => {
-        this.checkConnectionStatus()
+        //this.checkConnectionStatus()
       }, 3000)
     }
 
@@ -2305,7 +2340,7 @@ console.log(val);
       this.newBrandCategories = []
       this.adderOpen = false
       this.isBrand = false
-      
+      this.removeAdder()
     })
 
   }
@@ -2354,8 +2389,9 @@ console.log(val);
   addNewCategoryToArray(){
     console.log('sdfsfsffs');
     
-    this.newBrandCategories.push({name: this.newCategory, isSummer: false, isAccessory: false, picture: this.categoryPicture})
+    this.newBrandCategories.push({name: this.newCategory, isSummer: this.isSummer, isAccessory: false, picture: this.categoryPicture})
     console.log(this.newBrandCategories);
+    this.isSummer = false
   }
   //adding new categories to existing brand
   addCategoryToBrand(){
@@ -2371,6 +2407,7 @@ console.log(val);
           console.log(this.newBrandCategories[i].picture);
           let picture = this.newBrandCategories[i].picture
           firebase.firestore().collection('category').add({
+            deleteQueue: false,
             brand: this.department,
             brandID: this.categoryList[key].brand.brandID,
             name: this.newBrandCategories[i].name,
@@ -2396,6 +2433,7 @@ console.log(val);
     this.newBrandCategories = []
     this.adderOpen = false
     this.isBrand = false
+    this.removeAdder()
   }
   validateNewCategoryItems(){
     if(this.newBrandCategories.length === 0){
@@ -2456,7 +2494,22 @@ console.log(val);
   // }, 300);
     
   }
+  isSummer : boolean = false
+  enableSeasonalWear(event){
+    let check = event.target.checked
+    console.log(check);
+    if(check === true){
+      this.isSummer = true
+    }else{
+      this.isSummer = false
+    }
+    console.log(this.isSummer);
+    
+    //if(even)
+  }
   saveEditedBrand(){
+    console.log('adding');
+    
     return new Promise( (resolve, reject) => {
       let brandID = this.currentBrand['brandID']
       let addedCategories : Array<any> = []
@@ -2473,13 +2526,13 @@ console.log(val);
         for(let i in this.currentBrandCategories){
           if(this.newBrandCategories[key].categoryID === this.currentBrandCategories[i].categoryID){
             if((this.newBrandCategories[key].name === this.currentBrandCategories[i].name) && (this.newBrandCategories[key].pictureLink === this.currentBrandCategories[i].pictureLink) && (this.newBrandCategories[key].isAccessory === this.currentBrandCategories[i].isAccessory) && (this.newBrandCategories[key].isSummer === this.currentBrandCategories[i].isSummer)){
-              console.log('there is a match');
+             // console.log('there is a match');
               
               edited = false
               break
             }else if((this.newBrandCategories[key].name !== this.currentBrandCategories[i].name) || (this.newBrandCategories[key].pictureLink !== this.currentBrandCategories[i].pictureLink) || (this.newBrandCategories[key].isAccessory !== this.currentBrandCategories[i].isAccessory) || (this.newBrandCategories[key].isSummer !== this.currentBrandCategories[i].isSummer)){
-              console.log(this.newBrandCategories[key]);
-              console.log(this.currentBrandCategories[i]);
+              //console.log(this.newBrandCategories[key]);
+             // console.log(this.currentBrandCategories[i]);
               
               
               edited = true
@@ -2488,15 +2541,15 @@ console.log(val);
 
           }
           if(this.newBrandCategories[key].categoryID){
-            console.log(this.newBrandCategories[key]);
-            console.log(this.currentBrandCategories[i]);
+            //console.log(this.newBrandCategories[key]);
+           // console.log(this.currentBrandCategories[i]);
             
             
             exists = true;
             break
           }else{
-            console.log(this.currentBrandCategories[i]);
-            console.log(this.newBrandCategories[key]);
+            //console.log(this.currentBrandCategories[i]);
+            //console.log(this.newBrandCategories[key]);
             
             
             exists = false
@@ -2505,14 +2558,14 @@ console.log(val);
         if(edited === true){
           editedCategories.push(this.newBrandCategories[key])
         }
-        console.log(exists);
+      //  console.log(exists);
         
         if(exists === false){
           addedCategories.push(this.newBrandCategories[key])
-          console.log('added new items');
+          //console.log('added new items');
           
         }
-        console.log(addedCategories);
+        //console.log(addedCategories);
         
       }
   
@@ -2566,6 +2619,7 @@ console.log(val);
               console.log(addedCategories[i].picture);
               let picture = addedCategories[i].picture
               firebase.firestore().collection('category').add({
+                deleteQueue: false,
                 brand: this.currentBrandName,
                 brandID: brandID,
                 name: addedCategories[i].name,
@@ -2621,6 +2675,7 @@ console.log(val);
               }, 3000)
             }
           }
+          this.removeAdder()
       }
       })
 
@@ -2689,11 +2744,33 @@ console.log(val);
   }
   deleteBrand(brandID){
     console.log(brandID);
+    const alert = document.createElement('ion-alert');
+    alert.header = 'Risky action!!!';
+    alert.message = 'Deleting this brand will delete all its categories and products!';
+    alert.buttons = [
+      {
+        text: 'Cancel',
+        role: 'cancel',
+        cssClass: 'secondary', 
+        handler: (blah) => {
+          console.log('User canceled');
+        }
+      }, {
+        text: 'Continue',
+        handler: () => {
+          console.log('Confirm Okay')
     
-    return this.productService.deleteBrand(brandID).then(result => {
-      
-    })
-    
+         // console.log(productID);
+         // console.log(item);
+          this.presentLoading()
+          return this.productService.deleteBrand(brandID).then(result => {
+            this.loadingCtrl.dismiss()
+          })
+        }
+      }
+    ];
+    document.body.appendChild(alert);
+    return alert.present();
   }
   viewAll(){
     console.log(this.brands);

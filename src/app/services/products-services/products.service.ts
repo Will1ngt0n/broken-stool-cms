@@ -228,7 +228,7 @@ return new Promise((resolve, reject)  => {
 
   deleteSpecialsItem(productID, item){
     return firebase.firestore().collection('Specials').doc(productID).delete().then(result => {
-      firebase.firestore().collection('Products').doc(item.brand).collection(item.category).doc(productID).update({
+      firebase.firestore().collection('Products').doc(productID).update({
         onSale : false,
         discount : 0,
         saleprice : Number(item.data.normalPrice)
@@ -796,6 +796,8 @@ return new Promise((resolve, reject)  => {
           let name : string = ''
           let isSummer : string = ''
           let categoryList : Array<any> = []
+          console.log(brands);
+          
           for(let key in brands){
             categoryList = []
             for(let i in result.docs){
@@ -812,8 +814,11 @@ return new Promise((resolve, reject)  => {
                 console.log(now);
                 
                 categoryList.push({category : category, isSummer: isSummer, isAccessory : isAccessory, categoryID: categoryID, pictureLink: pictureLink})
+                console.log(categoryList);
+                
               }
             }
+            
             all.push({brand: brands[key], categoryList})
             console.log(all);
             resolve(all)
