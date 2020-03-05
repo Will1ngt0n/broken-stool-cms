@@ -21,28 +21,28 @@ import {NgxWebstorageModule} from 'ngx-webstorage';
 //   measurementId: "G-BYBG8HFL6W"
 // };
 
-var firebaseConfig = {
-  apiKey: "AIzaSyC9Edgr1Yl4b2VHU98wSlm4xBtj2or51Vg",
-  authDomain: "broken-stool.firebaseapp.com",
-  databaseURL: "https://broken-stool.firebaseio.com",
-  projectId: "broken-stool",
-  storageBucket: "broken-stool.appspot.com",
-  messagingSenderId: "918311615055",
-  appId: "1:918311615055:web:374b3a771e9870a4c8083a",
-  measurementId: "G-YKQ4BTFTS9"
-};
-
-
 // var firebaseConfig = {
-//   apiKey: "AIzaSyBK6kckSYAyPrY_H8dfKxzoi4d95YkSfdU",
-//   authDomain: "broken-stool-flat.firebaseapp.com",
-//   databaseURL: "https://broken-stool-flat.firebaseio.com",
-//   projectId: "broken-stool-flat",
-//   storageBucket: "broken-stool-flat.appspot.com",
-//   messagingSenderId: "160738006805",
-//   appId: "1:160738006805:web:e6e0210eb8f5470d403b1c",
-//   measurementId: "G-JSFZR301ZQ"
+//   apiKey: "AIzaSyC9Edgr1Yl4b2VHU98wSlm4xBtj2or51Vg",
+//   authDomain: "broken-stool.firebaseapp.com",
+//   databaseURL: "https://broken-stool.firebaseio.com",
+//   projectId: "broken-stool",
+//   storageBucket: "broken-stool.appspot.com",
+//   messagingSenderId: "918311615055",
+//   appId: "1:918311615055:web:374b3a771e9870a4c8083a",
+//   measurementId: "G-YKQ4BTFTS9"
 // };
+
+
+var firebaseConfig = {
+  apiKey: "AIzaSyBK6kckSYAyPrY_H8dfKxzoi4d95YkSfdU",
+  authDomain: "broken-stool-flat.firebaseapp.com",
+  databaseURL: "https://broken-stool-flat.firebaseio.com",
+  projectId: "broken-stool-flat",
+  storageBucket: "broken-stool-flat.appspot.com",
+  messagingSenderId: "160738006805",
+  appId: "1:160738006805:web:e6e0210eb8f5470d403b1c",
+  measurementId: "G-JSFZR301ZQ"
+};
 // this is where we Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();

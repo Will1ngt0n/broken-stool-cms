@@ -145,6 +145,7 @@
               </label>
               <input type="file" accept="image/x-png,image/jpeg" id="cat-img" (change)='addPictureToNewCategory($event, item)' [disabled]='!newCategory'>
             </div>
+            <input type='checkbox' (change)='enableSeasonalWear($event)'> Summer wear
            <input type="text" placeholder="Category" id="cate" [(ngModel)]='newCategory' [disabled]='!newBrand'>    
            <button (click)='addNewCategoryToArray()' [disabled]='!newCategory || !categoryPicture || !newBrand'>Add</button>        
           </div>
@@ -181,6 +182,7 @@
               </label>
               <input type="file" accept="image/x-png,image/jpeg" id="cat-img" (change)='addPictureToNewCategory($event, item)' [disabled]='!newCategory || !currentBrandName'>
             </div>
+            <input type='checkbox' (change)='enableSeasonalWear($event)'> Summer wear
            <input type="text" placeholder="Category" id="cate" [(ngModel)]='newCategory' [disabled]='!currentBrandName'>    
            <button (click)='addNewCategoryToArray()' [disabled]='!currentBrandName || !newCategory || !categoryPicture'>Add</button>        
           </div>
