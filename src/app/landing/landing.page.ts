@@ -357,7 +357,7 @@ export class LandingPage implements OnInit {
 
     // this.pageLoader = true
     return this.productService.loadAllProducts().then((result : any) => {
-      this.presentLoading()
+      //this.presentLoading()
       console.log(result);
       
       if(result !== null && result.length > 0){
