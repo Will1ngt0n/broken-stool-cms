@@ -295,13 +295,15 @@ export class LandingPage implements OnInit {
 
     this.nativeCategory.nativeElement.disabled = true
     //snapshots
-
-
+    this.refreshTimer = setInterval( () => {
       this.refreshProducts()
       this.refreshOrderHistory()
       this.getPendingOrdersSnap()
       this.refreshBrands()
       this.refreshCategories()
+    }, 3000)
+
+
 
 
   }
@@ -352,9 +354,10 @@ export class LandingPage implements OnInit {
     }
   }
   loadAllProducts(){
-    this.presentLoading()
+
     // this.pageLoader = true
     return this.productService.loadAllProducts().then((result : any) => {
+      this.presentLoading()
       console.log(result);
       
       if(result !== null && result.length > 0){
@@ -362,10 +365,10 @@ export class LandingPage implements OnInit {
       this.inventoryLength = this.allProducts.length
       this.sortProducts()
     }
-    if(this.pageLoader){
+    //if(this.pageLoader){
       this.loadingCtrl.dismiss()
-      this.pageLoader = false
-    }
+      //this.pageLoader = false
+    //}
     })
   }
   refreshProducts(){
@@ -1857,21 +1860,21 @@ export class LandingPage implements OnInit {
   pageLoader : boolean
   ionViewDidEnter(){
     //console.log('hahahahahaahahahahahah');
-    if(this.preventIonViewDidEnterInit === true){
+    // if(this.preventIonViewDidEnterInit === true){
 
-    }else{
-      if(this.isCached !== true){
-        // this.presentLoading()
-        // this.pageLoader = true
-      }else{
-        this.pageLoader = false
-      }
-      console.log(this.isOnline);
-      console.log(this.isCached);
-      this.timer = setInterval( () => {
-        //this.checkConnectionStatus()
-      }, 3000)
-    }
+    // }else{
+    //   if(this.isCached !== true){
+    //     // this.presentLoading()
+    //     // this.pageLoader = true
+    //   }else{
+    //     this.pageLoader = false
+    //   }
+    //   console.log(this.isOnline);
+    //   console.log(this.isCached);
+    //   this.timer = setInterval( () => {
+    //     //this.checkConnectionStatus()
+    //   }, 3000)
+    // }
 
     //console.log('ion view did enter');
 

@@ -135,17 +135,17 @@
               <input type="file" accept="image/x-png,image/jpeg" id="cam-ico" (change)='changeBrandImage($event, null)' [disabled]='!newBrand'>
             <ion-icon name="camera"></ion-icon>
             </label>
-          </div>
+          </div><input type='checkbox' (change)='enableSeasonalWear($event)'> Summer wear
           </div>
           <div class="cats">
-
+            
             <div class="floating-camera">
               <label for="cat-img">
                 <ion-icon name="camera"></ion-icon>
               </label>
-              <input type="file" accept="image/x-png,image/jpeg" id="cat-img" (change)='addPictureToNewCategory($event, item)' [disabled]='!newCategory'>
+              <input type="file" accept="image/x-png,image/jpeg" id="cat-img" (change)='addPictureToNewCategory($event)' [disabled]='!newCategory'>
             </div>
-            <input type='checkbox' (change)='enableSeasonalWear($event)'> Summer wear
+
            <input type="text" placeholder="Category" id="cate" [(ngModel)]='newCategory' [disabled]='!newBrand'>    
            <button (click)='addNewCategoryToArray()' [disabled]='!newCategory || !categoryPicture || !newBrand'>Add</button>        
           </div>
@@ -175,14 +175,14 @@
           </div>
           </div>
           <div class="cats">
-
+            <input type='checkbox' (change)='enableSeasonalWear($event)'> Summer wear
             <div class="floating-camera">
               <label for="cat-img">
                 <ion-icon name="camera"></ion-icon>
               </label>
-              <input type="file" accept="image/x-png,image/jpeg" id="cat-img" (change)='addPictureToNewCategory($event, item)' [disabled]='!newCategory || !currentBrandName'>
+              <input type="file" accept="image/x-png,image/jpeg" id="cat-img" (change)='addPictureToNewCategory($event)' [disabled]='!newCategory || !currentBrandName'>
             </div>
-            <input type='checkbox' (change)='enableSeasonalWear($event)'> Summer wear
+
            <input type="text" placeholder="Category" id="cate" [(ngModel)]='newCategory' [disabled]='!currentBrandName'>    
            <button (click)='addNewCategoryToArray()' [disabled]='!currentBrandName || !newCategory || !categoryPicture'>Add</button>        
           </div>
@@ -219,14 +219,14 @@
         <div class="input-spaces">
           <!-- <input type="text" placeholder="Brand Name" id="brand-name"> -->
           <div class="cats">
-
+            <input type='checkbox' (change)='enableSeasonalWear($event)'> Summer wear
             <div class="floating-camera">
               <label for="cat-img">
                 <ion-icon name="camera"></ion-icon>
               </label>
               <input type="file" accept="image/x-png,image/jpeg" id="cat-img" (change)='addPictureToNewCategory($event)'>
             </div>
-            <input type='checkbox' (change)='enableSeasonalWear($event)'> Summer wear
+
            <input type="text" placeholder="Category" id="cate" [(ngModel)]='newCategory'>    
            <button (click)='addNewCategoryToArray()'>Add</button>        
           </div>
@@ -437,7 +437,7 @@
                     <!-- <div id="user-options" (click)='viewMore(item.name)'>
                       <input type="file" accept="image/x-png,image/jpeg"  (change)='changeBrandImage($event, item)'>
                     </div> -->
-                    <div class="brandName-text" (click)='viewMore(item.name)'>
+                    <div class="brandName-text" (click)='viewMore(item.name, item)'>
                       {{item.name}}
                     </div>
                   </div>                  
@@ -894,7 +894,7 @@
           <select #mbdepartmentCombo (change)="changeDepartment($event);">
             <option value='i' *ngFor='let i of departmentOptions' [value]='i'>{{i}}</option>
           </select>
-          <div class="add-btn" (click)="toggleAdderBrand()">
+          <div class="add-btn" (click)="toggleAdderBrand('Add a new')">
             <p>
               <ion-icon name="add"></ion-icon>
             </p>
@@ -1066,7 +1066,7 @@
                     <!-- <div id="user-options" (click)='viewMore(item.name)'>
                       <input type="file" accept="image/x-png,image/jpeg"  (change)='changeBrandImage($event, item)'>
                     </div> -->
-                    <div class="brandName-text" (click)='viewMore(item.name)'>
+                    <div class="brandName-text" (click)='viewMore(item.name, item)'>
                       {{item.name}}
                     </div>
                   </div>                  
