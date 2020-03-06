@@ -222,12 +222,41 @@ export class LandingPage implements OnInit {
             if(result === true){
               clearInterval(this.timer)
               this.preventIonViewDidEnterInit = false
-              // this.presentLoading()
+
               // this.pageLoader = true
               this.isOnline = true
               this.isCached = true
               this.isConnected = true
               this.loadRunFunction()
+              ////
+              // this.getCategories()
+              // this.loadAllProducts()
+              // this.pageLoader = true
+              // //this.loadTotalNumberOfProducts()
+              // this.getPendingOrders()
+              // let date = moment(new Date()).format('LLLL');
+              // let tee = moment(new Date('10/12/2019')).format('LLLL')
+              // if (date > tee) {
+              // }
+          
+              // this.getReadyOrders()
+              // this.getOrderHistory()
+          
+          
+              // this.nativeCategory.nativeElement.disabled = true
+              // //snapshots
+              // this.refreshTimer = setInterval( () => {
+              //   // this.refreshProducts()
+              //   // this.refreshOrderHistory()
+              //   // this.getPendingOrdersSnap()
+              //   // this.refreshBrands()
+              //   // this.refreshCategories()
+              // }, 3000)
+          
+          
+          
+          
+              ////
             }else{
               this.isConnected = false
               this.preventIonViewDidEnterInit = false
@@ -278,19 +307,30 @@ export class LandingPage implements OnInit {
   loadRunFunction(){
     console.log('mememeemee');
     
-   // this.presentLoading()
-    this.getCategories()
-    this.loadAllProducts()
+   this.presentLoading()
+   return new Promise( (resolve, reject) => {
+    this.getCategories().then(res => {
+
+    })
+    this.loadAllProducts().then(res => {
+
+    })
     this.pageLoader = true
     //this.loadTotalNumberOfProducts()
-    this.getPendingOrders()
+    this.getPendingOrders().then(res => {
+      
+    })
     let date = moment(new Date()).format('LLLL');
     let tee = moment(new Date('10/12/2019')).format('LLLL')
     if (date > tee) {
     }
 
-    this.getReadyOrders()
-    this.getOrderHistory()
+    this.getReadyOrders().then(res => {
+      
+    })
+    this.getOrderHistory().then(res => {
+      
+    })
 
 
     this.nativeCategory.nativeElement.disabled = true
@@ -304,6 +344,8 @@ export class LandingPage implements OnInit {
     }, 3000)
 
 
+
+   })
 
 
   }
@@ -357,10 +399,10 @@ export class LandingPage implements OnInit {
 
     // this.pageLoader = true
     return this.productService.loadAllProducts().then((result : any) => {
-      this.presentLoading()
+      //this.presentLoading()
       console.log(result);
       
-      if(result !== null && result.length > 0){
+      if(result){
         this.allProducts = result
       this.inventoryLength = this.allProducts.length
       this.sortProducts()
@@ -387,26 +429,42 @@ export class LandingPage implements OnInit {
         if(change.type === 'modified'){
          // console.log('yuno');
           let oldIndex = change.oldIndex
+          console.log(oldIndex);
+          
           if(oldIndex === -1){
             data = {}
             productID = change.doc.id
             docData = change.doc.data()
             data = {productID: productID, data: docData, category: docData['category'], categoryID: docData['categoryID'], brand: docData['brand'], brandID: docData['brandID']}
             //console.log(data);
-            this.allProducts.unshift(data)
+           this.allProducts.unshift(data)
            // console.log(this.allProducts);
             
           }else if(oldIndex !== -1){
-            //console.log('modified');
+            console.log('modified using oldIndex !== -1');
             data = {}
             productID = change.doc.id
             docData = change.doc.data()
             data = {productID: productID, data: docData, category: docData['category'], categoryID: docData['categoryID'], brand: docData['brand'], brandID: docData['brandID']}
             //console.log(data);
+            let addQueueChange : boolean = false
             for(let key in this.allProducts){
               if(this.allProducts[key].productID === productID){
-                this.allProducts[key] = data
+                if(change.doc.data().deleteQueue === false){
+                  this.allProducts[key] = data
+                }else{
+                  this.allProducts.splice(Number(key), 1)
+                }
+                addQueueChange = false
+                break
+              }else{
+                if(change.doc.data().deleteQueue === false){
+                  addQueueChange = true
+                }
               }
+            }
+            if(addQueueChange === true){
+              this.allProducts.unshift(data)
             }
           //  console.log(this.allProducts);
             
@@ -429,7 +487,7 @@ export class LandingPage implements OnInit {
             }
           }
         }else{
-          let addItem : boolean
+          let addItem : boolean = false
           //console.log('added new item');
           data = {}
           productID = change.doc.id
@@ -437,19 +495,32 @@ export class LandingPage implements OnInit {
           data = {productID: productID, data: docData, category: docData['category'], categoryID: docData['categoryID'], brand: docData['brand'], brandID: docData['brandID']}
           for(let key in this.allProducts){
             if(productID === this.allProducts[key].productID){
-              addItem = false
-              break
+              if(change.doc.data().deleteQueue === false){
+                addItem = false
+                break
+              }else{
+                addItem = false
+                this.allProducts.splice(Number(key), 1)
+                break
+              }
             }else{
-              addItem = true
+              if(change.doc.data().deleteQueue === false){
+                addItem = true
+              }else{
+                addItem = false
+              }
+
             }
           }
           if(this.allProducts.length === 0){
             addItem = true
           }
+          console.log(addItem);
+          
           if(addItem === true){
           //  console.log(true);
                         
-            this.allProducts.unshift(data)
+           this.allProducts.unshift(data)
             this.inventoryLength = this.allProducts.length
           }else{
           //  console.log(false);
@@ -458,7 +529,9 @@ export class LandingPage implements OnInit {
         }
       }
     })
+    this.inventoryLength = this.allProducts.length
     this.sortProducts()
+   // this.loadingCtrl.dismiss()
     clearInterval(this.refreshTimer)
   }
   refreshBrands(){

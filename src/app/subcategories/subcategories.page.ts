@@ -1,6 +1,6 @@
 import { Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NavController, AlertController } from '@ionic/angular';
+import { NavController, AlertController, LoadingController } from '@ionic/angular';
 import { ProductsService } from '../services/products-services/products.service';
 import { AuthService } from '../services/auth-services/auth.service';
 import { RouteService } from '../services/route-services/route.service';
@@ -16,9 +16,10 @@ export class SubcategoriesPage implements OnInit {
   currentBrandID : string = ''
   pictureLink
 
-  constructor(private activatedRoute : ActivatedRoute, private routeService : RouteService, private alertController : AlertController, private authService : AuthService, private navCtrl : NavController, public route : Router, public productService : ProductsService) { }
+  constructor(public loadingCtrl: LoadingController, private activatedRoute : ActivatedRoute, private routeService : RouteService, private alertController : AlertController, private authService : AuthService, private navCtrl : NavController, public route : Router, public productService : ProductsService) { }
 
   ngOnInit() {
+    this.presentLoading()
     console.log(this.activatedRoute.snapshot.paramMap.get('id'));
     this.currentBrand = this.activatedRoute.snapshot.paramMap.get('id')
     console.log(this.currentBrand);
@@ -66,6 +67,7 @@ export class SubcategoriesPage implements OnInit {
     return this.productService.getBrandCategories(query).then(result => {
       console.log(result);
       this.categories = result
+      this.loadingCtrl.dismiss()
     })
   }
   getCategoriesSnap(currentBrandID){
@@ -156,10 +158,21 @@ export class SubcategoriesPage implements OnInit {
           }
         }
       }
+      this.loadingCtrl.dismiss()
     })
   }
   back(){
     this.route.navigate(['/landing'])
+  }
+  async presentLoading() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Loading...',
+    });
+    await loading.present();
+
+    // const { role, data } = await loading.onDidDismiss();
+
+    // console.log('Loading dismissed!');
   }
   
 }

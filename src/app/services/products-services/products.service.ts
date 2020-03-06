@@ -762,20 +762,22 @@ return new Promise((resolve, reject)  => {
   }
 
   loadAllProducts(){
-    return new Promise((resolve, reject) => {
-      firebase.firestore().collection('Products').where('deleteQueue', '==', false).orderBy('dateAdded', 'desc').get().then(result => {
+    console.log('We are retrieving all products');
+    
+      return firebase.firestore().collection('Products').where('deleteQueue', '==', false).orderBy('dateAdded', 'desc').get().then(result => {
         let data : Array<any> = []
         for(let key in result.docs){
           let productID = result.docs[key].id
           let docData = result.docs[key].data() 
           data.push({productID: productID, data: docData, category: docData['category'], categoryID: docData['categoryID'], brand: docData['brand'], brandID: docData['brandID']})
         }
-        resolve(data)
+        console.log(data);
+        
+        return data
       }).catch(error => {
         console.log(error);
         
       })
-    })
   }
   getCategories(){
     return new Promise( (resolve, reject) => {
