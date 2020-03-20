@@ -191,15 +191,17 @@
               </ion-col>
               <ion-col size="3" *ngFor='let item of currentSelectedItems'>
                 <div class="big-on-sale">
-                  <p><b>{{item.data.price | currency : 'R'}}</b></p>
-                  <p id="new-price" *ngIf="item.data.onSale === true"><b>{{item.data.price | currency : 'R'}}</b></p>
-                  <p id="old-price" *ngIf="item.data.onSale === true"><b>{{item.data.price | currency : 'R'}}</b></p>
                 </div>
                 <div class="brandName">
                   <div class="onPromo" *ngIf="item.data.onSale === true">
-                    On Promotion
+                    On Sale
                   </div>
                   <div class="myOptions">
+                    <div class="pricing">
+                      <p *ngIf="item.data.onSale === false"><b>{{item.data.price | currency : 'R'}}</b></p>
+                      <p id="new-price" *ngIf="item.data.onSale === true"><b>{{item.data.saleprice | currency : 'R'}}</b></p>
+                      <p id="old-price" *ngIf="item.data.onSale === true"><b>{{item.data.price | currency : 'R'}}</b></p>
+                    </div>
                     <div class="chooseOneLabels">
                       <div class="myLabels">Hide</div>
                       <div class="myLabels">Edit</div>
