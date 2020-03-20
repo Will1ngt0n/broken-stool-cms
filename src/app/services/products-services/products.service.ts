@@ -445,6 +445,9 @@ return new Promise((resolve, reject)  => {
         }else{
           console.log('Picture is undefined');
           resolve ('success')
+          setTimeout( () => {
+            reject('error')
+          }, 50000)
         }
 
       })
@@ -511,6 +514,8 @@ return new Promise((resolve, reject)  => {
         }).then(status => {
           return 'success'
         })
+    }).catch( () => {
+      return 'error'
     })
   }
 

@@ -122,9 +122,9 @@ export class ItemsListPage implements OnInit, OnDestroy {
 
   }
 
-  async productAlert(message) {
+  async productAlert(message, header) {
     const alert = await this.alertController.create({
-      header: 'Success!',
+      header: header,
       message: message,
       buttons: [
         {
@@ -397,7 +397,7 @@ export class ItemsListPage implements OnInit, OnDestroy {
           
         }
         
-      }, 600)
+      }, 1000)
       if(data.length !== 0){
         return data
       }
@@ -626,23 +626,11 @@ export class ItemsListPage implements OnInit, OnDestroy {
   promoteItem() {
     this.presentLoading()
     return this.productsService.promoteItem(this.salePrice, this.editPercentage, this.editStartDate, this.editEndDate, this.itemBrand, this.itemCategory, this.itemID, this.itemName, this.itemImageLink, this.itemDescription, this.selectedItem).then(result => {
-      console.log(result);
+     // this.loaderDismiss(result)
       if(result === 'success'){
-        setTimeout( () => {
-          try {
-            this.loadingCtrl.dismiss()
-          } catch (error) {
-            console.log(error);
-            
-          }
-        }, 300)
-          
-        
         this.clearPromoForm()
         return this.dismissPromo()
-      }else(
-        alert('An error occurred, please retry')
-      )
+      }
     })
   }
 
@@ -712,35 +700,31 @@ export class ItemsListPage implements OnInit, OnDestroy {
   deleteItemConfirmed(productID, brand, category, item) {
     this.presentLoading()
     return this.productsService.deleteItemFromInventory(productID, brand, category, item).then(result => {
-      if(result === 'Deleted'){
-          //this.loadingCtrl.dismiss()
-        
-      }
+      this.loaderDismiss(result)
     })
   }
   hideItem(productID, brand, category, item) {
     this.presentLoading()
     return this.productsService.hideProduct(productID, brand, category, item).then(result => {
-      if(result === 'success'){
-          //this.loadingCtrl.dismiss()
-        
-      }else if(result === 'error'){
-          //this.loadingCtrl.dismiss()
-        }
+      this.loaderDismiss(result)
     })
+  }
+  loaderDismiss(res){
+    if(res === 'success'){
+      setTimeout( () => {
+        try { this.loadingCtrl.dismiss() } catch (error) { }
+      }, 300)
+    }else if(res === 'error'){
+      setTimeout( () => {
+        try { this.loadingCtrl.dismiss() } catch (error) { }
+        this.productAlert('An error occured', 'Error!')
+      })
+    }
   }
   showItem(productID, brand, category, item) {
     this.presentLoading()
     return this.productsService.showProduct(productID, brand, category, item).then(result => {
-      if(result === 'success'){
-        if(this.loadingCtrl){
-          //this.loadingCtrl.dismiss()
-        }
-      }else if(result === 'error'){
-        if(this.loadingCtrl){
-          //this.loadingCtrl.dismiss()
-        }
-      }
+      this.loaderDismiss(result)
     })
   }
   reloadPage(){
@@ -775,13 +759,9 @@ export class ItemsListPage implements OnInit, OnDestroy {
         this.updateDescription = result
       }).then(result => {
         return this.productsService.updateItemsListItem(this.itemID, this.itemBrand, this.itemCategory, this.updatePrice, this.updateDescription, this.updateName, this.itemSizes, this.pictureUpdate, this.itemColors).then(result => {
-            setTimeout(() => {
-              //this.reloadPage()
-            }, 30);
+          this.loaderDismiss(result)
           if (result === 'success') {
-            //location.reload()
-              this.loadingCtrl.dismiss()
-            this.productAlert('Product was successfully updated')
+            this.productAlert('Product was successfully updated', 'Success!')
             this.clearUpdateForm()
             return this.dismissPromo()
           }
