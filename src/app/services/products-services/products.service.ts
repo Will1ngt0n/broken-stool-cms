@@ -69,7 +69,7 @@ return new Promise((resolve, reject)  => {
   }
 
 
-  getAllSales(brand, category){
+  getAllSales(){
     return firebase.firestore().collection('Specials').get().then(result => {
       let sales : Array<any> = []
       for(let key in result.docs){
@@ -504,7 +504,7 @@ return new Promise((resolve, reject)  => {
       timestamp : firebase.firestore.FieldValue.serverTimestamp(),
     }).then(result => {
      // console.log(result);
-        return firebase.firestore().collection('Products').doc(itemBrand).collection(itemCategory).doc(itemID).update({
+        return firebase.firestore().collection('Products').doc(itemID).update({
           onSale: true,
           saleprice: Number(price),
           discount: percentage

@@ -30,7 +30,10 @@ export class SubcategoriesPage implements OnInit {
       console.log(this.pictureLink);
       this.currentBrandID = result['brandID']
       this.getCategories(this.currentBrandID)
-      this.getCategoriesSnap(this.currentBrandID)
+      setTimeout( () => {
+        this.getCategoriesSnap(this.currentBrandID)
+      }, 1000)
+
     })
 
   }
@@ -67,7 +70,16 @@ export class SubcategoriesPage implements OnInit {
     return this.productService.getBrandCategories(query).then(result => {
       console.log(result);
       this.categories = result
-      this.loadingCtrl.dismiss()
+      setTimeout( () => {
+        try {
+          this.loadingCtrl.dismiss()
+        } catch (error) {
+          console.log(error);
+          
+        }
+
+      }, 600)
+
     })
   }
   getCategoriesSnap(currentBrandID){
@@ -158,7 +170,7 @@ export class SubcategoriesPage implements OnInit {
           }
         }
       }
-      this.loadingCtrl.dismiss()
+      //this.loadingCtrl.dismiss()
     })
   }
   back(){

@@ -390,11 +390,14 @@ export class ItemsListPage implements OnInit, OnDestroy {
       console.log(this.currentViewedItems);
       
       //console.log(data);
-      if(this.pageLoader){
-        this.loadingCtrl.dismiss()
-        this.pageLoader = false
-        //clearInterval(this.timer)
-      }this.loadingCtrl.dismiss()
+      setTimeout( () => {
+        try {
+          this.loadingCtrl.dismiss()
+        } catch (error) {
+          
+        }
+        
+      }, 600)
       if(data.length !== 0){
         return data
       }
@@ -625,7 +628,15 @@ export class ItemsListPage implements OnInit, OnDestroy {
     return this.productsService.promoteItem(this.salePrice, this.editPercentage, this.editStartDate, this.editEndDate, this.itemBrand, this.itemCategory, this.itemID, this.itemName, this.itemImageLink, this.itemDescription, this.selectedItem).then(result => {
       console.log(result);
       if(result === 'success'){
-          this.loadingCtrl.dismiss()
+        setTimeout( () => {
+          try {
+            this.loadingCtrl.dismiss()
+          } catch (error) {
+            console.log(error);
+            
+          }
+        }, 300)
+          
         
         this.clearPromoForm()
         return this.dismissPromo()
@@ -1118,7 +1129,7 @@ export class ItemsListPage implements OnInit, OnDestroy {
   loadInventorySnaps(){
     return firebase.firestore().collection('Products').onSnapshot(data => {
       for(let key in data.docChanges()){
-        this.ngOnInit()
+        //this.ngOnInit()
         let change = data.docChanges()[key]
         if(change.type === 'added'){
           let addToInventory : boolean = false

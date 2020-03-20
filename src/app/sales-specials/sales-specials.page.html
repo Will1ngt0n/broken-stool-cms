@@ -40,7 +40,7 @@
         <div *ngFor="let item of allBrandSales">
           <div *ngIf="brandName === 'All'">
 
-            <div *ngIf="item.brand === 'Kwanga' || item.brand === 'Dankie Jesu'">
+            <div *ngIf="item.brand === 'Kwanga Apparel' || item.brand === 'Dankie Jesu'">
               <div class="SubCat">
                 <div class="gridder">
                   <img defer [src]="item.data.pictureLink" *ngIf='item.data.pictureLink' alt="">
@@ -82,7 +82,7 @@
           </div>
           <div *ngIf="brandName === 'Kwanga Apparel'">
 
-            <div *ngIf="item.brand === 'Kwanga'">
+            <div *ngIf="item.brand === 'Kwanga Apparel'">
               <div class="SubCat">
                 <div class="gridder">
                   <img defer [src]="item.data.pictureLink" *ngIf='item.data.pictureLink' alt="">
@@ -184,7 +184,7 @@
         </div>
         <div class="list" *ngIf="brandName === 'Kwanga Apparel'">
 
-          <div class="SubCats" *ngIf="item.brand === 'Kwanga'">
+          <div class="SubCats" *ngIf="item.brand === 'Kwanga Apparel'">
             <div>
               <img defer [src]="item.data.pictureLink" *ngIf='item.data.pictureLink' alt="">
               <img src="../../assets/imgs/images.jpg" *ngIf="!item.data.pictureLink" alt="">

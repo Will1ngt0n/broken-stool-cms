@@ -65,11 +65,13 @@ export class AuthService {
   }
 ​
   loginWithEmail(email, password){
-    return firebase.firestore().collection('Admin').get().then(result => {
+    return firebase.firestore().collection('Admin').where('email', '==', email).get().then(result => {
       for(let key in result.docs){
         let docEmail = result.docs[key].data().email
-        console.log(docEmail);
+        console.log(docEmail, email);
         if(docEmail === email){
+          console.log('emails match');
+          
           this.user = true
 
           let loc = this.loc['_platformLocation'].location.origin
@@ -84,6 +86,8 @@ export class AuthService {
             return error
           })
         }else if (docEmail !== email){
+          console.log('emails dont match');
+          
           return 
         }
       }
@@ -174,13 +178,20 @@ export class AuthService {
       })
     })
   }
-  checkingAuthStateBoolean() : boolean {
-    let loc = this.loc['_platformLocation'].location.origin
-    console.log(loc);
-    console.log(this.localStorage);
-    
-    
-    return this.localStorage.retrieve('inSession:' + loc)
+  checkingAuthStateBoolean() : Promise<boolean> {
+    return new Promise ((resolve,reject)=>{
+      firebase.auth().onAuthStateChanged((user:firebase.User)=>{
+        if (user) {
+          resolve(true);
+           } else{
+            console.log('User is  not logged in');
+            //this.router.navigate(['/sign-in']);
+            resolve(false);
+          }
+          // Partner is everything okay?
+      });
+     
+      });
   }
   checkingAuthStateHome(){
     return new Promise((resolve, reject) =>{

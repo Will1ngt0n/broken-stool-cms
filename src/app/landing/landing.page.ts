@@ -309,15 +309,15 @@ export class LandingPage implements OnInit {
     
    this.presentLoading()
    return new Promise( (resolve, reject) => {
-    this.getCategories().then(res => {
 
-    })
     this.loadAllProducts().then(res => {
-
+      console.log('inventory here');
+      
     })
     this.pageLoader = true
     //this.loadTotalNumberOfProducts()
     this.getPendingOrders().then(res => {
+      console.log('pending orders here');
       
     })
     let date = moment(new Date()).format('LLLL');
@@ -326,10 +326,22 @@ export class LandingPage implements OnInit {
     }
 
     this.getReadyOrders().then(res => {
+      console.log('ready orders here');
       
     })
     this.getOrderHistory().then(res => {
+      console.log('orders history here');
       
+    })
+    this.getCategories().then(res => {
+      console.log('categories here');
+      setTimeout( () => {
+        try {
+          this.loadingCtrl.dismiss()
+        } catch (error) {
+          
+        }
+      }, 600)
     })
 
 
@@ -404,11 +416,17 @@ export class LandingPage implements OnInit {
       
       if(result){
         this.allProducts = result
+        for(let key in this.allProducts){
+          console.log(this.allProducts[key]);
+          firebase.firestore().collection('Products').doc(this.allProducts[key].productID).update({
+            deleteQueue: false
+          })
+        }
       this.inventoryLength = this.allProducts.length
       this.sortProducts()
     }
     //if(this.pageLoader){
-      this.loadingCtrl.dismiss()
+      //this.loadingCtrl.dismiss()
       //this.pageLoader = false
     //}
     })
