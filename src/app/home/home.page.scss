@@ -451,6 +451,22 @@
       display: block;
     }
   }
+  @media screen and (max-width: 831px){
+    .feet {
+      flex-wrap: wrap;
+    }
+    .feet > div:nth-child(1){
+      width: 100%;
+    }
+    .feet > div:nth-child(2){
+      font-size: 13px;
+      width: 50%;
+    }
+    .feet > div:nth-child(3){
+      font-size: 13px;
+      width: 50%;
+    }
+  }
 }
 
 @media screen and (max-width: 640px) {
