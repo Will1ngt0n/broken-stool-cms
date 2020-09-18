@@ -180,7 +180,9 @@ export class AuthService {
   }
   checkingAuthStateBoolean() : Promise<boolean> {
     return new Promise ((resolve,reject)=>{
-      firebase.auth().onAuthStateChanged((user:firebase.User)=>{
+      return firebase.auth().onAuthStateChanged((user:firebase.User)=>{
+        console.log(user);
+        
         if (user) {
           resolve(true);
            } else{

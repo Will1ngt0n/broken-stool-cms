@@ -7,14 +7,23 @@ import { AuthService } from '../auth-services/auth.service';
 })
 export class ReverseAuthGuardGuard implements CanActivate {
   constructor(private authService : AuthService, private router : Router){ }
-  canActivate() : boolean{
-    if(this.authService.checkingAuthStateBoolean()){
-      console.log(false);  
-      this.router.navigate(['landing'])
-      return false
-    }else{
-      console.log(true);
-      return true
-    }
+  canActivate() : Promise<boolean> {
+    return this.authService.checkingAuthStateBoolean().then( (bln : boolean) => {
+      if(bln === true) {
+        this.router.navigate(['/landing'])
+        return false
+      } else {
+        return true
+      }
+    
+    })
+    // if(this.authService.checkingAuthStateBoolean()){
+    //   console.log(false);  
+    //   this.router.navigate(['landing'])
+    //   return false
+    // }else{
+    //   console.log(true);
+    //   return true
+    // }
   }
 }
