@@ -7,8 +7,8 @@
       </ion-button>
       <p id="topic-item"><b>{{promoUdpate}}</b></p>
       <div class="theItemsImage">
-        <img *ngIf='itemImageLink' [src]="itemImageLink" alt="" id="item-image">
-        <img *ngIf='!itemImageLink' src="../../assets/imgs/images.jpg" alt="" id="item-image">
+        <img *ngIf="itemImageLink != 'undefined' && itemImageLink != ''" [src]="itemImageLink" alt="" id="item-image">
+        <img *ngIf="itemImageLink == 'undefined' || itemImageLink == ''" src="../../assets/imgs/images.jpg" alt="" id="item-image">
       </div>
       <div class="item-data">
         <h3>{{itemName}}</h3>
@@ -43,8 +43,8 @@
       </ion-button>
       <p id="topic-item"><b>{{promoUdpate}}</b></p>
       <div class="theItemsImage">
-        <img *ngIf='itemImageLink' [src]="itemImageLink" alt="" id="item-image">
-        <img *ngIf='!itemImageLink' src="../../assets/imgs/images.jpg" alt="" id="item-image">
+        <img *ngIf="itemImageLink != 'undefined' && itemImageLink != ''" [src]="itemImageLink" alt="" id="item-image">
+        <img *ngIf="itemImageLink == 'undefined' || itemImageLink == ''" src="../../assets/imgs/images.jpg" alt="" id="item-image">
       </div>
       <div class="item-data">
         <h3>{{updateName}}</h3>
@@ -181,7 +181,8 @@
               <ion-col size="12" id="makeSmaller">
                 <div class="brandName-top">
                   <div class="brandImage">
-                    <img [src]="pictureLink" alt="">
+                    <img *ngIf="pictureLink != 'undefined' && pictureLink != ''" [src]="pictureLink" alt="">
+                    <img *ngIf="pictureLink == 'undefined' || pictureLink == ''" src="../../assets/imgs/images.jpg" alt="">
                   </div>
                   <div class="brandName-text-head">
                     <!-- <a (click)='navigate()'>{{title}}</a> -->
@@ -234,7 +235,8 @@
                     </div>
                   </div>
                   <div class="brandImage">
-                    <img [src]="item.data.pictureLink" alt="">
+                    <img *ngIf="item.data.pictureLink != 'undefined' && item.data.pictureLink != ''" [src]="item.data.pictureLink" alt="">
+                    <img *ngIf="item.data.pictureLink == 'undefined' || item.data.pictureLink == ''" src="../../assets/imgs/images.jpg" alt="">
                   </div>
                   <div class="brandName-text">
                     {{item.data.name}}
@@ -329,8 +331,8 @@
           <div class="SubCats">
             <div>
               <div class="hidden" *ngIf='item.data.hideItem === true'>Hidden</div>
-              <img defer [src]="item.data.pictureLink" *ngIf='item.data.pictureLink' alt="">
-              <img src="../../assets/imgs/images.jpg" *ngIf="!item.data.pictureLink" alt="">
+              <img defer [src]="item.data.pictureLink" *ngIf="item.data.pictureLink != 'undefined' && item.data.pictureLink != ''" alt="">
+              <img src="../../assets/imgs/images.jpg" *ngIf="item.data.pictureLink == 'undefined' || item.data.pictureLink == ''" alt="">
             </div>
             <div>
               <h5>{{item.data.name}}</h5>
