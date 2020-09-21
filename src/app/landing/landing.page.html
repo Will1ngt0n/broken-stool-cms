@@ -334,7 +334,8 @@
           <div class="items-list" *ngIf='allProducts && !inventorySearch'>
             <ion-card *ngFor='let item of allProducts'>
               <div (click)="showHideSearchDetails(item)">
-                <img [src]="item.data.pictureLink" *ngIf='item.data' alt="">
+                <img [src]="item.data.pictureLink" *ngIf='item.data && item.data.pictureLink' alt="">
+                <img src="/src/assets/imgs/images.jpg" *ngIf='!item.data.pictureLink' alt="">
                 <p><b>{{item.data.name}}</b></p>
               </div>
 
@@ -430,7 +431,8 @@
                 <ion-col size="3" *ngFor='let item of brands'>
                   <div class="brandName">
                     <div class="brandImage" (click)='viewMore(item.name, item)'>
-                      <img [src]="item.pictureLink" alt="">
+                      <img [src]="item.pictureLink" *ngIf="item.pictureLink != 'undefined'" alt="">
+                      <img src="../../assets/imgs/images.jpg" *ngIf="item.pictureLink == 'undefined'" alt="">
                     </div>
                     <div id="user-options-opts">
                       <div id="user-opt-buttons">
