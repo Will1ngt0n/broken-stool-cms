@@ -16,7 +16,7 @@ $RECYCLE.BIN/
 *.log
 log.txt
 npm-debug.log*
-
+/changes // this enables me to track changes without posting them
 /.idea
 /.ionic
 /.sass-cache

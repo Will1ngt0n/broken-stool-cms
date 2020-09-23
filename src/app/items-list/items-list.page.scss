@@ -896,10 +896,27 @@ ion-searchbar {
   }
   .SubCats > div:nth-child(1) {
     width: 100px;
+    // border: 1px solid red;
     img {
       width: 100%;
       height: 100%;
       object-fit: contain;
+    }
+    .onSale {
+      position: absolute;
+      top: 50%;
+      width: 100px;
+      height: auto;
+      object-fit: contain;
+      // border: 1px solid black;
+
+      transform: translateY(-25%);
+      // left: 5px;
+      // width: calc(100% - 10px);
+      color: white;
+      background: rgba(0, 0, 0, 0.486);
+      // padding: 5px;
+      text-align: center;
     }
   }
   .SubCats > div:nth-child(2) {

@@ -231,7 +231,10 @@ export class ItemsListPage implements OnInit, OnDestroy {
   ionViewDidEnter(){
     //console.log('ion view did enter');
     //console.log(this.isCached);
+    console.log('we did enter bruh');
+    console.log(this.pageLoader);
     
+    // this.loadingCtrl.dismiss()
     if(this.isCached !== true){
       // this.presentLoading()
       // this.pageLoader = true
@@ -403,9 +406,9 @@ export class ItemsListPage implements OnInit, OnDestroy {
       }
     })
   }
-  loadCategoryItemsSnap(category){
+  async loadCategoryItemsSnap(category){
     this.presentLoading()
-    return firebase.firestore().collection('Products').where('categoryID', '==', category).orderBy('timestamp', 'desc').onSnapshot(result => {
+    firebase.firestore().collection('Products').where('categoryID', '==', category).orderBy('timestamp', 'desc').onSnapshot(result => {
       let data : Array<any> = []
       for(let key in result.docs){
         if(result.docs[key].data().deleteQueue === false){
@@ -424,7 +427,8 @@ export class ItemsListPage implements OnInit, OnDestroy {
         this.loadingCtrl.dismiss()
         this.pageLoader = false
         //clearInterval(this.timer)
-      }this.loadingCtrl.dismiss()
+      }
+      this.loadingCtrl.dismiss()
       if(data.length !== 0){
         return data
       }
@@ -524,7 +528,7 @@ export class ItemsListPage implements OnInit, OnDestroy {
   isCached : boolean
   pageLoader : boolean
   ngOnInit() {
-    this.activatedRoute.params.subscribe(result => {
+    this.activatedRoute.params.subscribe(async (result) => {
       console.log(result);
       
       console.log(result.id);
@@ -534,7 +538,7 @@ export class ItemsListPage implements OnInit, OnDestroy {
       let reroute : boolean
       //this.load16CategoryItems()
       if(navigator.onLine){
-        return this.networkService.getUID().then( result => {
+        await this.networkService.getUID().then( result => {
           if(result === true){
             if(para === 'Inventory'){
               this.routeService.readInventoryParameter().then(result => {
@@ -547,8 +551,8 @@ export class ItemsListPage implements OnInit, OnDestroy {
                 console.log(this.pictureLink);
                 
                 this.currentCategory = para
-                this.loadInventory()
-                this.loadInventorySnaps()
+                this.loadInventory()       // testing, bring this back
+                this.loadInventorySnaps()  // testing, bring this back
               })
             }else if(para === 'All'){
               this.routeService.readBrandItemsListParameters().then(result => {
@@ -597,6 +601,7 @@ export class ItemsListPage implements OnInit, OnDestroy {
   }
   ionViewWillEnter(){
     console.log('ion view did enter');
+    // this.presentLoading()
     if(navigator.onLine){
       this.isOnline = true
     }else{
@@ -1214,5 +1219,9 @@ export class ItemsListPage implements OnInit, OnDestroy {
   togglePop(){
     this.openPopoverS()
     this.openPopover()
+  }
+  ionVdiewDidEnter () {
+    console.log('we are running bruh');
+    
   }
 }

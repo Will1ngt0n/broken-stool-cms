@@ -281,6 +281,7 @@
     <div class="body-content">
       <div id="left">
         <div class="history-items">
+          <!-- this shows when order history is clicked -->
           <div class="title-top">
             <h5> Order History ({{orderHistoryLength}})</h5>
             <ion-icon name="close" id="closer" (click)="dismissList()"></ion-icon>
@@ -388,13 +389,13 @@
           </div>
 
         </div>
-        <div class="side-buttons" (click)="showPendingList()" *ngIf='pendingOrdersLength < 9'>Pending Orders
+        <div class="side-buttons" (click)="showPendingList()" *ngIf='pendingOrdersLength <= 9'>Pending Orders
           ({{pendingOrdersLength}})</div>
         <div class="side-buttons" (click)="showPendingList()" *ngIf='pendingOrdersLength > 9'>Pending Orders (9+)</div>
-        <div class="side-buttons" (click)="showHistoryList()" *ngIf='orderHistoryLength < 9'>Order History
+        <div class="side-buttons" (click)="showHistoryList()" *ngIf='orderHistoryLength <= 9'>Order History
           ({{orderHistoryLength}})</div>
         <div class="side-buttons" (click)="showHistoryList()" *ngIf='orderHistoryLength > 9'>Order History (9+)</div>
-        <div class="side-buttons" (click)="showInventoryList()" *ngIf='inventoryLength < 99'>Inventory
+        <div class="side-buttons" (click)="showInventoryList()" *ngIf='inventoryLength <= 99'>Inventory
           ({{inventoryLength}})</div>
         <div class="side-buttons" (click)="showInventoryList()" *ngIf='inventoryLength > 99'>Inventory (99+)</div>
         <div class="helpDesk" id="helpDesk" (click)="goToHelpDesk()">
@@ -677,7 +678,7 @@
       <div id="right">
 
         <div class="adding">
-          <h4>Add Product</h4>
+          <h4 id="web-title">Add Product</h4>
           <div class="gridder">
             <select #departmentCombo (change)="changeDepartment($event); checkValidity()">
               <option value='i' *ngFor='let i of departmentOptions' [value]='i'>{{i}}</option>

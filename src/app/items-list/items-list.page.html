@@ -330,6 +330,9 @@
 
           <div class="SubCats">
             <div>
+              <div class="onSale" *ngIf="item.data.onSale === true">
+                On Sale
+              </div>
               <div class="hidden" *ngIf='item.data.hideItem === true'>Hidden</div>
               <img defer [src]="item.data.pictureLink" *ngIf="item.data.pictureLink != 'undefined' && item.data.pictureLink != ''" alt="">
               <img src="../../assets/imgs/images.jpg" *ngIf="item.data.pictureLink == 'undefined' || item.data.pictureLink == ''" alt="">
