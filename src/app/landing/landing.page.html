@@ -445,8 +445,8 @@
                 <ion-col size="3" *ngFor='let item of brands'>
                   <div class="brandName">
                     <div class="brandImage" (click)='viewMore(item.name, item)'>
-                      <img [src]="item.pictureLink" *ngIf="itemImageLink != 'undefined' && itemImageLink != ''" alt="">
-                      <img src="../../assets/imgs/images.jpg" *ngIf="itemImageLink == 'undefined' || itemImageLink == ''" alt="">
+                      <img [src]="item.pictureLink" *ngIf="item.pictureLink != 'undefined' && item.pictureLink != ''" alt="">
+                      <img src="../../assets/imgs/images.jpg" *ngIf="item.pictureLink == 'undefined' || item.pictureLink == ''" alt="">
                     </div>
                     <div id="user-options-opts">
                       <div id="user-opt-buttons">
