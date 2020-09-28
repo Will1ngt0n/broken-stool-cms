@@ -319,7 +319,7 @@ export class LandingPage implements OnInit {
     //this.loadTotalNumberOfProducts()
     this.getPendingOrders().then(res => {
       console.log('pending orders here');
-      
+      this.dismissLoader()
     })
     let date = moment(new Date()).format('LLLL');
     let tee = moment(new Date('10/12/2019')).format('LLLL')

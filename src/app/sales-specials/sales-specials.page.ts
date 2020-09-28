@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductsService } from '../services/products-services/products.service';
 import { AuthService } from '../services/auth-services/auth.service';
@@ -87,7 +87,9 @@ export class SalesSpecialsPage implements OnInit {
   @ViewChild('checkboxYellow', {static : true}) checkboxYellow : ElementRef
   @ViewChild('checkboxWhite', {static : true}) checkboxWhite : ElementRef
   @ViewChild('btnClearForm', {static : true}) btnClearForm : ElementRef
-  constructor(private networkService : NetworkService, public loadingCtrl: LoadingController, private alertController : AlertController, private authService : AuthService, public route : Router, public activatedRoute : ActivatedRoute, public productsService : ProductsService) {
+
+  @ViewChild('loaderDiv', {static: true}) loaderDiv: ElementRef
+  constructor(private render: Renderer2, private networkService : NetworkService, public loadingCtrl: LoadingController, private alertController : AlertController, private authService : AuthService, public route : Router, public activatedRoute : ActivatedRoute, public productsService : ProductsService) {
     this.isCached = false
     this.isConnected = false
     this.isOnline = false
@@ -728,7 +730,7 @@ viewMore(query){
 // }
 loadSalesSnap(){
   //this.presentLoading()
-  this.presentLoading()
+  // this.presentLoading()
   this.pageLoader = true
   return firebase.firestore().collection('Specials').orderBy('timestamp', 'desc').onSnapshot(result => {
     let sales : Array<any> = []
@@ -742,7 +744,8 @@ loadSalesSnap(){
         sales.push({productID: productID, data: docData, category: docData.category, brand: docData.brand, link: docData.pictureLink})
       }
       if(this.pageLoader === true){
-        this.loadingCtrl.dismiss()
+        // this.loadingCtrl.dismiss()
+        this.dismissLoader()
       }
       console.log(sales);
       this.allBrandSales = sales
@@ -950,6 +953,15 @@ showInventoryListSmall(){
 stepBackToBtns(){
   this.sideMenuButtons = true;
   this.listOfItems = 0;
+}
+dismissLoader() {
+  try {
+    this.render.addClass(this.loaderDiv.nativeElement, 'hidden')
+  } catch (error) {
+    console.warn(error)
+    this.loaderDiv.nativeElement.class = 'hidden'
+  }
+  console.log(this.loaderDiv)
 }
 
 }

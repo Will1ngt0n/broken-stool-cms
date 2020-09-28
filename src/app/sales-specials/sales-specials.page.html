@@ -1,3 +1,11 @@
+<div #loaderDiv id="loader">
+  <div id="loader-box">
+    <div id="wrapper">
+      <div id="loader-spinner"></div>
+      <div id="loader-text">Loading...</div>
+    </div>
+  </div>
+</div>
 <ion-content>
 
   <div class="searchResults" *ngIf="searchInput">
@@ -43,8 +51,8 @@
             <div *ngIf="item.brand === 'Kwanga Apparel' || item.brand === 'Dankie Jesu'">
               <div class="SubCat">
                 <div class="gridder">
-                  <img defer [src]="item.data.pictureLink" *ngIf='item.data.pictureLink' alt="">
-                  <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="!item.data.pictureLink" alt="">
+                  <img defer [src]="item.data.pictureLink" *ngIf="item.data.pictureLink != undefined && item.data.pictureLink != ''" alt="">
+                  <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="item.data.pictureLink == undefined || item.data.pictureLink == ''" alt="">
                   <div id="info">
                     <h5>{{item.data.name}}</h5>
                     <p>{{item.data.description}}.</p>
@@ -63,8 +71,8 @@
             <div *ngIf="item.brand === 'Dankie Jesu'">
               <div class="SubCat">
                 <div class="gridder">
-                  <img defer [src]="item.data.pictureLink" *ngIf='item.data.pictureLink' alt="">
-                  <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="!item.data.pictureLink" alt="">
+                  <img defer [src]="item.data.pictureLink" *ngIf="item.data.pictureLink != undefined && item.data.pictureLink != ''" alt="">
+                  <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="item.data.pictureLink == undefined || item.data.pictureLink == ''" alt="">
                   <div id="info">
                     <h5>{{item.data.name}}</h5>
                     <p>{{item.data.description}}.</p>
@@ -85,8 +93,8 @@
             <div *ngIf="item.brand === 'Kwanga Apparel'">
               <div class="SubCat">
                 <div class="gridder">
-                  <img defer [src]="item.data.pictureLink" *ngIf='item.data.pictureLink' alt="">
-                  <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="!item.data.pictureLink" alt="">
+                  <img defer [src]="item.data.pictureLink" *ngIf="item.data.pictureLink != undefined && item.data.pictureLink != ''" alt="">
+                  <img class="bg" src="../../assets/imgs/images.jpg" *ngIf="item.data.pictureLink == undefined || item.data.pictureLink == ''" alt="">
                   <div id="info">
                     <h5>{{item.data.name}}</h5>
                     <p>{{item.data.description}}.</p>
@@ -139,8 +147,8 @@
 
           <div class="SubCats" *ngIf="item.brand === 'Kwanga' || item.brand === 'Dankie Jesu'">
             <div>
-              <img defer [src]="item.data.pictureLink" *ngIf='item.data.pictureLink' alt="">
-              <img src="../../assets/imgs/images.jpg" *ngIf="!item.data.pictureLink" alt="">
+              <img defer [src]="item.data.pictureLink" *ngIf="item.data.pictureLink != undefined && item.data.pictureLink != ''" alt="">
+              <img src="../../assets/imgs/images.jpg" *ngIf="item.data.pictureLink == undefined || item.data.pictureLink == ''" alt="">
             </div>
             <div>
               <p id="item-name-small">{{item.data.name}}</p>
@@ -163,8 +171,8 @@
 
           <div class="SubCats" *ngIf="item.brand === 'Dankie Jesu'">
             <div>
-              <img defer [src]="item.data.pictureLink" *ngIf='item.data.pictureLink' alt="">
-              <img src="../../assets/imgs/images.jpg" *ngIf="!item.data.pictureLink" alt="">
+              <img defer [src]="item.data.pictureLink" *ngIf="item.data.pictureLink != undefined && item.data.pictureLink != ''" alt="">
+              <img src="../../assets/imgs/images.jpg" *ngIf="item.data.pictureLink == undefined || item.data.pictureLink == ''" alt="">
             </div>
             <div>
               <p id="item-name-small">{{item.data.name}}</p>
@@ -186,8 +194,8 @@
 
           <div class="SubCats" *ngIf="item.brand === 'Kwanga Apparel'">
             <div>
-              <img defer [src]="item.data.pictureLink" *ngIf='item.data.pictureLink' alt="">
-              <img src="../../assets/imgs/images.jpg" *ngIf="!item.data.pictureLink" alt="">
+              <img defer [src]="item.data.pictureLink" *ngIf="item.data.pictureLink != undefined && item.data.pictureLink != ''" alt="">
+              <img src="../../assets/imgs/images.jpg" *ngIf="item.data.pictureLink == undefined || item.data.pictureLink == ''" alt="">
             </div>
             <div>
               <p id="item-name-small">{{item.data.name}}</p>

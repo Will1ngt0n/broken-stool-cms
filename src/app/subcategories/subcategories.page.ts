@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, Renderer2, ElementRef, ViewChild} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NavController, AlertController, LoadingController } from '@ionic/angular';
 import { ProductsService } from '../services/products-services/products.service';
@@ -15,11 +15,11 @@ export class SubcategoriesPage implements OnInit {
   currentBrand : string = ''
   currentBrandID : string = ''
   pictureLink
-
-  constructor(public loadingCtrl: LoadingController, private activatedRoute : ActivatedRoute, private routeService : RouteService, private alertController : AlertController, private authService : AuthService, private navCtrl : NavController, public route : Router, public productService : ProductsService) { }
+  @ViewChild('loaderDiv', {static: true}) loaderDiv: ElementRef
+  constructor(private render: Renderer2, public loadingCtrl: LoadingController, private activatedRoute : ActivatedRoute, private routeService : RouteService, private alertController : AlertController, private authService : AuthService, private navCtrl : NavController, public route : Router, public productService : ProductsService) { }
 
   ngOnInit() {
-    this.presentLoading()
+    // this.presentLoading()
     console.log(this.activatedRoute.snapshot.paramMap.get('id'));
     this.currentBrand = this.activatedRoute.snapshot.paramMap.get('id')
     console.log(this.currentBrand);
@@ -72,7 +72,8 @@ export class SubcategoriesPage implements OnInit {
       this.categories = result
       setTimeout( () => {
         try {
-          this.loadingCtrl.dismiss()
+          // this.loadingCtrl.dismiss()
+          this.dismissLoader()
         } catch (error) {
           console.log(error);
           
@@ -186,5 +187,13 @@ export class SubcategoriesPage implements OnInit {
 
     // console.log('Loading dismissed!');
   }
-  
+  dismissLoader() {
+    try {
+      this.render.addClass(this.loaderDiv.nativeElement, 'hidden')
+    } catch (error) {
+      console.warn(error)
+      this.loaderDiv.nativeElement.class = 'hidden'
+    }
+    console.log(this.loaderDiv)
+  } 
 }

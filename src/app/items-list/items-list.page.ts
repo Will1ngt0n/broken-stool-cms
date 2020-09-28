@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductsService } from '../services/products-services/products.service';
 import * as firebase from 'firebase'
@@ -106,8 +106,9 @@ export class ItemsListPage implements OnInit, OnDestroy {
   @ViewChild('checkboxWhite', { static: true }) checkboxWhite: ElementRef
   @ViewChild('btnClearForm', { static: true }) btnClearForm: ElementRef
 
+  @ViewChild('loaderDiv', {static: true}) loaderDiv: ElementRef
 
-  constructor(private popover: PopoverController, private networkService : NetworkService, private routeService : RouteService, private loc: Location, public loadingCtrl: LoadingController, private alertController: AlertController, private authService: AuthService, private activatedRoute: ActivatedRoute, private productsService: ProductsService, public route: Router) {
+  constructor(private render: Renderer2, private popover: PopoverController, private networkService : NetworkService, private routeService : RouteService, private loc: Location, public loadingCtrl: LoadingController, private alertController: AlertController, private authService: AuthService, private activatedRoute: ActivatedRoute, private productsService: ProductsService, public route: Router) {
     this.today = moment(new Date()).format('YYYY-MM-DD')
     this.isConnected = true
     this.isOnline = true
@@ -407,7 +408,7 @@ export class ItemsListPage implements OnInit, OnDestroy {
     })
   }
   async loadCategoryItemsSnap(category){
-    this.presentLoading()
+    // this.presentLoading()
     firebase.firestore().collection('Products').where('categoryID', '==', category).orderBy('timestamp', 'desc').onSnapshot(result => {
       let data : Array<any> = []
       for(let key in result.docs){
@@ -428,7 +429,8 @@ export class ItemsListPage implements OnInit, OnDestroy {
         this.pageLoader = false
         //clearInterval(this.timer)
       }
-      this.loadingCtrl.dismiss()
+      // this.loadingCtrl.dismiss()
+      this.dismissLoader()
       if(data.length !== 0){
         return data
       }
@@ -1223,5 +1225,14 @@ export class ItemsListPage implements OnInit, OnDestroy {
   ionVdiewDidEnter () {
     console.log('we are running bruh');
     
+  }
+  dismissLoader() {
+    try {
+      this.render.addClass(this.loaderDiv.nativeElement, 'hidden')
+    } catch (error) {
+      console.warn(error)
+      this.loaderDiv.nativeElement.class = 'hidden'
+    }
+    console.log(this.loaderDiv)
   }
 }

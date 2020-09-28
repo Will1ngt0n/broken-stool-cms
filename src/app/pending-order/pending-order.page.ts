@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductsService } from '../services/products-services/products.service';
 import { AuthService } from '../services/auth-services/auth.service';
@@ -42,7 +42,9 @@ export class PendingOrderPage implements OnInit {
     text: '',
     address:''
   } 
-  constructor(private networkService : NetworkService, public loadingCtrl: LoadingController, private alertController : AlertController, private authService : AuthService, private route : Router, private activatedRoute : ActivatedRoute, private productsService: ProductsService) {
+
+  @ViewChild('loaderDiv', {static: true}) loaderDiv: ElementRef
+  constructor(private render: Renderer2, private networkService : NetworkService, public loadingCtrl: LoadingController, private alertController : AlertController, private authService : AuthService, private route : Router, private activatedRoute : ActivatedRoute, private productsService: ProductsService) {
   this.isOnline = false
   this.isCached = false
   this.isConnected = false
@@ -340,7 +342,7 @@ export class PendingOrderPage implements OnInit {
     })
   }
   getUser(userID){
-    this.presentLoading()
+    // this.presentLoading()
     this.pageLoader = true
     return this.productsService.loadUser(userID).then(result => {
       console.log(result);
@@ -391,7 +393,8 @@ countQuantity(){
   if(this.pageLoader === true){
     console.log('asddsfs');
     
-    this.loadingCtrl.dismiss()
+    // this.loadingCtrl.dismiss()
+    this.dismissLoader()
   }
 }
 goBack(){
@@ -582,6 +585,14 @@ cancelOrder(){
 
   document.body.appendChild(alert);
   return alert.present();
-  
-}
+  }
+  dismissLoader() {
+    try {
+      this.render.addClass(this.loaderDiv.nativeElement, 'hidden')
+    } catch (error) {
+      console.warn(error)
+      this.loaderDiv.nativeElement.class = 'hidden'
+    }
+    console.log(this.loaderDiv)
+  }
 }

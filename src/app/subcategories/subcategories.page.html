@@ -1,3 +1,11 @@
+<div #loaderDiv id="loader">
+  <div id="loader-box">
+    <div id="wrapper">
+      <div id="loader-spinner"></div>
+      <div id="loader-text">Loading...</div>
+    </div>
+  </div>
+</div>
 <ion-content>
   <div class="content-container">
     <div class="nav-bar">
@@ -42,7 +50,8 @@
               <ion-col size="12" (click)='navigateForward("All")'>
                 <div class="brandName">
                   <div class="brandImage">
-                    <img [src]="pictureLink" alt="">
+                    <img [src]="pictureLink" *ngIf="pictureLink != undefined && pictureLink != ''" alt="">
+                    <img src="../../assets/imgs/images.jpg" *ngIf="pictureLink == undefined || pictureLink == ''" alt="">
                   </div>
                   <div class="brandName-text-head">
                     View All {{currentBrand}} Items
@@ -52,7 +61,8 @@
               <ion-col size="3" *ngFor='let item of categories' (click)='navigateForward(item)'>
                 <div class="brandName">
                   <div class="brandImage">
-                    <img [src]='item.data.pictureLink' alt="">
+                    <img [src]='item.data.pictureLink' *ngIf="item.data.pictureLink != undefined && item.data.pictureLink != ''" alt="">
+                    <img src="../../assets/imgs/images.jpg" *ngIf="item.data.pictureLink == undefined || item.data.pictureLink == ''">
                   </div>
                   <div class="brandName-text">
                     {{item.data.name}}
@@ -119,7 +129,8 @@
               <ion-col size="12" (click)='navigateForward("All")'>
                 <div class="brandName">
                   <div class="brandImage">
-                    <img [src]="pictureLink" alt="">
+                    <img [src]="pictureLink" *ngIf="pictureLink != undefined && pictureLink != ''" alt="">
+                    <img src="../../assets/imgs/images.jpg" *ngIf="pictureLink == undefined || pictureLink == ''" alt="">
                   </div>
                   <div class="brandName-text-head">
                     View All {{currentBrand}} Items
@@ -129,7 +140,8 @@
               <ion-col size="6" *ngFor='let item of categories' (click)='navigateForward(item)'>
                 <div class="brandName-small">
                   <div class="brandImage">
-                    <img [src]='item.data.pictureLink' alt="">
+                    <img [src]='item.data.pictureLink' *ngIf="item.data.pictureLink != undefined && item.data.pictureLink != ''" alt="">
+                    <img src="../../assets/imgs/images.jpg" *ngIf="item.data.pictureLink == undefined || item.data.pictureLink == ''">
                     
                   </div>
                   <div class="brandName-text">

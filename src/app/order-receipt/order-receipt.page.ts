@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductsService } from '../services/products-services/products.service';
 import { AuthService } from '../services/auth-services/auth.service';
@@ -29,7 +29,9 @@ export class OrderReceiptPage implements OnInit {
   datePurchased
   routingPage
   timer
-  constructor(private networkService : NetworkService, public loadingCtrl: LoadingController, private alertController : AlertController, private authService : AuthService, private activatedRoute : ActivatedRoute, private productsService : ProductsService, private route : Router) {
+
+  @ViewChild('loaderDiv', {static: true}) loaderDiv : ElementRef
+  constructor(private render: Renderer2, private networkService : NetworkService, public loadingCtrl: LoadingController, private alertController : AlertController, private authService : AuthService, private activatedRoute : ActivatedRoute, private productsService : ProductsService, private route : Router) {
 ​ 
   }
   async presentLoading() {
@@ -117,6 +119,7 @@ export class OrderReceiptPage implements OnInit {
     if(this.pageLoader){
      this.loadingCtrl.dismiss()     
     }
+    this.dismissLoader()
 
    }
    countQuantity(){
@@ -225,7 +228,7 @@ export class OrderReceiptPage implements OnInit {
     clearInterval(this.timer)
   }
   getUser(userID){
-    this.presentLoading()
+    // this.presentLoading()
     this.pageLoader = true
     return this.productsService.loadUser(userID).then(result => {
       console.log(result);
@@ -276,5 +279,13 @@ export class OrderReceiptPage implements OnInit {
     //   }
     // }
   }
-​
+  dismissLoader() {
+    try {
+      this.render.addClass(this.loaderDiv.nativeElement, 'hidden')
+    } catch (error) {
+      console.warn(error)
+      this.loaderDiv.nativeElement.class = 'hidden'
+    }
+    console.log(this.loaderDiv)
+  }
 }
