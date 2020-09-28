@@ -2900,6 +2900,7 @@ console.log(val);
       this.render.addClass(this.loaderDiv.nativeElement, 'hidden')
     } catch (error) {
       console.warn(error)
+      this.loaderDiv.nativeElement.class = 'hidden'
     }
     console.log(this.loaderDiv)
   }
