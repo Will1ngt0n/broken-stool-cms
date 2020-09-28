@@ -295,8 +295,8 @@
             <ion-icon name="close" id="closer" (click)="dismissList()"></ion-icon>
           </div>
           <div id="searcher">
-            <input type='text' id="inventory-search" placeholder="Search Inventory"
-              (keyup)='searchInventory($event, null)'>
+            <input type='text' id="history-search" placeholder="Search History"
+              (keyup)='searchHistory($event, null)'>
           </div>
           <div class="items-list" *ngIf='history.length > 0'>
             <ion-card *ngFor='let item of history' class="item-card-list" (click)='viewOrderHistory(item)'>
@@ -347,8 +347,8 @@
           <div class="items-list" *ngIf='allProducts && !inventorySearch'>
             <ion-card *ngFor='let item of allProducts'>
               <div (click)="showHideSearchDetails(item)">
-                <img [src]="item.data.pictureLink" *ngIf='item.data && item.data.pictureLink' alt="">
-                <img src="/src/assets/imgs/images.jpg" *ngIf='!item.data.pictureLink' alt="">
+                <img [src]="item.data.pictureLink" *ngIf="item.data.pictureLink != undefined && item.data.pictureLink != ''" alt="">
+                <img src="../../assets/imgs/images.jpg" *ngIf="item.data.pictureLink == undefined || item.data.pictureLink == ''" alt="">
                 <p><b>{{item.data.name}}</b></p>
               </div>
 
@@ -377,7 +377,8 @@
           <div class="items-list" *ngIf='allProducts && searchSideInventory.length !== 0'>
             <ion-card *ngFor='let item of searchSideInventory'>
               <div (click)="showHideSearchDetails(item)">
-                <img [src]="item.data.pictureLink" *ngIf='item.data' alt="">
+                <img [src]="item.data.pictureLink" *ngIf="item.data.pictureLink != undefined && item.data.pictureLink != ''" alt="">
+                <img src="../../assets/imgs/images.jpg" *ngIf="item.data.pictureLink == undefined || item.data.pictureLink == ''">
                 <p><b>{{item.data.name}}</b></p>
               </div>
 
@@ -444,8 +445,8 @@
                 <ion-col size="3" *ngFor='let item of brands'>
                   <div class="brandName">
                     <div class="brandImage" (click)='viewMore(item.name, item)'>
-                      <img [src]="item.pictureLink" *ngIf="item.pictureLink != 'undefined'" alt="">
-                      <img src="../../assets/imgs/images.jpg" *ngIf="item.pictureLink == 'undefined'" alt="">
+                      <img [src]="item.pictureLink" *ngIf="itemImageLink != 'undefined' && itemImageLink != ''" alt="">
+                      <img src="../../assets/imgs/images.jpg" *ngIf="itemImageLink == 'undefined' || itemImageLink == ''" alt="">
                     </div>
                     <div id="user-options-opts">
                       <div id="user-opt-buttons">
@@ -877,7 +878,8 @@
           </div>
           <div *ngIf='allProducts && !inventorySearch'>
             <div class="myItems" *ngFor='let item of allProducts '>
-              <img [src]="item.data.pictureLink" *ngIf='item.data.pictureLink' alt="">
+              <img [src]="item.data.pictureLink" *ngIf="item.data.pictureLink != undefined && item.data.pictureLink != ''" alt="">
+              <img src="../../assets/imgs/images.jpg" *ngIf="item.data.pictureLink == 'undefined' || item.data.pictureLink == ''"
               <p id="nameOfItem">{{item.data.name}}</p>
               <input type="number" [id]='item.productID' [value]="item.data.quantity"
                 (keyup)='changeQuantity($event, item)'><br>
@@ -1078,7 +1080,8 @@
                 <ion-col size="6" *ngFor='let item of brands'>
                   <div class="brandName-smaller">
                     <div class="brandImage" (click)='viewMore(item.name, item)'>
-                      <img [src]="item.pictureLink" alt="">
+                      <img [src]="item.pictureLink" *ngIf="item.pictureLink != undefined && item.pictureLink != ''" alt="">
+                      <img src="../../assets/imgs/images.jpg" *ngIf="item.pictureLink == undefined || item.pictureLink == ''" alt="">
                     </div>
                     <div id="user-options-opts">
                       <div id="user-opt-buttons">
