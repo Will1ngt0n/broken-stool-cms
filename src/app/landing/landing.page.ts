@@ -2188,6 +2188,18 @@ console.log(val);
     console.log(this.searchInventoryVal);
     
   }
+  searchHistoryVal : Array<any> = []
+  historySearch : boolean = false
+  searchHistory(event, val) {
+    let searchRef : string = event['target'].value
+    this.searchHistoryVal = this.history.filter(item => item.refNo.toLowerCase().indexOf(searchRef) >= 0)
+    if(this.searchHistoryVal.length > 0) {
+      this.historySearch = true
+    } else {
+      this.historySearch =false
+    }
+    
+  }
   newProductCode : string = ''
   autoGenerateCode(){
     let date2 =    moment(moment.utc(new Date().getTime())).format('X')

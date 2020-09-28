@@ -1627,14 +1627,14 @@ ion-item {
       padding-top: 20px;
       position: absolute;
       bottom: -16px;
-      font-family: "Poppins";
+      font-family: "Poppins", "Roboto", Arial;
     }
   }
 }
 .specials-bar > div:nth-child(2) {
   margin-top: 20px;
   font-weight: bold;
-  font-family: "Poppins";
+  font-family: "Poppins", "Roboto", Arial;
   color: rgb(61, 61, 61);
 }
 
@@ -1701,7 +1701,7 @@ ion-item {
     text-align: right;
     color: rgb(54, 54, 54);
     font-weight: bold;
-    font-family: "Poppins";
+    font-family: "Poppins", "Roboto", Arial;
   }
 }
 
@@ -1717,7 +1717,7 @@ ion-item {
   background: rgb(255,223,90);
   cursor: pointer;
   line-height: 50px;
-  font-family: "Poppins";
+  font-family: "Poppins", "Roboto", Arial;
   padding-left: 20px;
 }
 
@@ -1853,7 +1853,7 @@ ion-item {
         align-items: center;
         text-align: left;
         color: #fff;
-        font-family: 'Roboto', Arial, sans-serif;
+        font-family: "Poppins", "Roboto", Arial, sans-serif;
       }
     }
    }

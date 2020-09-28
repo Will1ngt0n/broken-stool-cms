@@ -1154,14 +1154,14 @@ a{
       padding-top: 20px;
       position: absolute;
       bottom: -16px;
-      font-family: "Poppins";
+      font-family: "Poppins", "Roboto", Arial;
     }
   }
 }
 .specials-bar > div:nth-child(2) {
   margin-top: 20px;
   font-weight: bold;
-  font-family: "Poppins";
+  font-family: "Poppins", "Roboto", Arial;
   color: rgb(61, 61, 61);
 }
 
@@ -1253,7 +1253,7 @@ a{
     text-align: right;
     color: rgb(255, 255, 255);
     font-weight: bold;
-    font-family: "Poppins";
+    font-family: "Poppins", "Roboto", Arial;
     position: absolute;
     bottom: 5px;
     left: 5px;
@@ -1268,7 +1268,7 @@ a{
     text-align: left;
     color: rgb(255, 255, 255);
     font-weight: bold;
-    font-family: "Poppins";
+    font-family: "Poppins", "Roboto", Arial;
     position: absolute;
     bottom: 5px;
     left: 5px;
@@ -1297,7 +1297,7 @@ a{
   background: rgb(206, 206, 206);
   cursor: pointer;
   line-height: 50px;
-  font-family: "Poppins";
+  font-family: "Poppins", "Roboto", Arial;
   padding-left: 20px;
 }
 #makeSmaller{

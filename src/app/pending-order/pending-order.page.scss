@@ -101,6 +101,7 @@
                 color: white;
                 border: 1px solid black;
                 font-size: 12px;
+                font-family: "Poppins", "Roboto", Arial;
                 border-radius: 5px;
             }
         }
@@ -120,19 +121,23 @@
       }
       .nums {
         font-size: 12px;
+        font-family: "Poppins", "Roboto", Arial;
         color: rgb(87, 87, 87);
         margin-top: -10px;
       }
       .refNum {
         font-size: 12px;
+        font-family: "Poppins", "Roboto", Arial;
         color: rgb(87, 87, 87);
         b {
           color: black;
           font-size: 13px;
+          font-family: "Poppins", "Roboto", Arial;
         }
       }
       #note {
         font-size: 11px;
+        font-family: "Poppins", "Roboto", Arial;
         transform: translateY(-10px);
         color: grey;
       }
@@ -145,12 +150,14 @@
       .titleName {
         text-align: center;
         font-size: 20px;
+        font-family: "Poppins", "Roboto", Arial;
         font-weight: 500;
       }
     }
     .toFlex {
       display: flex;
       font-size: 13px;
+      font-family: "Poppins", "Roboto", Arial;
       padding: 0;
       margin-bottom: -25px;
     }
@@ -168,6 +175,7 @@
       color: grey;
       margin-top: -10px;
       font-size: 11px;
+      font-family: "Poppins", "Roboto", Arial;
       padding: 0;
     }
     .subtitle:nth-child(1) {
@@ -180,9 +188,11 @@
   #address {
     color: grey;
     font-size: 13px;
+    font-family: "Poppins", "Roboto", Arial;
   }
   #Notifier {
     font-size: 18px;
+    font-family: "Poppins", "Roboto", Arial;
     font-style: italic;
   }
   #left,
@@ -257,6 +267,7 @@
     background: rgb(0, 3, 36);
     line-height: 50px;
     font-weight: bold;
+    font-family: "Poppins", "Roboto", Arial;
     color: white
   }
   #bckBtn{
@@ -278,6 +289,7 @@
     }
     #note{
       font-size: 10px;
+      font-family: "Poppins", "Roboto", Arial;
     }
   }
   ion-card{
@@ -293,9 +305,11 @@
         padding-right: 10px;
         h4{
           font-size: 16px;
+          font-family: "Poppins", "Roboto", Arial;
         }
         p{
           font-size: 12px;
+          font-family: "Poppins", "Roboto", Arial;
         }
     }
   }
@@ -318,6 +332,7 @@
   p{
     font-weight: bold;
     font-size: 18px;
+    font-family: "Poppins", "Roboto", Arial;
     color: rgb(49, 49, 49);
   }
 }
@@ -334,6 +349,7 @@
   p{
     font-weight: bold;
     font-size: 18px;
+    font-family: "Poppins", "Roboto", Arial;
     color: rgb(49, 49, 49);
   }
 }
