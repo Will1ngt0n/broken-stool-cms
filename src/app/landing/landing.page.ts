@@ -332,6 +332,7 @@ export class LandingPage implements OnInit {
     })
     this.getOrderHistory().then(res => {
       console.log('orders history here');
+      this.dismissLoader()
       
     })
     this.getCategories().then(res => {
