@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, renderer2 } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
 import { AuthService } from '../services/auth-services/auth.service';
 import { ProductsService } from '../services/products-services/products.service';
@@ -91,6 +91,7 @@ export class LandingPage implements OnInit {
   @ViewChild('checkboxYellow', {static : true}) checkboxYellow : ElementRef
   @ViewChild('checkboxWhite', {static : true}) checkboxWhite : ElementRef
   @ViewChild('btnClearForm', {static : true}) btnClearForm : ElementRef
+  @ViewChild('loaderDiv', {static: true}) loaderDiv: ElementRef
 
   //mobile view
   @ViewChild('mbcheckboxXS', {static : true}) mbcheckboxXS : ElementRef
@@ -141,7 +142,7 @@ export class LandingPage implements OnInit {
   updateName; updatePrice; updateDescription; updateColors: Array<any> = []; updateSizes: Array<any> = []
   pictureUpdate : File
 
-  constructor(private routeService : RouteService, private networkService : NetworkService, private alertController: AlertController, public loadingCtrl: LoadingController, public navCtrl: NavController, public route: Router, public authService: AuthService, public productService: ProductsService) {
+  constructor(private render: Renderer2, private routeService : RouteService, private networkService : NetworkService, private alertController: AlertController, public loadingCtrl: LoadingController, public navCtrl: NavController, public route: Router, public authService: AuthService, public productService: ProductsService) {
     //console.log(this.department);
     this.categoryUpdateMatch = false
     this.kwangaSpecialsPicture = undefined
@@ -307,7 +308,7 @@ export class LandingPage implements OnInit {
   loadRunFunction(){
     console.log('mememeemee');
     
-   this.presentLoading()
+  //  this.presentLoading()
    return new Promise( (resolve, reject) => {
 
     this.loadAllProducts().then(res => {
@@ -337,7 +338,7 @@ export class LandingPage implements OnInit {
       console.log('categories here');
       setTimeout( () => {
         try {
-          this.loadingCtrl.dismiss()
+          this.dismissLoader()
         } catch (error) {
           
         }
@@ -2881,5 +2882,13 @@ console.log(val);
     console.log(parameter);
     this.routeService.storeInventoryParameter(parameter)
     this.route.navigate(['items-list', 'Inventory'])
+  }
+  dismissLoader() {
+    try {
+      this.render.addClass(this.loaderDiv.nativeElement, 'hidden')
+    } catch (error) {
+      console.warn(error)
+    }
+    console.log(this.loaderDiv)
   }
 }
