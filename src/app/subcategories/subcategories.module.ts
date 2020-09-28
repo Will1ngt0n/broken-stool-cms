@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { SubcategoriesPageRoutingModule } from './subcategories-routing.module';
 
 import { SubcategoriesPage } from './subcategories.page';
+import { LoaderComponent } from '../components/loader/loader.component';
+
 
 @NgModule({
   imports: [
@@ -15,6 +17,6 @@ import { SubcategoriesPage } from './subcategories.page';
     IonicModule,
     SubcategoriesPageRoutingModule
   ],
-  declarations: [SubcategoriesPage]
+  declarations: [SubcategoriesPage, LoaderComponent]
 })
 export class SubcategoriesPageModule {}

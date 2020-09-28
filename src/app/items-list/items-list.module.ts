@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { ItemsListPageRoutingModule } from './items-list-routing.module';
 
 import { ItemsListPage } from './items-list.page';
+import { LoaderComponent } from '../components/loader/loader.component';
+
 
 @NgModule({
   imports: [
@@ -15,6 +17,6 @@ import { ItemsListPage } from './items-list.page';
     IonicModule,
     ItemsListPageRoutingModule
   ],
-  declarations: [ItemsListPage]
+  declarations: [ItemsListPage, LoaderComponent]
 })
 export class ItemsListPageModule {}

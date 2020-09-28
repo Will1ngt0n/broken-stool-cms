@@ -444,13 +444,13 @@ ion-searchbar {
 }
 .history-items {
   display: none;
-  @media screen and (max-width : 1366px) and (min-height : 501px) {
+  @media screen and (max-width : 1366px) {
     z-index: 140;
-    width: 360px;
+    width: 300px;
   }
-  @media screen and (max-width : 1200px) and (max-height : 500px) {
+  @media screen and (max-width : 1200px) {
     z-index: 140;
-    wdith: 360px;
+    wdith: 300px;
   }
   width: 100%;
   height: 100%;
@@ -502,11 +502,11 @@ ion-searchbar {
   display: none;
   @media screen and (max-width : 1366px) and (min-height : 501px) {
     z-index: 140;
-    width: 360px;
+    width: 300px;
   }
   @media screen and (max-width : 1200px) and (max-height : 500px) {
     z-index: 140;
-    wdith: 360px;
+    wdith: 300px;
   }
   width: 100%;
   height: 100%;
@@ -556,13 +556,13 @@ ion-searchbar {
 }
 .inventory-items {
   display: none;
-  @media screen and (max-width : 1366px) and (min-height : 501px) {
+  @media screen and (max-width : 1366px) {
     z-index: 140;
-    width: 360px;
+    width: 300px;
   }
-  @media screen and (max-width : 1200px) and (max-height : 500px) {
+  @media screen and (max-width : 1200px) {
     z-index: 140;
-    wdith: 360px;
+    wdith: 300px;
   }
   width: 100%;
   height: 100%;
@@ -1818,7 +1818,7 @@ ion-item {
     @media screen and (max-width : 360px) {
       width: 80%;
     }
-    @media screen and (max-width: 720px) {
+    @media screen and (min-width: 720px) {
       width: 290px;
     }
     height: 100px;
@@ -1840,8 +1840,14 @@ ion-item {
 
       #loader-spinner {
         position: relative;
-        width: 50px;
-        height: 50px;
+        @media screen and (max-width: 360px) {
+          width: 25px;
+          height: 25px;
+        }
+        @media screen and (min-width: 361px) {
+          width: 50px;
+          height: 50px;
+        }
         padding: 0;
         margin: 0;
         border: 2px solid rgba(255, 255, 255, 0.384);

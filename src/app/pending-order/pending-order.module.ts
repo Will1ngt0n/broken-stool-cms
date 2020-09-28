@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { PendingOrderPageRoutingModule } from './pending-order-routing.module';
 
 import { PendingOrderPage } from './pending-order.page';
+import { LoaderComponent } from '../components/loader/loader.component';
+
 
 @NgModule({
   imports: [
@@ -15,6 +17,6 @@ import { PendingOrderPage } from './pending-order.page';
     IonicModule,
     PendingOrderPageRoutingModule
   ],
-  declarations: [PendingOrderPage]
+  declarations: [PendingOrderPage, LoaderComponent]
 })
 export class PendingOrderPageModule {}

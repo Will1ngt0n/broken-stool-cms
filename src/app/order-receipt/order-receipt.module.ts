@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { OrderReceiptPageRoutingModule } from './order-receipt-routing.module';
 
 import { OrderReceiptPage } from './order-receipt.page';
+import { LoaderComponent } from '../components/loader/loader.component';
+
 
 @NgModule({
   imports: [
@@ -15,6 +17,6 @@ import { OrderReceiptPage } from './order-receipt.page';
     IonicModule,
     OrderReceiptPageRoutingModule
   ],
-  declarations: [OrderReceiptPage]
+  declarations: [OrderReceiptPage, LoaderComponent]
 })
 export class OrderReceiptPageModule {}
