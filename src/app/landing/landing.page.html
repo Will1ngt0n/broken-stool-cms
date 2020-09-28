@@ -879,7 +879,7 @@
           <div *ngIf='allProducts && !inventorySearch'>
             <div class="myItems" *ngFor='let item of allProducts '>
               <img [src]="item.data.pictureLink" *ngIf="item.data.pictureLink != undefined && item.data.pictureLink != ''" alt="">
-              <img src="../../assets/imgs/images.jpg" *ngIf="item.data.pictureLink == 'undefined' || item.data.pictureLink == ''"
+              <img src="../../assets/imgs/images.jpg" *ngIf="item.data.pictureLink == 'undefined' || item.data.pictureLink == ''">
               <p id="nameOfItem">{{item.data.name}}</p>
               <input type="number" [id]='item.productID' [value]="item.data.quantity"
                 (keyup)='changeQuantity($event, item)'><br>
