@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, renderer2 } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
 import { AuthService } from '../services/auth-services/auth.service';
 import { ProductsService } from '../services/products-services/products.service';
