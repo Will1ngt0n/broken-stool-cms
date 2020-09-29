@@ -91,7 +91,10 @@ export class LandingPage implements OnInit {
   @ViewChild('checkboxYellow', {static : true}) checkboxYellow : ElementRef
   @ViewChild('checkboxWhite', {static : true}) checkboxWhite : ElementRef
   @ViewChild('btnClearForm', {static : true}) btnClearForm : ElementRef
+  //
   @ViewChild('loaderDiv', {static: true}) loaderDiv: ElementRef
+  @ViewChild('historySearchInput', {static: true}) historySearchInput: ElementRef
+  @ViewChild('inventorySearchInput', {static: true}) inventorySearchInput: ElementRef
 
   //mobile view
   @ViewChild('mbcheckboxXS', {static : true}) mbcheckboxXS : ElementRef
@@ -1444,7 +1447,18 @@ export class LandingPage implements OnInit {
     var inventoryItems = document.getElementsByClassName("inventory-items") as HTMLCollectionOf<HTMLElement>;
     inventoryItems[0].style.display = "none"
     document.getElementById("helpDesk").style.display = "block"
+    this.searchSideHistory = []
+    this.historySearch = false
+    this.searchSideInventory = []
+    this.inventorySearch = false
 
+    try {
+      this.inventorySearchInput.nativeElement.value = ''
+      this.historySearchInput.nativeElement.value = ''
+    } catch (error) {
+      console.warn(error);
+      
+    }
   }
   subtract(item) {
     //console.log(item.productID);
@@ -2205,6 +2219,9 @@ console.log(val);
       } else {
         this.historySearch =false
       }
+    } else if(searchRef === '' && (val === 'null' || val === null)) {
+      this.historySearch = false
+      this.searchSideHistory = []
     }
     console.log(this.searchHistoryVal);    
   }

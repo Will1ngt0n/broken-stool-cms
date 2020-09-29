@@ -290,7 +290,7 @@
             <ion-icon name="close" id="closer" (click)="dismissList()"></ion-icon>
           </div>
           <div id="searcher">
-            <input type='text' id="history-search" placeholder="Search History"
+            <input #historySearchInput type='text' id="history-search" placeholder="Search History"
               (keyup)='searchHistory($event, null)'>
           </div>
           <div class="items-list" *ngIf="history.length > 0 && historySearch == false">
@@ -346,7 +346,7 @@
             <ion-icon name="close" id="closer" (click)="dismissList()"></ion-icon>
           </div>
           <div id="searcher">
-            <input type='text' id="inventory-search" placeholder="Search Inventory"
+            <input #inventorySearchInput type='text' id="inventory-search" placeholder="Search Inventory"
               (keyup)='searchInventory($event, null)'>
           </div>
           <div class="items-list" *ngIf='allProducts && !inventorySearch'>

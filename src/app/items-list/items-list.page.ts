@@ -374,6 +374,7 @@ export class ItemsListPage implements OnInit, OnDestroy {
       }
       this.currentViewedItems = data
       this.currentSelectedItems = data
+      this.dismissLoader()
       console.log(this.currentViewedItems);
     })
   }
@@ -391,6 +392,7 @@ export class ItemsListPage implements OnInit, OnDestroy {
       }
       this.currentViewedItems = data
       this.currentSelectedItems = data
+      this.dismissLoader()
       console.log(this.currentViewedItems);
       
       //console.log(data);
