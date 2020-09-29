@@ -50,7 +50,7 @@ firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 @NgModule({
   declarations: [AppComponent],
-  entryComponents: [LoaderComponent],
+  entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, FormsModule, ReactiveFormsModule, NgxWebstorageModule.forRoot()],
   providers: [
     StatusBar,

@@ -816,13 +816,13 @@
         </ion-button>
       </div>
       <div class="small-side-items" *ngIf="sideMenuButtons">
-        <div id="smallOne" (click)="showPendingListSmall()" *ngIf='pendingOrdersLength < 9'>Pending Orders
+        <div id="smallOne" (click)="showPendingListSmall()" *ngIf='pendingOrdersLength <= 9'>Pending Orders
           ({{pendingOrdersLength}})</div>
         <div id="smallOne" (click)="showPendingListSmall()" *ngIf='pendingOrdersLength > 9'>Pending Orders (9+)</div>
-        <div id="smallTwo" (click)="showHistoryListSmall()" *ngIf='orderHistoryLength < 9'>Order History
+        <div id="smallTwo" (click)="showHistoryListSmall()" *ngIf='orderHistoryLength <= 9'>Order History
           ({{orderHistoryLength}})</div>
         <div id="smallTwo" (click)="showHistoryListSmall()" *ngIf='orderHistoryLength > 9'>Order History (9+)</div>
-        <div id="smallThree" (click)="showInventoryListSmall()" *ngIf='inventoryLength < 99'>Inventory
+        <div id="smallThree" (click)="showInventoryListSmall()" *ngIf='inventoryLength <= 99'>Inventory
           ({{inventoryLength}})</div>
         <div id="smallThree" (click)="showInventoryListSmall()" *ngIf='inventoryLength > 99'>Inventory (99+)</div>
 
