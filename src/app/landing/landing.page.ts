@@ -2190,16 +2190,23 @@ console.log(val);
     
   }
   searchHistoryVal : Array<any> = []
+  searchSideHistory : Array<any> = []
   historySearch : boolean = false
   searchHistory(event, val) {
     let searchRef : string = event['target'].value
-    this.searchHistoryVal = this.history.filter(item => item.refNo.toLowerCase().indexOf(searchRef) >= 0)
-    if(this.searchHistoryVal.length > 0) {
-      this.historySearch = true
-    } else {
-      this.historySearch =false
+    if(searchRef !== '' && (val === 'null' || val === null)) {
+      if(searchRef === '*' || searchRef === ' ' || searchRef === '   ') {
+        this.searchSideHistory = this.history
+      } else {
+        this.searchSideHistory = this.history.filter(item => item.refNo.toLowerCase().indexOf(searchRef) >= 0)
+      }
+      if(this.searchSideHistory.length > 0) {
+        this.historySearch = true
+      } else {
+        this.historySearch =false
+      }
     }
-    
+    console.log(this.searchHistoryVal);    
   }
   newProductCode : string = ''
   autoGenerateCode(){

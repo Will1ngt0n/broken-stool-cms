@@ -293,8 +293,18 @@
             <input type='text' id="history-search" placeholder="Search History"
               (keyup)='searchHistory($event, null)'>
           </div>
-          <div class="items-list" *ngIf='history.length > 0'>
+          <div class="items-list" *ngIf="history.length > 0 && historySearch == false">
             <ion-card *ngFor='let item of history' class="item-card-list" (click)='viewOrderHistory(item)'>
+              <p class="floating" *ngIf="item.details.status">{{item.details.status}}</p>
+              <p><b>{{item.details.userID}}</b></p>
+              <p>{{item.details.grandTotal | currency : 'R'}}</p>
+              <p>REF: {{item.refNo}}</p>
+              <p>Products ({{item.details.numberOfItems}})</p>
+
+            </ion-card>
+          </div>
+          <div class="items-list" *ngIf="history.length > 0 && historySearch == true">
+            <ion-card *ngFor='let item of searchSideHistory' class="item-card-list" (click)='viewOrderHistory(item)'>
               <p class="floating" *ngIf="item.details.status">{{item.details.status}}</p>
               <p><b>{{item.details.userID}}</b></p>
               <p>{{item.details.grandTotal | currency : 'R'}}</p>
@@ -853,12 +863,27 @@
             <ion-icon name="arrow-back" class="backBtn" (click)="stepBackToBtns()"></ion-icon>
             <h5>Order History</h5>
           </div>
-          <div class="myItems" *ngFor='let item of history' (click)='viewOrderHistory(item)'>
+          <div id="searcher">
+            <input type='text' id="history-search" placeholder="Search History"
+              (keyup)='searchHistory($event, null)'>
+          </div>
+          <div class="cont-history" *ngIf="history.length > 0 && historySearch == false">
+            <div class="myItems" *ngFor='let item of history' (click)='viewOrderHistory(item)'>
 
-            <p><b>{{item.details.userID}}</b></p>
-            <p>{{item.details.totalPrice | currency : 'R'}}</p>
-            <p>REF: {{item.refNo}}</p>
-            <p>({{item.details.numberOfItems}})</p>
+              <p><b>{{item.details.userID}}</b></p>
+              <p>{{item.details.totalPrice | currency : 'R'}}</p>
+              <p>REF: {{item.refNo}}</p>
+              <p>({{item.details.numberOfItems}})</p>
+            </div>
+          </div>
+          <div class="cont-history" *ngIf="history.length > 0 && historySearch == true">
+            <div class="myItems" *ngFor='let item of searchSideHistory' (click)='viewOrderHistory(item)'>
+
+              <p><b>{{item.details.userID}}</b></p>
+              <p>{{item.details.totalPrice | currency : 'R'}}</p>
+              <p>REF: {{item.refNo}}</p>
+              <p>({{item.details.numberOfItems}})</p>
+            </div>
           </div>
         </div>
         <div class="forInventory" *ngIf="listOfItems === 3">
