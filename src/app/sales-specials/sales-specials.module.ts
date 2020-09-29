@@ -7,7 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { SalesSpecialsPageRoutingModule } from './sales-specials-routing.module';
 
 import { SalesSpecialsPage } from './sales-specials.page';
-import { LoaderComponent } from '../components/loader/loader.component';
+// import { LoaderComponent } from '../components/loader/loader.component';
+import { LoaderComponentModule } from '../components/loader/loader.module';
 
 
 @NgModule({
@@ -15,8 +16,9 @@ import { LoaderComponent } from '../components/loader/loader.component';
     CommonModule,
     FormsModule,
     IonicModule,
-    SalesSpecialsPageRoutingModule
+    SalesSpecialsPageRoutingModule,
+    LoaderComponentModule
   ],
-  declarations: [SalesSpecialsPage, LoaderComponent]
+  declarations: [SalesSpecialsPage]
 })
 export class SalesSpecialsPageModule {}

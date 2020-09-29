@@ -7,7 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { LandingPageRoutingModule } from './landing-routing.module';
 
 import { LandingPage } from './landing.page';
-import { LoaderComponent } from '../components/loader/loader.component';
+import { LoaderComponentModule } from '../components/loader/loader.module';
+// import { LoaderComponent } from '../components/loader/loader.component';
 
 
 @NgModule({
@@ -15,8 +16,9 @@ import { LoaderComponent } from '../components/loader/loader.component';
     CommonModule,
     FormsModule,
     IonicModule,
-    LandingPageRoutingModule
+    LandingPageRoutingModule,
+    LoaderComponentModule
   ],
-  declarations: [LandingPage, LoaderComponent]
+  declarations: [LandingPage,]
 })
 export class LandingPageModule {}

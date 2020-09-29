@@ -10,6 +10,8 @@ import { AppRoutingModule } from './app-routing.module';
 //import { Location } from '@angular/common'
 import * as firebase from 'firebase'
 import {NgxWebstorageModule} from 'ngx-webstorage';
+// import { LoaderComponent } from './components/loader/loader.component';
+
 // var firebaseConfig = {
 //   apiKey: "AIzaSyDOthq8-7ipC4rQYCh_R8_oC9fL0F0Oz5g",
 //   authDomain: "fir-crud-11c1f.firebaseapp.com",
@@ -48,7 +50,7 @@ firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 @NgModule({
   declarations: [AppComponent],
-  entryComponents: [],
+  entryComponents: [LoaderComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, FormsModule, ReactiveFormsModule, NgxWebstorageModule.forRoot()],
   providers: [
     StatusBar,
