@@ -176,6 +176,26 @@ export class LandingPage implements OnInit {
     console.log(new Date().getTime());
     
     // this.pageLoader = false
+    // this.clickedSearchItem = "hideItem"
+    // this.updateName = item.data.name
+    // this.updatePrice = item.data.price
+    // this.updateDescription = item.data.description
+    // this.updatePic = item.data.pictureLink
+    // this.pictureUpdate
+    // this.updateSearchPic = item.data.pictureLink
+    // this.updateBrand = item.brand
+    // this.updateCategory = item.category
+    // this.updateProductID = item.productID
+    // this.itemSizes = item.data.size
+    // this.itemColors = item.data.color
+    // this.item = item
+    // this.searchedProductStatus = item.data.hideItem
+    let val = {
+      data: {
+        name: 'Will', price: 'R500', description: 'toasting here', pictureLink: 'https: www.schools.neg', hideItem: false, size: ['XL', 'S']
+      }, brand: 'Kwasi', category: 'valuable', productID: 'roseta', 
+    }
+    // this.showHideSearchDetails(val)
   }
   signOutPopup() {
     this.presentLogoutConfirmAlert()
@@ -1714,6 +1734,7 @@ export class LandingPage implements OnInit {
   clickedSearchItem: string = "hideItem"
   showHideSearchDetails(item) {
     console.log("closing");
+    console.log(this.clickedSearchItem);
     
     if (this.clickedSearchItem == "hideItem") {
       this.updateName = item.data.name

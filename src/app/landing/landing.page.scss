@@ -39,12 +39,13 @@
     position: absolute;
     background: rgba(0, 0, 0, 0.493);
     z-index: 1000000000000000000000000000000000000000000000000;
-    color: white;
+    color: #5a0000;
     font-weight: bolder;
   }
   #dismisserBtn {
     position: absolute;
     right: 0;
+    color: #5a0000;
     z-index: 1000000000000000000000000000000000000000000000000;
   }
   div > img {
@@ -148,15 +149,67 @@ ion-list > div {
 }
 .clicked-from-search > #forms {
   width: 30%;
-  height: 80%;
-  background: white;
+  height: 90%;
   margin: 0 auto;
+  padding-top: 0;
   transition: 300ms;
   border-radius: 10px;
-  overflow: hidden;
   z-index: 1;
   transition: 300ms;
   position: relative;
+  .top-bar {
+    position: relative;
+    top: 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    margin: 0;
+    width: 100%;
+    height: 50px;
+    // font-weight: bolder;
+    // line-height: 50px;
+    
+    background-color: #000324;
+    color: #7c0000;
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    h4 {
+      padding: 0;
+      margin: 0;
+      // border: 1px solid red;
+    }
+    ion-button {
+      // border: 1px solid red;
+      margin: 0;
+    }
+  }
+  .update-content {
+    position: relative;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 50px);
+    overflow-y: scroll;
+    background-color: rgb(255, 255, 255);
+  }
+  .updatePicture{
+    position: relative;
+    top: 0;
+    background: white;
+  }
+  .bottom {
+    position: relative;
+    top: 0;
+    background: white;
+    margin: 0;
+    padding-top: 0;
+    transition: 300ms;
+    overflow: visible;
+    z-index: 1;
+    transition: 300ms;
+    
+  }
 }
 
 #dismisser-bg {
@@ -166,6 +219,7 @@ ion-list > div {
   position: absolute;
   z-index: 0;
   cursor: pointer;
+  color: #5a0000
 }
 .searchResults {
   position: absolute;
@@ -194,28 +248,68 @@ ion-list > div {
   height: 60px;
   background: #000324;
   z-index: 100;
-  border-bottom: 1px solid black;
-  color: #ffdf5a;
+  // border-bottom: 1px solid black;
+  border-bottom: 1px solid #5a0000;
+  color: #5a0000;
 }
 .nav-content {
   height: 100%;
-  width: 65%;
+  width: 100%;
   margin: 0 auto;
-  padding-left: 10px;
-  padding-right: 10px;
+  // padding-left: 10px;
+  // padding-right: 10px;
   display: flex;
+  #title {
+    position: relative;
+    left: 0;
+    width: 17.5%;
+    padding-left: 10px
+  }
+  #nav-middle {
+    width: 65%;
+    // border: 1px solid red;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    #searchbar {
+      position: relative;
+      width: 60%;
+    }
+    #admin {
+      width: 20%;
+      position: relative;
+      // background-color: #fff;
+      color: #7c0000;
+      p {
+        right: 0;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
 }
+
+
 .body-content {
   width: 100%;
   height: calc(100% - 60px);
   background: green;
   display: flex;
 }
-#title,
+#title {
+  // width: calc(17.5% - 10px);
+}
 #admin {
   width: 20%;
+}
+#title,
+#admin {
+  // width: 20%;
   height: 100%;
   position: relative;
+  // border: 1px solid white;
   p {
     cursor: pointer;
     width: auto;
@@ -231,6 +325,7 @@ ion-list > div {
     line-height: 30px;
     // width: 100%;
     position: absolute;
+    right: 30%;
   }
   img {
     margin-left: 10px;
@@ -244,7 +339,7 @@ ion-list > div {
 #searchbar {
   width: 60%;
   height: 100%;
-  margin: 0 auto;
+  // margin: 0 auto;
 }
 #mid {
   // display: none ;
@@ -322,9 +417,13 @@ ion-searchbar {
   }
   #dismiss-button {
     float: right;
-    height: 50px;
+    height: 40px;
     margin-left: 10px;
     margin-top: 0px;
+    color: #5a0000;
+  }
+  #dismiss-button:hover {
+    height: 40px;
   }
 }
 .slide-specials {
@@ -685,8 +784,19 @@ ion-searchbar {
     margin-top: 5px;
     margin-bottom: 5px;
   }
-  #web-title {
+  .web-select {
+    border-radius: 5px 0 0 5px;
+    border: 1px solid rgba(187, 187, 187, 0.493);
+    background-color: rgba(230, 230, 230, 0.39);
+    -moz-appearance: menulist-button;
+    -webkit-appearance: menulist-button;
+    appearance: menulist-button;
+  }
+  .web-title {
     margin-top: 0;
+    font-size: 14px;
+    font-weight: 2em;
+    color: rgb(50, 50, 50);
   }
   .user-input {
     padding-left: 5px;
@@ -699,6 +809,122 @@ ion-searchbar {
   }
   .sizes {
     width: 100%;
+    // border: 1px solid red;
+    padding: 0 10px;
+
+    .sizes-cont {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      // align-content: flex-start;
+      justify-content: left;
+      // border: 1px solid red;
+      div {
+        padding: 0;
+        width: 45px;
+        // border: 1px solid blue;
+      }
+      input[type="checkbox"] {
+        // visibility: hidden;
+        display: none;
+      }
+      label {
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+        font-size: 12px;
+      }
+      input[type="checkbox"] + label:before {
+        border: 1px solid #333;
+        border-radius: 2px;
+        content: "\00a0";
+        display: inline-block;
+        font: 10px "Roboto" 12px;
+        line-height: 12px;
+        height: 12px;
+        width: 12px;
+        margin: 0 .25em 0 0;
+        padding: 0;
+        vertical-align: middle;
+      }
+      
+      input[type="checkbox"]:checked + label:before {
+        background: #5a0000;
+        border: 1px solid #5a0000;
+        color: #fff;
+        content: "\2713";
+        text-align: center;
+        
+        // background-color: #5a0000;
+        // background: #5a0000;
+        // color: #5a0000;
+      }
+      input[type="checkbox"]:focus + label:before {
+        outline: rgb(59, 153, 252) auto 5px;
+      }
+    }
+
+  }
+  .colors {
+    width: 100%;
+    // border: 1px solid red;
+    padding: 0 10px;
+
+    .colors-cont {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      // align-content: flex-start;
+      justify-content: left;
+      // border: 1px solid red;
+      div {
+        padding: 0;
+        width: 45px;
+        // border: 1px solid blue;
+        vertical-align: middle;
+      }
+      input[type="checkbox"] {
+        // visibility: hidden;
+        display: none;
+      }
+      label {
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+        font-size: 12px;
+
+      }
+      input[type="checkbox"] + label:before {
+        position: relative;
+        top: -4px;
+        border: 1px solid #333;
+        border-radius: 2px;
+        content: "\00a0";
+        display: inline-block;
+        font: 10px "Roboto" 12px;
+        line-height: 12px;
+        height: 12px;
+        width: 12px;
+        margin: 0 .25em 0 0;
+        padding: 0;
+        vertical-align: middle;
+      }
+      
+      input[type="checkbox"]:checked + label:before {
+        background: #5a0000;
+        border: 1px solid #5a0000;
+        color: #fff;
+        content: "\2713";
+        text-align: center;
+        
+        // background-color: #5a0000;
+        // background: #5a0000;
+        // color: #5a0000;
+      }
+      input[type="checkbox"]:focus + label:before {
+        outline: rgb(59, 153, 252) auto 5px;
+      }
+    }
   }
   .gridder {
     display: flex;
@@ -1041,8 +1267,108 @@ ion-searchbar {
   }
   .sizes {
     width: 100%;
+    padding: 0;
+    input[type="checkbox"] {
+      visibility: hidden;
+    }
+    label {
+      cursor: pointer;
+      vertical-align: middle;
+    }
+    input[type="checkbox"] + label:before {
+      border: 1px solid #333;
+      border-radius: 2px;
+      content: "\00a0";
+      display: inline-block;
+      font: 12px "Roboto" 12px;
+      line-height: 12px;
+      height: 12px;
+      width: 12px;
+      margin: 0 .25em 0 0;
+      padding: 0;
+      vertical-align: middle;
+    }
+    
+    input[type="checkbox"]:checked + label:before {
+      background: #5a0000;
+      border: 1px solid #5a0000;
+      color: #fff;
+      content: "\2713";
+      text-align: center;
+      
+      // background-color: #5a0000;
+      // background: #5a0000;
+      // color: #5a0000;
+    }
+    input[type="checkbox"]:focus + label:before {
+      outline: rgb(59, 153, 252) auto 5px;
+    }
   }
+  .colors {
+    width: 100%;
+    // border: 1px solid red;
+    padding: 0 10px;
 
+    .colors-cont {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      // align-content: flex-start;
+      justify-content: left;
+      // border: 1px solid red;
+      div {
+        padding: 0;
+        width: 60px;
+        // border: 1px solid blue;
+        vertical-align: middle;
+      }
+      input[type="checkbox"] {
+        // visibility: hidden;
+        display: none;
+      }
+      label {
+        position: relative;
+        top: 0px;
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+        font-size: 12px;
+        // display: flex;
+        vertical-align: middle;
+        // border: 1px solid black;
+      }
+      input[type="checkbox"] + label:before {
+        position: relative;
+        top: -5px;
+        border: 1px solid #333;
+        border-radius: 2px;
+        content: "\00a0";
+        display: inline-block;
+        font: 10px "Roboto" 12px;
+        line-height: 12px;
+        height: 12px;
+        width: 12px;
+        margin: 0 .25em 0 0;
+        padding: 0;
+        vertical-align: middle;
+      }
+      
+      input[type="checkbox"]:checked + label:before {
+        background: #5a0000;
+        border: 1px solid #5a0000;
+        color: #fff;
+        content: "\2713";
+        text-align: center;
+        
+        // background-color: #5a0000;
+        // background: #5a0000;
+        // color: #5a0000;
+      }
+      input[type="checkbox"]:focus + label:before {
+        outline: rgb(59, 153, 252) auto 5px;
+      }
+    }
+  }
   #saveBtton {
     height: 30px;
   }
@@ -1258,8 +1584,7 @@ ion-row {
   padding-left: 5px;
   margin-top: 10px;
 }
-#or,
-#gen {
+#or{
   text-align: center;
   width: 100%;
 }
@@ -1427,6 +1752,7 @@ ion-item {
     // background: red;
     z-index: 1;
     cursor: pointer;
+    color: #5a0000;
   }
   .adder-form {
     z-index: 10;
@@ -1434,6 +1760,7 @@ ion-item {
     max-width: 500px;
     max-height: 500px;
     background: whitesmoke;
+    border-top-color: rgb(0,3,36);
     margin: 0 auto;
     border-radius: 5px;
     overflow: hidden;
@@ -1443,11 +1770,11 @@ ion-item {
   #header-form {
     width: 100%;
     // height: 50px;
-    background: white;
+    background: rgb(0,3,36);
     line-height: 30px;
     padding: 10px;
     font-weight: bold;
-    color: rgb(54, 54, 54);
+    color: rgb(200, 200, 200);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.315);
     z-index: 10;
     position: relative;
@@ -1458,6 +1785,7 @@ ion-item {
     top: 10px;
     width: 40px;
     text-align: center;
+    color: #5a0000;
     cursor: pointer;
   }
   @media screen and (max-width: 500px) {
@@ -1486,7 +1814,7 @@ ion-item {
   }
   #brandImage{
     // border: 2px solid green;
-    width: 40px;
+    width: 60px;
     height: 40px;
     line-height: 40px;
     color: white;
@@ -1496,6 +1824,29 @@ ion-item {
     cursor: pointer;
     // margin: 10px;
     // margin-top: 10px !important;
+
+    ion-icon {
+      cursor: pointer;
+      
+    }
+  }
+  #brandImageInactive{
+    // border: 2px solid green;
+    width: 60px;
+    height: 40px;
+    line-height: 40px;
+    color: white;
+    background: #BC7E7E;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    // cursor: pointer;
+    // margin: 10px;
+    // margin-top: 10px !important;
+
+    ion-icon {
+      // cursor: pointer;
+      
+    }
   }
   .input-spaces {
     padding-top: 10px;
@@ -1524,6 +1875,10 @@ ion-item {
       border-top-left-radius: 5px;
       border-bottom-left-radius: 5px;
     }
+    input:disabled,
+    input[disabled] {
+      cursor: default;
+    }
     button {
       height: 100%;
       width: 60px;
@@ -1533,6 +1888,12 @@ ion-item {
       border-top-right-radius: 5px;
       border-bottom-right-radius: 5px;
       margin-top: 1px;
+    }
+
+    button:disabled,
+    button[disabled] {
+      background-color: #BC7E7E;
+      cursor: default;
     }
     button:active {
       background: #5a0000;
@@ -1590,6 +1951,11 @@ ion-item {
   }
   #adder-button:active {
     background: #5a0000;
+  }
+  #adder-button:disabled,
+  #adder-button[disabled] {
+    background-color: #BC7E7E;
+    cursor: text;
   }
 }
 
@@ -1793,6 +2159,43 @@ ion-item {
 .seasons{
   width: 100%;
   height: 30px;
+  input[type="checkbox"] {
+    visibility: hidden;
+  }
+  label {
+    cursor: pointer;
+  }
+  input[type="checkbox"] + label:before {
+    border: 1px solid #333;
+    border-radius: 2px;
+    content: "\00a0";
+    display: inline-block;
+    font: 12px "Roboto" 12em;
+    line-height: 12px;
+    height: 12px;
+    width: 12px;
+    margin: 0 .25em 0 0;
+    padding: 0;
+    vertical-align: middle;
+  }
+  
+  input[type="checkbox"]:checked + label:before {
+    background: #5a0000;
+    border: 1px solid #5a0000;
+    color: #fff;
+    content: "\2713";
+    text-align: center;
+    
+    // background-color: #5a0000;
+    // background: #5a0000;
+    // color: #5a0000;
+  }
+  input[type="checkbox"]:focus + label:before {
+    outline: rgb(59, 153, 252) auto 5px;
+  }
+  
+
+  
 }
 
 // #editImage{

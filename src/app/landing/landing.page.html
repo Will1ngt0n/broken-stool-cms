@@ -1,6 +1,6 @@
-<div #loaderDiv id="loader">
+<!-- <div #loaderDiv id="loader">
   <app-loader></app-loader>
-</div>
+</div> -->
 <ion-content>
 
   <!-- <div *ngIf='brandPicEdit'>
@@ -39,83 +39,94 @@
 
     </div>
     <div id="forms">
-      <ion-button id="dismisserBtn" color="light" fill="clear" (click)="showHideSearchDetails('close')">
-        <ion-icon name="close"></ion-icon>
-      </ion-button>
-      <label for="uploaderBtn" id="imageToupdate">
-        <div id="upload-label">
-          Update Photo
-        </div>
-        <img src="../../assets/imgs/Image Corrupt.jpg" *ngIf='!updatePic' alt="">
-        <img [src]="updatePic" *ngIf='updatePic' alt="">
-      </label>
-      <div class="product-information-search">
-        <input type="text" placeholder="Product name" maxlength="25" (keyup)='findMatch($event, item);'
-          [(ngModel)]='updateName'>
-        <span *ngIf='categoryUpdateMatch'>This item already exists in this category</span>
-        <input type="text" placeholder="Price (R)" (keyup)='changeSearchPrice();' [(ngModel)]='updatePrice'>
-        <p class="instruction">Choose available sizes</p>
-        <div class="opts-sizes-search">
-          <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxXS' name='popCheckboxXS'
-            (ionChange)='checkSizeUpdateCheckboxes($event, "XS")'></ion-checkbox>
-          <p id="text-size">XS</p>
-          <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxS' name='popCheckboxS'
-            (ionChange)='checkSizeUpdateCheckboxes($event, "S")'></ion-checkbox>
-          <p id="text-size">S</p>
-          <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxM' name='popCheckboxM'
-            (ionChange)='checkSizeUpdateCheckboxes($event, "M")'></ion-checkbox>
-          <p id="text-size">M</p>
-          <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxL' name='popCheckboxL'
-            (ionChange)='checkSizeUpdateCheckboxes($event, "L")'></ion-checkbox>
-          <p id="text-size">L</p>
-          <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxXL' name='popCheckboxXL'
-            (ionChange)='checkSizeUpdateCheckboxes($event, "XL")'></ion-checkbox>
-          <p id="text-size">XL</p>
-          <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxXXL' name='popCheckboxXXL'
-            (ionChange)='checkSizeUpdateCheckboxes($event, "XXL")'></ion-checkbox>
-          <p id="text-size">2XL</p>
-          <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxXXXL' name='popCheckboxXXXL'
-            (ionChange)='checkSizeUpdateCheckboxes($event, "XXXL")'></ion-checkbox>
-          <p id="text-size">3XL</p>
-        </div>
-        <p class="instruction">Choose available colours</p>
-        <div class="opts-search">
-          <div class="myBox">
-            <ion-checkbox class="myCheck" [checked]='checkBlack' (ionChange)='checkColorUpdate($event, "Black")'>
-            </ion-checkbox>
-          </div>
-          <div class="myBox">
-            <ion-checkbox class="myCheck" [checked]='checkBrown' (ionChange)='checkColorUpdate($event, "Brown")'>
-            </ion-checkbox>
-          </div>
-          <div class="myBox">
-            <ion-checkbox class="myCheck" [checked]='checkOrange' (ionChange)='checkColorUpdate($event, "Orange")'>
-            </ion-checkbox>
-          </div>
-          <div class="myBox">
-            <ion-checkbox class="myCheck" [checked]='checkYellow' (ionChange)='checkColorUpdate($event, "Yellow")'>
-            </ion-checkbox>
-          </div>
-          <!-- <div class="myBox">
-            <ion-checkbox class="myCheck" [checked]='checkPink' (ionChange)='checkColorUpdate($event, "Pink")'></ion-checkbox>
-          </div> -->
-          <div class="myBox">
-            <ion-checkbox class="myCheck" [checked]='checkWhite' (ionChange)='checkColorUpdate($event, "White")'>
-            </ion-checkbox>
-          </div>
-        </div>
-        <textarea rows="4" type="text" placeholder="Description" maxlength="150"
-          [(ngModel)]='updateDescription'></textarea>
-        <input #updateSearchPic width='100px' id="uploaderBtn" class='pictureInput' type="file"
-          accept="image/jpeg, jpg, tif, png" (change)='addUpdatePicture($event)'>
-        <ion-button color="dark" (click)='updateItem()' [disabled]='!updateForm'>Update</ion-button>
-        <ion-button color="medium" (click)='hideItem(item.productID, item.brand, item.category, item)'
-          *ngIf='item.data.hideItem === false'>Hide</ion-button>
-        <ion-button color='medium' (click)='showItem(item.productID, item.brand, item.category, item)'
-          *ngIf='item.data.hideItem !== false'>Show</ion-button>
-        <ion-button color="danger" (click)='deleteItem(item.productID, item.brand, item.category, item)'>Delete
+      <div class="top-bar">
+        <h4>Edit Item</h4>
+        <ion-button id="dismisser-Btn" color="light" fill="clear" (click)="showHideSearchDetails('close')">
+          <ion-icon name="close" color="primary"></ion-icon>
         </ion-button>
       </div>
+      <div class="update-content">
+        <div class="updatePicture">
+          <label for="uploaderBtn" id="imageToupdate">
+            <div id="upload-label">
+              Update Photo
+            </div>
+            <img src="../../assets/imgs/Image Corrupt.jpg" *ngIf='!updatePic' alt="">
+            <img [src]="updatePic" *ngIf='updatePic' alt="">
+          </label>
+        </div>
+        <div class="bottom">
+          <div class="product-information-search">
+            <input type="text" placeholder="Product name" maxlength="25" (keyup)='findMatch($event, item);'
+              [(ngModel)]='updateName'>
+            <span *ngIf='categoryUpdateMatch'>This item already exists in this category</span>
+            <input type="text" placeholder="Price (R)" (keyup)='changeSearchPrice();' [(ngModel)]='updatePrice'>
+            <p class="instruction">Choose available sizes</p>
+            <div class="opts-sizes-search">
+              <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxXS' name='popCheckboxXS'
+                (ionChange)='checkSizeUpdateCheckboxes($event, "XS")'></ion-checkbox>
+              <p id="text-size">XS</p>
+              <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxS' name='popCheckboxS'
+                (ionChange)='checkSizeUpdateCheckboxes($event, "S")'></ion-checkbox>
+              <p id="text-size">S</p>
+              <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxM' name='popCheckboxM'
+                (ionChange)='checkSizeUpdateCheckboxes($event, "M")'></ion-checkbox>
+              <p id="text-size">M</p>
+              <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxL' name='popCheckboxL'
+                (ionChange)='checkSizeUpdateCheckboxes($event, "L")'></ion-checkbox>
+              <p id="text-size">L</p>
+              <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxXL' name='popCheckboxXL'
+                (ionChange)='checkSizeUpdateCheckboxes($event, "XL")'></ion-checkbox>
+              <p id="text-size">XL</p>
+              <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxXXL' name='popCheckboxXXL'
+                (ionChange)='checkSizeUpdateCheckboxes($event, "XXL")'></ion-checkbox>
+              <p id="text-size">2XL</p>
+              <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxXXXL' name='popCheckboxXXXL'
+                (ionChange)='checkSizeUpdateCheckboxes($event, "XXXL")'></ion-checkbox>
+              <p id="text-size">3XL</p>
+            </div>
+            <p class="instruction">Choose available colours</p>
+            <div class="opts-search">
+              <div class="myBox">
+                <ion-checkbox class="myCheck" [checked]='checkBlack' (ionChange)='checkColorUpdate($event, "Black")'>
+                </ion-checkbox>
+              </div>
+              <div class="myBox">
+                <ion-checkbox class="myCheck" [checked]='checkBrown' (ionChange)='checkColorUpdate($event, "Brown")'>
+                </ion-checkbox>
+              </div>
+              <div class="myBox">
+                <ion-checkbox class="myCheck" [checked]='checkOrange' (ionChange)='checkColorUpdate($event, "Orange")'>
+                </ion-checkbox>
+              </div>
+              <div class="myBox">
+                <ion-checkbox class="myCheck" [checked]='checkYellow' (ionChange)='checkColorUpdate($event, "Yellow")'>
+                </ion-checkbox>
+              </div>
+              <!-- <div class="myBox">
+                <ion-checkbox class="myCheck" [checked]='checkPink' (ionChange)='checkColorUpdate($event, "Pink")'></ion-checkbox>
+              </div> -->
+              <div class="myBox">
+                <ion-checkbox class="myCheck" [checked]='checkWhite' (ionChange)='checkColorUpdate($event, "White")'>
+                </ion-checkbox>
+              </div>
+            </div>
+            <textarea rows="4" type="text" placeholder="Description" maxlength="150"
+              [(ngModel)]='updateDescription'></textarea>
+            <input #updateSearchPic width='100px' id="uploaderBtn" class='pictureInput' type="file"
+              accept="image/jpeg, jpg, tif, png" (change)='addUpdatePicture($event)'>
+            <ion-button color="dark" (click)='updateItem()' [disabled]='!updateForm'>Update</ion-button>
+            <ion-button color="medium" (click)='hideItem(item.productID, item.brand, item.category, item)'
+              *ngIf='item.data.hideItem === false'>Hide</ion-button>
+            <ion-button color='medium' (click)='showItem(item.productID, item.brand, item.category, item)'
+              *ngIf='item.data.hideItem !== false'>Show</ion-button>
+            <ion-button color="danger" (click)='deleteItem(item.productID, item.brand, item.category, item)'>Delete
+            </ion-button>
+          </div>
+        </div>
+      </div>
+
+
     </div>
   </div>
   <!-- -->
@@ -124,7 +135,7 @@
     <!-- -->
     <div class="adder-form" *ngIf="isBrand === true">
       <div id="header-form">
-        {{brandMessage}} brands
+        {{brandMessage}} brand
         <div class="toDismiss" (click)="removeAdder()">
           <ion-icon name="close"></ion-icon>
         </div>
@@ -133,7 +144,14 @@
         <div class="input-spaces">
           <div class="addBrandName">
             <input type="text" placeholder="Brand Name" id="brand-name" [(ngModel)]='newBrand'>
-            <div id="brandImage">
+            <div id="brandImage" *ngIf="newBrand">
+              <label for="cam-ico">
+                <input type="file" accept="image/x-png,image/jpeg" id="cam-ico"
+                  (change)='changeBrandImage($event, null)' [disabled]='!newBrand'>
+                <ion-icon name="camera"></ion-icon>
+              </label>
+            </div>
+            <div id="brandImageInactive" *ngIf="!newBrand">
               <label for="cam-ico">
                 <input type="file" accept="image/x-png,image/jpeg" id="cam-ico"
                   (change)='changeBrandImage($event, null)' [disabled]='!newBrand'>
@@ -142,9 +160,12 @@
             </div>
           </div>
           <div class="seasons">
-            <input type='checkbox' (change)='enableSeasonalWear($event)'> Summer
-            <input type='checkbox' (change)='enableSeasonalWear($event)'> Winter
-            <input type='checkbox' (change)='enableSeasonalWear($event)'> All Weather
+            <input id='enableSummerWear' type='checkbox' (change)='enableSeasonalWear($event)'>
+            <label for="enableSummerWear">Summer</label>
+            <input id='enableWinterWear' type='checkbox' (change)='enableSeasonalWear($event)'>
+            <label for="enableWinterWear">Winter</label>
+            <input id='enableAllWear' type='checkbox' (change)='enableSeasonalWear($event)'>
+            <label for="enableAllWear">All Weather</label>
           </div>
 
           <div class="cats">
@@ -160,6 +181,7 @@
             <input type="text" placeholder="Category" id="cate" [(ngModel)]='newCategory' [disabled]='!newBrand'>
             <button (click)='addNewCategoryToArray()'
               [disabled]='!newCategory || !categoryPicture || !newBrand'>Add</button>
+              
           </div>
           <div class="added-cats">
 
@@ -269,15 +291,19 @@
       <div class="nav-content">
         <div id="title">
           <img src="../../assets/imgs/Logo/Logo.png" id="appLogo" alt="" (click)="reloadPage()" id="dankie-home-button">
-          <!-- <h4>DankieJesu</h4> -->
+          
         </div>
-        <div id="searchbar">
+        <div id="nav-middle">
+          <div id="searchbar">
           <ion-input [(ngModel)]='searchInput' id="mySearchBar" (ionChange)='search()' placeholder="Search products"
             show-cancel-button="never"></ion-input>
+          </div>
+          <div id="admin">
+            <p (click)='signOutPopup()'>SIGN OUT</p>
+          </div>
         </div>
-        <div id="admin">
-          <p (click)='signOutPopup()'>SIGN OUT</p>
-        </div>
+
+
       </div>
     </div>
 
@@ -698,7 +724,7 @@
         <div class="adding">
           <h4 id="web-title">Add Product</h4>
           <div class="gridder">
-            <select #departmentCombo (change)="changeDepartment($event); checkValidity()">
+            <select #departmentCombo class="web-select" (change)="changeDepartment($event); checkValidity()">
               <option value='i' *ngFor='let i of departmentOptions' [value]='i'>{{i}}</option>
             </select>
             <div class="add-btn" (click)="toggleAdderBrand('Add a new')">
@@ -709,7 +735,7 @@
             </div>
           </div>
           <div class="gridder">
-            <select #nativeCategory [disabled]='department === "Select Brand"' (change)="changeCategory($event);">
+            <select #nativeCategory class="web-select" [disabled]='department === "Select Brand"' (change)="changeCategory($event);">
               <option *ngFor='let x of categoryOptions' [value]='x'>{{x}}</option>
             </select>
             <div class="add-btn" (click)="toggleAdderCat()">
@@ -740,14 +766,39 @@
             [disabled]='selectedCategory === "Select Category"' [(ngModel)]='description'
             (keyup)='checkItemDescription();'></textarea>
           <div class="sizes">
+            <h4>Available sizes</h4>
+            <!-- input checkbox for adding available sizes, and id for labels to control custom checkboxes -->
+            <div class="sizes-cont">
+              <div>
+                <input id="toggleWebPAddXS" #checkboxXS type='checkbox' name='checkboxXS' (change)='check($event, "XS")'>
+                <label for="toggleWebPAddXS">XS</label>
+              </div>
+              <div>
+                <input id="toggleWebPAddS" #checkboxS type='checkbox' name='checkboxS' (change)='check($event, "S")'>
+                <label for="toggleWebPAddS">S</label>              
+              </div>
+              <div>
+                <input id="toggleWebPAddM" #checkboxM type='checkbox' name='checkboxM' (change)='check($event, "M")'>
+                <label for="toggleWebPAddM">M</label> 
+              </div>
+              <div>
+                <input id="toggleWebPAddL" #checkboxL type='checkbox' name='checkboxL' (change)='check($event, "L")'>
+                <label for="toggleWebPAddL">L</label>
+              </div>
+              <div>
+                <input id="toggleWebPAddXL" #checkboxXL type='checkbox' name='checkboxXL' (change)='check($event, "XL")'>
+                <label for="toggleWebPAddXL">XL</label>
+              </div>
+              <div>
+                <input id="toggleWebPAdd2XL" #checkboxXXL type='checkbox' name='checkboxXXL' (change)='check($event, "XXL")'>
+                <label for="toggleWebPAdd2XL">2XL</label>
+              </div>
+              <div>
+                <input id="toggleWebPAdd3XL" #checkboxXXXL type='checkbox' name='checkboxXXXL' (change)='check($event, "XXXL")'>
+                <label for="toggleWebPAdd3XL">3XL</label>
+              </div>
+            </div>
 
-            <input #checkboxXS type='checkbox' name='checkboxXS' (change)='check($event, "XS")'> XS
-            <input #checkboxS type='checkbox' name='checkboxS' (change)='check($event, "S")'> S
-            <input #checkboxM type='checkbox' name='checkboxM' (change)='check($event, "M")'> M
-            <input #checkboxL type='checkbox' name='checkboxL' (change)='check($event, "L")'> L
-            <input #checkboxXL type='checkbox' name='checkboxXL' (change)='check($event, "XL")'> XL
-            <input #checkboxXXL type='checkbox' name='checkboxXXL' (change)='check($event, "XXL")'> 2XL
-            <input #checkboxXXXL type='checkbox' name='checkboxXXXL' (change)='check($event, "XXXL")'> 3XL
           </div>
 
           <input #fileInput width='100px' id="image-uploader" class='pictureInput' type="file"
@@ -763,21 +814,34 @@
           </label>
           <div class='colors'>
             <h5>Available colors</h5>
-            <input #checkboxBlack type='checkbox' name='checkboxBlack' (change)='checkColor($event, "Black")'>&nbsp;<img
-              width='15px' style='border: 1px solid rgb(0,0,0)'
-              src='.\assets\product-colors\black.jpg'>&nbsp;&nbsp;&nbsp;&nbsp;
-            <input #checkboxBrown type='checkbox' name='checkboxBrown' (change)='checkColor($event, "Brown")'>&nbsp;<img
-              width='15px' style='border: 1px solid rgb(0,0,0)'
-              src='.\assets\product-colors\brown.jpg'>&nbsp;&nbsp;&nbsp;&nbsp;
-            <input #checkboxOrange type='checkbox' name='checkboxOrange'
-              (change)='checkColor($event, "Orange")'>&nbsp;<img width='15px' style='border: 1px solid rgb(0,0,0)'
-              src='.\assets\product-colors\orange.png'>&nbsp;&nbsp;&nbsp;&nbsp;
-            <input #checkboxYellow type='checkbox' name='checkboxYellow'
-              (change)='checkColor($event, "Yellow")'>&nbsp;<img width='15px' style='border: 1px solid rgb(0,0,0)'
-              src='.\assets\product-colors\yellow.jpg'>&nbsp;&nbsp;&nbsp;&nbsp;
-            <input #checkboxWhite type='checkbox' name='checkboxWhite' (change)='checkColor($event, "White")'>&nbsp;<img
-              width='15px' style='border: 1px solid rgb(0,0,0)'
-              src='.\assets\product-colors\white.png'>&nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="colors-cont">
+              <div>
+                <input #checkboxBlack type='checkbox' id="toggleWebPAddBlack" name='checkboxBlack' (change)='checkColor($event, "Black")'>&nbsp;
+                <label for="toggleWebPAddBlack"><img width='15px' style='border: 1px solid rgb(0,0,0)' src='.\assets\product-colors\black.jpg'></label>
+              </div>
+              <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
+              <div>
+                <input #checkboxBrown type='checkbox' id="toggleWebPAddBrown" name='checkboxBrown' (change)='checkColor($event, "Brown")'>&nbsp;
+                <label for="toggleWebPAddBrown"><img  width='15px' style='border: 1px solid rgb(0,0,0)' src='.\assets\product-colors\brown.jpg'></label>
+              </div>
+              <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
+              <div>
+                <input #checkboxOrange type='checkbox' id="toggleWebPAddOrange" name='checkboxOrange' (change)='checkColor($event, "Orange")'>&nbsp;
+                <label for="toggleWebPAddOrange"><img width='15px' style='border: 1px solid rgb(0,0,0)' src='.\assets\product-colors\orange.png'></label>
+              </div>
+              <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
+              <div>
+                <input #checkboxYellow type='checkbox' id="toggleWebPAddYellow" name='checkboxYellow' (change)='checkColor($event, "Yellow")'>&nbsp;
+                <label for="toggleWebPAddYellow"><img width='15px' style='border: 1px solid rgb(0,0,0)' src='.\assets\product-colors\yellow.jpg'></label>
+              </div>
+              <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
+              <div>
+                <input #checkboxWhite type='checkbox' id="toggleWebPAddWhite" name='checkboxWhite' (change)='checkColor($event, "White")'>&nbsp;
+                <label for="toggleWebPAddWhite"><img width='15px' style='border: 1px solid rgb(0,0,0)' src='.\assets\product-colors\white.png'></label>
+              </div>
+            </div>
+
+            <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
           </div>
           <div>
             <input id="generate-code" type='text' [disabled]='!generateCode' placeholder="Product Code"
@@ -786,13 +850,9 @@
             <span *ngIf='productCodeMatch'>A product with this product code already exists</span>
             <div id="or">or</div>
           </div>
-          <ion-button [disabled]='!generateCode' (click)='autoGenerateCode()' color="warning" expand="full">Generate
-            Code</ion-button>
-          <ion-button [disabled]='!addForm || productCodeMatch' (click)='addProduct()' expand="full" color="success">Add
-            to Stall
-          </ion-button>
-          <ion-button #btnClearForm [disabled]='!formHasValues' (click)='clearForm()' expand="full" color="danger">Clear
-            Form</ion-button>
+          <ion-button [disabled]='!generateCode' (click)='autoGenerateCode()' color="warning" expand="full">Generate Code</ion-button>
+          <ion-button [disabled]='!addForm || productCodeMatch' (click)='addProduct()' expand="full" color="success">Add to Stall</ion-button>
+          <ion-button #btnClearForm [disabled]='!formHasValues' (click)='clearForm()' expand="full" color="danger">Clear Form</ion-button>
         </div>
       </div>
     </div>
@@ -936,7 +996,7 @@
       </div>
     </div>
     <div id="right-items-list">
-      <div class="top-bar">
+      <div class="top-bar web-title">
         Add Product
         <ion-button fill="clear" color="dark" icon-only id="dismiss-button" (click)="hideSideMenu()">
           <ion-icon name="close"></ion-icon>
@@ -946,7 +1006,7 @@
         <h4>Add Product</h4>
 
         <div class="gridder">
-          <select #mbdepartmentCombo (change)="changeDepartment($event);">
+          <select #mbdepartmentCombo class="web-select" (change)="changeDepartment($event);">
             <option value='i' *ngFor='let i of departmentOptions' [value]='i'>{{i}}</option>
           </select>
           <div class="add-btn" (click)="toggleAdderBrand('Add a new')">
@@ -959,7 +1019,7 @@
 
 
         <div class="gridder">
-          <select #nativeCategory [disabled]='department === "Select Brand"' (change)="changeCategory($event);">
+          <select #nativeCategory class="web-select" [disabled]='department === "Select Brand"' (change)="changeCategory($event);">
             <option *ngFor='let x of categoryOptions' [value]='x'>{{x}}</option>
           </select>
           <div class="add-btn" (click)="toggleAdderCat()">
@@ -991,14 +1051,20 @@
           [disabled]='selectedCategory === "Select Category"' [(ngModel)]='description'
           (keyup)='checkValidity()'></textarea>
         <div class="sizes">
-
-          <input #mbcheckboxXS type='checkbox' name='mbcheckboxXS' (change)='check($event, "XS")'> XS
-          <input #mbcheckboxS type='checkbox' name='mbcheckboxS' (change)='check($event, "S")'> S
-          <input #mbcheckboxM type='checkbox' name='mbcheckboxM' (change)='check($event, "M")'> M
-          <input #mbcheckboxL type='checkbox' name='mbcheckboxL' (change)='check($event, "L")'> L
-          <input #mbcheckboxXL type='checkbox' name='mbcheckboxXL' (change)='check($event, "XL")'> XL
-          <input #mbcheckboxXXL type='checkbox' name='mbcheckboxXXL' (change)='check($event, "XXL")'> 2XL
-          <input #mbcheckboxXXXL type='checkbox' name='mbcheckboxXXXL' (change)='check($event, "XXXL")'> 3XL
+          <input #mbcheckboxXS  type='checkbox'id="toggleMobiPAddXS" name='mbcheckboxXS' (change)='check($event, "XS")'>
+            <label for="toggleMobiPAddXS">XS</label>
+          <input #mbcheckboxS  type='checkbox' id="toggleMobiPAddS"name='mbcheckboxS' (change)='check($event, "S")'> 
+            <label for="toggleMobiPAddS">S</label>
+          <input #mbcheckboxM type='checkbox' id="toggleMobiPAddM" name='mbcheckboxM' (change)='check($event, "M")'>
+            <label for="toggleMobiPAddM">M</label>
+          <input #mbcheckboxL type='checkbox' id="toggleMobiPAddL" name='mbcheckboxL' (change)='check($event, "L")'>
+            <label for="toggleMobiPAddL">L</label>
+          <input #mbcheckboxXL type='checkbox' id="toggleMobiPAddXL" name='mbcheckboxXL' (change)='check($event, "XL")'>
+            <label for="toggleMobiPAddXL">XL</label>
+          <input #mbcheckboxXXL type='checkbox' id="toggleMobiPAddXXL" name='mbcheckboxXXL' (change)='check($event, "XXL")'>
+            <label for="toggleMobiPAddXXL">2XL</label>
+          <input #mbcheckboxXXXL type='checkbox' id="toggleMobiPAddXXXL" name='mbcheckboxXXXL' (change)='check($event, "XXXL")'>
+            <label for="toggleMobiPAddXXXL">3XL</label>
         </div>
 
         <input #fileInput width='100px' id="image-uploader" class='pictureInput' type="file"
@@ -1014,21 +1080,28 @@
         </label>
         <div class='colors'>
           <h5>Available colors</h5>
-          <input #mbcheckboxBlack type='checkbox' name='mbcheckboxBlack'
-            (change)='checkColor($event, "Black")'>&nbsp;<img width='15px' style='border: 1px solid rgb(0,0,0)'
-            src='.\assets\product-colors\black.jpg'>&nbsp;&nbsp;&nbsp;&nbsp;
-          <input #mbcheckboxBrown type='checkbox' name='mbcheckboxBrown'
-            (change)='checkColor($event, "Brown")'>&nbsp;<img width='15px' style='border: 1px solid rgb(0,0,0)'
-            src='.\assets\product-colors\brown.jpg'>&nbsp;&nbsp;&nbsp;&nbsp;
-          <input #mbcheckboxOrange type='checkbox' name='mbcheckboxOrange'
-            (change)='checkColor($event, "Orange")'>&nbsp;<img width='15px' style='border: 1px solid rgb(0,0,0)'
-            src='.\assets\product-colors\orange.png'>&nbsp;&nbsp;&nbsp;&nbsp;
-          <input #mbcheckboxYellow type='checkbox' name='mbcheckboxYellow'
-            (change)='checkColor($event, "Yellow")'>&nbsp;<img width='15px' style='border: 1px solid rgb(0,0,0)'
-            src='.\assets\product-colors\yellow.jpg'>&nbsp;&nbsp;&nbsp;&nbsp;
-          <input #mbcheckboxWhite type='checkbox' name='mbcheckboxWhite'
-            (change)='checkColor($event, "White")'>&nbsp;<img width='15px' style='border: 1px solid rgb(0,0,0)'
-            src='.\assets\product-colors\white.png'>&nbsp;&nbsp;&nbsp;&nbsp;
+          <div class="colors-cont">
+            <div>
+              <input #mbcheckboxBlack type='checkbox' id="toggleMobiPAddBlack" name='mbcheckboxBlack' (change)='checkColor($event, "Black")'>&nbsp;
+                <label for="toggleMobiPAddBlack"><img width='15px' style='border: 1px solid rgb(0,0,0)' src='.\assets\product-colors\black.jpg'></label>
+            </div>
+            <div>
+              <input #mbcheckboxBrown type='checkbox' id="toggleMobiPAddBrown" name='mbcheckboxBrown' (change)='checkColor($event, "Brown")'>&nbsp;
+              <label for="toggleMobiPAddBrown"><img width='15px' style='border: 1px solid rgb(0,0,0)' src='.\assets\product-colors\brown.jpg'></label>
+            </div>
+            <div>
+              <input #mbcheckboxOrange type='checkbox' id="toggleMobiPAddOrange" name='mbcheckboxOrange' (change)='checkColor($event, "Orange")'>&nbsp;
+              <label for="toggleMobiPAddOrange"><img width='15px' style='border: 1px solid rgb(0,0,0)' src='.\assets\product-colors\orange.png'></label>
+            </div>
+            <div>
+              <input #mbcheckboxYellow type='checkbox' id="toggleMobiPAddYellow" name='mbcheckboxYellow' (change)='checkColor($event, "Yellow")'>&nbsp;
+              <label for="toggleMobiPAddYellow"><img width='15px' style='border: 1px solid rgb(0,0,0)' src='.\assets\product-colors\yellow.jpg'></label>
+            </div>
+            <div>
+              <input #mbcheckboxWhite type='checkbox' id="toggleMobiPAddWhite" name='mbcheckboxWhite' (change)='checkColor($event, "White")'>&nbsp;
+              <label for="toggleMobiPAddWhite"><img width='15px' style='border: 1px solid rgb(0,0,0)' src='.\assets\product-colors\white.png'></label>
+            </div>
+          </div>
         </div>
         <div>
           <input type='text' id="generate-code" [disabled]='!generateCode' placeholder="Product Code"
@@ -1036,12 +1109,9 @@
           <br>
           <div id="or">or</div>
         </div>
-        <ion-button id="gen" [disabled]='!generateCode' (click)='autoGenerateCode()' expand="full">Generate Code
-        </ion-button>
-        <ion-button [disabled]='!addForm' (click)='addProduct()' expand="full" color="success">Add to Stall
-        </ion-button>
-        <ion-button #btnClearForm [disabled]='!formHasValues' (click)='mbclearForm()' expand="full" color="danger">Clear
-          Form</ion-button>
+        <ion-button id="gen" [disabled]='!generateCode' (click)='autoGenerateCode()' expand="full">Generate Code</ion-button>
+        <ion-button [disabled]='!addForm' (click)='addProduct()' expand="full" color="success">Add to Stall</ion-button>
+        <ion-button #btnClearForm [disabled]='!formHasValues' (click)='mbclearForm()' expand="full" color="danger">Clear Form</ion-button>
       </div>
     </div>
     <div class="cont-small">
