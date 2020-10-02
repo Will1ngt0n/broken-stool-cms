@@ -190,12 +190,18 @@ export class LandingPage implements OnInit {
     // this.itemColors = item.data.color
     // this.item = item
     // this.searchedProductStatus = item.data.hideItem
+
+    // Delete all code below
+    // This is for internetless coding only purposes
+    // Please delete
     let val = {
       data: {
-        name: 'Will', price: 'R500', description: 'toasting here', pictureLink: 'https: www.schools.neg', hideItem: false, size: ['XL', 'S']
+        name: 'Will', price: 'R500', description: 'toasting here', pictureLink: null, hideItem: false, size: ['XL', 'S']
       }, brand: 'Kwasi', category: 'valuable', productID: 'roseta', 
     }
     // this.showHideSearchDetails(val)
+    this.brands.push({name: 'Kwanga', brandID: '34fds8f989JKJsdf3rf43', pictureLink: '' }, {name: 'Dankie Jesu', brandID: 'jhf43hrhjrhfh43hjkfhj34', pictureLink: null},
+      {name: 'Kwazi', brandID: 'HJH87778hJHJ877889VHV', pictureLink: undefined}, {name: 'Dumbi', brandID: 'asdf87f8s789fsf', pictureLink: false})
   }
   signOutPopup() {
     this.presentLogoutConfirmAlert()
@@ -1740,7 +1746,10 @@ export class LandingPage implements OnInit {
       this.updateName = item.data.name
       this.updatePrice = item.data.price
       this.updateDescription = item.data.description
-      this.updatePic = item.data.pictureLink
+      try { this.updatePic = item.data.pictureLink }
+      catch (error) {
+        this.updatePic = null
+      }
       this.pictureUpdate
       this.updateSearchPic = item.data.pictureLink
       this.updateBrand = item.brand

@@ -19,10 +19,10 @@
   </ion-fab>
   <div class="searchResults" *ngIf="searchInput">
 
-    <p>
+    <p *ngIf="searchArray.length > 0">
       Search Results
     </p>
-    <ion-list>
+    <ion-list *ngIf="searchArray.length > 0">
       <div *ngFor="let item of searchArray">
         <ion-item *ngIf='searchArray.length > 0' (click)="showHideSearchDetails(item)">{{item.data.name}}</ion-item>
       </div>
@@ -476,24 +476,24 @@
                 <ion-col size="3" *ngFor='let item of brands'>
                   <div class="brandName">
                     <div class="brandImage" (click)='viewMore(item.name, item)'>
-                      <img [src]="item.pictureLink" *ngIf="item.pictureLink != 'undefined' && item.pictureLink != ''" alt="">
-                      <img src="../../assets/imgs/images.jpg" *ngIf="item.pictureLink == 'undefined' || item.pictureLink == ''" alt="">
+                      <img [src]="item.pictureLink" *ngIf="item.pictureLink != undefined && item.pictureLink != ''" alt="">
+                      <img src="../../assets/imgs/images.jpg" *ngIf="item.pictureLink == undefined || item.pictureLink == ''" alt="">
                     </div>
                     <div id="user-options-opts">
                       <div id="user-opt-buttons">
                         <div (click)="deleteBrand(item.brandID)">
-                          <ion-icon name="trash"></ion-icon>
+                          <ion-icon name="trash" class="brand-icon"></ion-icon>
                         </div>
                         <div (click)='enableBrandPicEdit("open", item)'>
                           <input type="file" accept="image/x-png,image/jpeg" style="display: none" id={{item.name}}
                             (change)='changeBrandImage($event, item)'>
                           <label for="{{item.name}}">
-                            <ion-icon name='camera'></ion-icon>
+                            <ion-icon name='camera' class="brand-icon"></ion-icon>
                           </label>
 
                         </div>
                         <div (click)="editbrand(item.name, item)">
-                          <ion-icon name="create"></ion-icon>
+                          <ion-icon name="create" class="brand-icon"></ion-icon>
                         </div>
                       </div>
                     </div>
@@ -722,7 +722,7 @@
       <div id="right">
 
         <div class="adding">
-          <h4 id="web-title">Add Product</h4>
+          <h4 class="web-header">Add Product</h4>
           <div class="gridder">
             <select #departmentCombo class="web-select" (change)="changeDepartment($event); checkValidity()">
               <option value='i' *ngFor='let i of departmentOptions' [value]='i'>{{i}}</option>
@@ -766,7 +766,7 @@
             [disabled]='selectedCategory === "Select Category"' [(ngModel)]='description'
             (keyup)='checkItemDescription();'></textarea>
           <div class="sizes">
-            <h4>Available sizes</h4>
+            <h4 class="web-title">Available sizes</h4>
             <!-- input checkbox for adding available sizes, and id for labels to control custom checkboxes -->
             <div class="sizes-cont">
               <div>
@@ -813,30 +813,30 @@
             <img src="{{myUpload}}" id="myUpload-Image" alt="">
           </label>
           <div class='colors'>
-            <h5>Available colors</h5>
+            <h4 class="web-title">Available colors</h4>
             <div class="colors-cont">
               <div>
-                <input #checkboxBlack type='checkbox' id="toggleWebPAddBlack" name='checkboxBlack' (change)='checkColor($event, "Black")'>&nbsp;
+                <input #checkboxBlack type='checkbox' id="toggleWebPAddBlack" name='checkboxBlack' (change)='checkColor($event, "Black")'>
                 <label for="toggleWebPAddBlack"><img width='15px' style='border: 1px solid rgb(0,0,0)' src='.\assets\product-colors\black.jpg'></label>
               </div>
               <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
               <div>
-                <input #checkboxBrown type='checkbox' id="toggleWebPAddBrown" name='checkboxBrown' (change)='checkColor($event, "Brown")'>&nbsp;
+                <input #checkboxBrown type='checkbox' id="toggleWebPAddBrown" name='checkboxBrown' (change)='checkColor($event, "Brown")'>
                 <label for="toggleWebPAddBrown"><img  width='15px' style='border: 1px solid rgb(0,0,0)' src='.\assets\product-colors\brown.jpg'></label>
               </div>
               <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
               <div>
-                <input #checkboxOrange type='checkbox' id="toggleWebPAddOrange" name='checkboxOrange' (change)='checkColor($event, "Orange")'>&nbsp;
+                <input #checkboxOrange type='checkbox' id="toggleWebPAddOrange" name='checkboxOrange' (change)='checkColor($event, "Orange")'>
                 <label for="toggleWebPAddOrange"><img width='15px' style='border: 1px solid rgb(0,0,0)' src='.\assets\product-colors\orange.png'></label>
               </div>
               <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
               <div>
-                <input #checkboxYellow type='checkbox' id="toggleWebPAddYellow" name='checkboxYellow' (change)='checkColor($event, "Yellow")'>&nbsp;
+                <input #checkboxYellow type='checkbox' id="toggleWebPAddYellow" name='checkboxYellow' (change)='checkColor($event, "Yellow")'>
                 <label for="toggleWebPAddYellow"><img width='15px' style='border: 1px solid rgb(0,0,0)' src='.\assets\product-colors\yellow.jpg'></label>
               </div>
               <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
               <div>
-                <input #checkboxWhite type='checkbox' id="toggleWebPAddWhite" name='checkboxWhite' (change)='checkColor($event, "White")'>&nbsp;
+                <input #checkboxWhite type='checkbox' id="toggleWebPAddWhite" name='checkboxWhite' (change)='checkColor($event, "White")'>
                 <label for="toggleWebPAddWhite"><img width='15px' style='border: 1px solid rgb(0,0,0)' src='.\assets\product-colors\white.png'></label>
               </div>
             </div>
@@ -996,14 +996,14 @@
       </div>
     </div>
     <div id="right-items-list">
-      <div class="top-bar web-title">
+      <div class="top-bar">
         Add Product
         <ion-button fill="clear" color="dark" icon-only id="dismiss-button" (click)="hideSideMenu()">
           <ion-icon name="close"></ion-icon>
         </ion-button>
       </div>
       <div *ngIf="adding === true" class="adding">
-        <h4>Add Product</h4>
+        <h4 class="web-header">Add Product</h4>
 
         <div class="gridder">
           <select #mbdepartmentCombo class="web-select" (change)="changeDepartment($event);">
@@ -1050,6 +1050,8 @@
         <textarea type="text" rows="5" class="user-input-area" placeholder="About the product"
           [disabled]='selectedCategory === "Select Category"' [(ngModel)]='description'
           (keyup)='checkValidity()'></textarea>
+          <br>
+          <h5 class="web-title">Available sizes</h5>
         <div class="sizes">
           <input #mbcheckboxXS  type='checkbox'id="toggleMobiPAddXS" name='mbcheckboxXS' (change)='check($event, "XS")'>
             <label for="toggleMobiPAddXS">XS</label>
@@ -1079,26 +1081,26 @@
           <img src="{{myUpload}}" id="myUpload-Image" alt="">
         </label>
         <div class='colors'>
-          <h5>Available colors</h5>
+          <h5 class="web-title">Available colors</h5>
           <div class="colors-cont">
             <div>
-              <input #mbcheckboxBlack type='checkbox' id="toggleMobiPAddBlack" name='mbcheckboxBlack' (change)='checkColor($event, "Black")'>&nbsp;
+              <input #mbcheckboxBlack type='checkbox' id="toggleMobiPAddBlack" name='mbcheckboxBlack' (change)='checkColor($event, "Black")'>
                 <label for="toggleMobiPAddBlack"><img width='15px' style='border: 1px solid rgb(0,0,0)' src='.\assets\product-colors\black.jpg'></label>
             </div>
             <div>
-              <input #mbcheckboxBrown type='checkbox' id="toggleMobiPAddBrown" name='mbcheckboxBrown' (change)='checkColor($event, "Brown")'>&nbsp;
+              <input #mbcheckboxBrown type='checkbox' id="toggleMobiPAddBrown" name='mbcheckboxBrown' (change)='checkColor($event, "Brown")'>
               <label for="toggleMobiPAddBrown"><img width='15px' style='border: 1px solid rgb(0,0,0)' src='.\assets\product-colors\brown.jpg'></label>
             </div>
             <div>
-              <input #mbcheckboxOrange type='checkbox' id="toggleMobiPAddOrange" name='mbcheckboxOrange' (change)='checkColor($event, "Orange")'>&nbsp;
+              <input #mbcheckboxOrange type='checkbox' id="toggleMobiPAddOrange" name='mbcheckboxOrange' (change)='checkColor($event, "Orange")'>
               <label for="toggleMobiPAddOrange"><img width='15px' style='border: 1px solid rgb(0,0,0)' src='.\assets\product-colors\orange.png'></label>
             </div>
             <div>
-              <input #mbcheckboxYellow type='checkbox' id="toggleMobiPAddYellow" name='mbcheckboxYellow' (change)='checkColor($event, "Yellow")'>&nbsp;
+              <input #mbcheckboxYellow type='checkbox' id="toggleMobiPAddYellow" name='mbcheckboxYellow' (change)='checkColor($event, "Yellow")'>
               <label for="toggleMobiPAddYellow"><img width='15px' style='border: 1px solid rgb(0,0,0)' src='.\assets\product-colors\yellow.jpg'></label>
             </div>
             <div>
-              <input #mbcheckboxWhite type='checkbox' id="toggleMobiPAddWhite" name='mbcheckboxWhite' (change)='checkColor($event, "White")'>&nbsp;
+              <input #mbcheckboxWhite type='checkbox' id="toggleMobiPAddWhite" name='mbcheckboxWhite' (change)='checkColor($event, "White")'>
               <label for="toggleMobiPAddWhite"><img width='15px' style='border: 1px solid rgb(0,0,0)' src='.\assets\product-colors\white.png'></label>
             </div>
           </div>

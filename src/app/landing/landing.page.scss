@@ -1,7 +1,11 @@
+:host {
+  overflow: hidden;
+}
 .content-container {
   width: 100%;
   height: 100%;
   background: grey;
+  
 }
 #oops {
   width: 100%;
@@ -196,6 +200,7 @@ ion-list > div {
   .updatePicture{
     position: relative;
     top: 0;
+    height: 300px;
     background: white;
   }
   .bottom {
@@ -223,15 +228,40 @@ ion-list > div {
 }
 .searchResults {
   position: absolute;
-  width: 300px;
+  // width: 300px;
   z-index: 100000000000000000000000000000000000000000000000;
-  left: 50%;
-  top: 55px;
-  height: 500px;
-  overflow-y:auto;
-  background: white;
-  padding-top: 20px;
-  transform: translateX(-50%);
+  @media screen and (max-width: 768px) {
+    left: 50%;
+    top: 50px;
+    height: calc(100vh - 45px);
+    width: 300px;
+    overflow-y:auto;
+    background: white;
+    padding-top: 20px;
+    transform: translateX(-50%);
+    // border: 1px solid red;
+  }
+  @media screen and (min-width: 769px) {
+    border-top: 1px solid #FFDF5A;
+    // border-top: 1px solid #000324;
+    left: calc(17.5% + 15px);
+    top: 46px;
+    width: calc(39% - 18px);
+    min-height: 50px;
+    max-height: 500px;
+    overflow-y: auto;
+      background-color: #212440;
+      // background-color: #fff;
+    padding-top: 20px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    ion-list {
+      background-color: #212440;
+      // background-color: #fff;
+    }
+
+  }
+
   p {
     padding-left: 10px;
     padding-top: 0px;
@@ -297,6 +327,7 @@ ion-list > div {
   height: calc(100% - 60px);
   background: green;
   display: flex;
+  overflow: hidden;
 }
 #title {
   // width: calc(17.5% - 10px);
@@ -393,7 +424,10 @@ ion-searchbar {
   cursor: pointer;
   width: 100%;
   height: 50px;
-  border-top: 1px solid rgba(128, 128, 128, 0.438);
+  // border-top: 1px solid rgba(128, 128, 128, 0.438);
+  border-top: 1px solid #5a0000;
+  color: #fff;
+  background-color: #000324;
   margin-top: 2px;
   left: 0;
   padding-left: 10px;
@@ -543,6 +577,7 @@ ion-searchbar {
 }
 .history-items {
   display: none;
+  // border: 1px solid red;
   @media screen and (max-width : 1366px) {
     z-index: 140;
     width: 260px;
@@ -554,18 +589,32 @@ ion-searchbar {
   width: 100%;
   height: 100%;
   position: absolute;
-
+  margin: 0;
+  padding: 0;
   background: #f2f2f2;
+  // border-right: 1px solid #5a0000;
   top: 0;
   left: 0;
   animation: faderIn 300ms;
   .title-top {
-    border-bottom: 1px solid black;
-    height: 30px;
+    position: relative;
+    top: 0;
+    margin: 0;
+    border-bottom: 1px solid #5a0000;
+    height: 35px;
+    background-color: #000324;
+    color: #fff;
+    display: flex;
+    flex-direction: row;
+    
+    align-items: center;
   }
   h5 {
-    margin-top: 5px;
+    margin: auto 0;
     margin-left: 5px;
+    display: flex;
+    align-self: center;
+    // border: 1px solid white;
   }
   #closer {
     cursor: pointer;
@@ -573,6 +622,7 @@ ion-searchbar {
     position: absolute;
     right: 5px;
     top: 5px;
+    color: #5a0000;
   }
   .items-list {
     width: 100%;
@@ -612,15 +662,23 @@ ion-searchbar {
   position: absolute;
 
   background: #f2f2f2;
+  // border-right: 1px solid #5a0000;
   top: 0;
   left: 0;
   animation: faderIn 300ms;
   .title-top {
     border-bottom: 1px solid black;
-    height: 30px;
+    height: 35px;
+    background-color: #000324;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #fff;
   }
   h5 {
-    margin-top: 5px;
+    position: relative;
+    top: 0;
+    margin: auto 0;
     margin-left: 5px;
   }
   #closer {
@@ -629,6 +687,7 @@ ion-searchbar {
     position: absolute;
     right: 5px;
     top: 5px;
+    color: #5a0000;
   }
   .items-list {
     width: 100%;
@@ -668,15 +727,25 @@ ion-searchbar {
   position: absolute;
 
   background: #f2f2f2;
+  // border-right: 1px solid #5a0000;
   top: 0;
   left: 0;
   animation: faderIn 300ms;
   .title-top {
+    position: relative;
+    top: 0;
     border-bottom: 1px solid black;
-    height: 30px;
+    height: 35px;
+    background-color: #000433;
+    color: #fff;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
   h5 {
-    margin-top: 5px;
+    position: relative;
+    top: 0;
+    margin: auto 0;
     margin-left: 5px;
   }
   #closer {
@@ -685,6 +754,7 @@ ion-searchbar {
     position: absolute;
     right: 5px;
     top: 5px;
+    color: #5a0000;
   }
   .quantities {
     width: 130px;
@@ -792,11 +862,21 @@ ion-searchbar {
     -webkit-appearance: menulist-button;
     appearance: menulist-button;
   }
-  .web-title {
+  .web-header {
     margin-top: 0;
-    font-size: 14px;
-    font-weight: 2em;
+    font-size: 16px;
+    font-weight: 500;
     color: rgb(50, 50, 50);
+    font-family: "Poppins", "Roboto", Arial !important;
+  }
+  .web-title {
+    margin: 0 0 0 0;
+    // border: 1px solid black;
+    padding: 2px 0;
+    font-size: 14px;
+    font-weight: 450;
+    color: rgb(50, 50, 50);
+    font-family: "Poppins", "Roboto", Arial !important;
   }
   .user-input {
     padding-left: 5px;
@@ -810,18 +890,23 @@ ion-searchbar {
   .sizes {
     width: 100%;
     // border: 1px solid red;
-    padding: 0 10px;
-
+    padding: 0;
+    margin-top: 5px;
+    margin-bottom: 5px;
     .sizes-cont {
       width: 100%;
+      padding: 2px 5px;
       display: flex;
       flex-wrap: wrap;
+
       // align-content: flex-start;
       justify-content: left;
       // border: 1px solid red;
       div {
         padding: 0;
-        width: 45px;
+        width: 60px;
+        height: 25px;
+        
         // border: 1px solid blue;
       }
       input[type="checkbox"] {
@@ -833,6 +918,11 @@ ion-searchbar {
         margin: 0;
         cursor: pointer;
         font-size: 12px;
+        display: flex;
+        height: 25px;
+        flex-direction: row;
+        align-content: center;
+        align-items: center;;
       }
       input[type="checkbox"] + label:before {
         border: 1px solid #333;
@@ -868,10 +958,13 @@ ion-searchbar {
   .colors {
     width: 100%;
     // border: 1px solid red;
-    padding: 0 10px;
-
+    padding: 0;
+    margin: 0;
+    margin-top: 5px;
     .colors-cont {
       width: 100%;
+      padding: 2px 5px;
+      margin-bottom: 0;
       display: flex;
       flex-wrap: wrap;
       // align-content: flex-start;
@@ -879,35 +972,57 @@ ion-searchbar {
       // border: 1px solid red;
       div {
         padding: 0;
-        width: 45px;
+        margin: 0;
+        width: 60px;
+        height: 25px;
         // border: 1px solid blue;
-        vertical-align: middle;
+        display: flex;
+        flex-direction: row;
+        
       }
       input[type="checkbox"] {
         // visibility: hidden;
+        
         display: none;
       }
       label {
+        position: relative;
+        top: 0;
+        left: 0;
         padding: 0;
         margin: 0;
         cursor: pointer;
         font-size: 12px;
-
+        height: 25px;
+        // border: 1px solid red;;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        align-content: center;;
+        img {
+          margin: 0;
+          padding: 0;
+          width: 15px;
+          display: flex;
+          align-content: center;
+        }
       }
       input[type="checkbox"] + label:before {
         position: relative;
-        top: -4px;
+        left: 0;
         border: 1px solid #333;
         border-radius: 2px;
         content: "\00a0";
-        display: inline-block;
+        // display: inline-block;
         font: 10px "Roboto" 12px;
         line-height: 12px;
         height: 12px;
         width: 12px;
         margin: 0 .25em 0 0;
         padding: 0;
-        vertical-align: middle;
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
       }
       
       input[type="checkbox"]:checked + label:before {
@@ -915,7 +1030,9 @@ ion-searchbar {
         border: 1px solid #5a0000;
         color: #fff;
         content: "\2713";
-        text-align: center;
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
         
         // background-color: #5a0000;
         // background: #5a0000;
@@ -925,6 +1042,7 @@ ion-searchbar {
         outline: rgb(59, 153, 252) auto 5px;
       }
     }
+
   }
   .gridder {
     display: flex;
@@ -1085,6 +1203,7 @@ ion-searchbar {
     position: absolute;
     right: -100%;
     z-index: 100000;
+    
   }
   .welcomer {
     color: grey;
@@ -1268,12 +1387,21 @@ ion-searchbar {
   .sizes {
     width: 100%;
     padding: 0;
+    display: flex;
+    flex-direction: row;
+
     input[type="checkbox"] {
-      visibility: hidden;
+      display: none;
     }
     label {
       cursor: pointer;
-      vertical-align: middle;
+      display: flex;
+      height: 25px;
+      width: 65px;
+      flex-direction: row;
+      align-content: center;
+      align-items: center;
+      // border: 1px solid black;
     }
     input[type="checkbox"] + label:before {
       border: 1px solid #333;
@@ -1307,10 +1435,11 @@ ion-searchbar {
   .colors {
     width: 100%;
     // border: 1px solid red;
-    padding: 0 10px;
-
+    padding: 0;
+    margin: 0;
     .colors-cont {
       width: 100%;
+      padding: 5px;
       display: flex;
       flex-wrap: wrap;
       // align-content: flex-start;
@@ -1318,39 +1447,57 @@ ion-searchbar {
       // border: 1px solid red;
       div {
         padding: 0;
-        width: 60px;
+        margin: 0;
+        width: 65px;
+        height: auto;
         // border: 1px solid blue;
-        vertical-align: middle;
+        display: flex;
+        flex-direction: row;
+        
       }
       input[type="checkbox"] {
         // visibility: hidden;
+        
         display: none;
       }
       label {
         position: relative;
-        top: 0px;
+        top: 0;
+        left: 0;
         padding: 0;
         margin: 0;
         cursor: pointer;
         font-size: 12px;
-        // display: flex;
-        vertical-align: middle;
-        // border: 1px solid black;
+        height: 25px;
+        // border: 1px solid red;;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        align-content: center;;
+        img {
+          margin: 0;
+          padding: 0;
+          width: 15px;
+          display: flex;
+          align-content: center;
+        }
       }
       input[type="checkbox"] + label:before {
         position: relative;
-        top: -5px;
+        left: 0;
         border: 1px solid #333;
         border-radius: 2px;
         content: "\00a0";
-        display: inline-block;
+        // display: inline-block;
         font: 10px "Roboto" 12px;
         line-height: 12px;
         height: 12px;
         width: 12px;
         margin: 0 .25em 0 0;
         padding: 0;
-        vertical-align: middle;
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
       }
       
       input[type="checkbox"]:checked + label:before {
@@ -1358,7 +1505,9 @@ ion-searchbar {
         border: 1px solid #5a0000;
         color: #fff;
         content: "\2713";
-        text-align: center;
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
         
         // background-color: #5a0000;
         // background: #5a0000;
@@ -1368,6 +1517,7 @@ ion-searchbar {
         outline: rgb(59, 153, 252) auto 5px;
       }
     }
+
   }
   #saveBtton {
     height: 30px;
@@ -1688,7 +1838,7 @@ ion-row {
 
 #mySearchBar {
   background: rgba(255, 255, 255, 0.13);
-  color: white;
+  color: rgb(209, 209, 209);
 }
 @media screen and (max-width: 768px) {
   #mySearchBar {
@@ -2139,6 +2289,7 @@ ion-item {
   display: flex;
   text-shadow: 0 0 10px black;
 }
+
 #user-opt-buttons > div {
   width: 50px;
   height: 40px;
@@ -2146,7 +2297,8 @@ ion-item {
   line-height: 42px;
   color: white;
   margin-left: 5px;
-  background: rgba(0, 0, 0, 0.445);
+  // background: rgba(0, 0, 0, 0.445);
+  background-color: #5a0000a1;
   label{
     width: 100%;
     height: 100%;
@@ -2299,3 +2451,15 @@ ion-item {
     visibility: hidden;
   }
 }
+
+.brand-icon {
+  // color: #5a0000;
+  // background-color: yellow;
+}
+// .web-header {
+//   margin-top: 0;
+//   font-size: 160px;
+//   font-weight: 500;
+//   color: rgb(50, 50, 50);
+//   font-family: "Poppins", "Roboto", Arial !important;
+// }
