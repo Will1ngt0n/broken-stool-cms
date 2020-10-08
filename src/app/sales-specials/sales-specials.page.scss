@@ -1,3 +1,82 @@
+// web and mobile
+#mySearchBar {
+  // background: #212440;
+  background: rgba(255, 255, 255, 0.13);
+  height: 40px;
+  margin-top: 10px;
+  padding: 0;
+  font-size: 14px;
+  // color: #fff;
+  color: rgb(209, 209, 209);
+  font-weight: 500;
+  border-radius: 5px;
+  padding-left: 5px !important;
+}
+#searcher {
+  padding: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+  #mySearchBar {
+    margin-top: 5px;
+  }
+}
+@media screen and (min-width: 769px) {
+  #mySearchBar {
+    // width: 60%;
+  }
+}
+
+.searchResults {
+  position: absolute;
+  // width: 300px;
+  z-index: 100000000000000000000000000000000000000000000000;
+  @media screen and (max-width: 768px) {
+    left: 50%;
+    top: 50px;
+    height: calc(100vh - 45px);
+    width: 300px;
+    overflow-y:auto;
+    background: white;
+    padding-top: 20px;
+    transform: translateX(-50%);
+    // border: 1px solid red;
+  }
+  @media screen and (min-width: 769px) {
+    border-top: 1px solid #FFDF5A;
+    // border-top: 1px solid #000324;
+    left: calc(17.5% + 15px);
+    top: 46px;
+    width: calc(39% - 9px);
+    min-height: 50px;
+    max-height: 500px;
+    overflow-y: auto;
+      background-color: #212440;
+      // background-color: #fff;
+    padding-top: 20px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    ion-list {
+      background-color: #212440;
+      // background-color: #fff;
+    }
+
+  }
+
+  p {
+    padding-left: 10px;
+    padding-top: 0px;
+    margin-top: 0px;
+    color: grey;
+  }
+  ion-list {
+    // border: 2px solid red;
+    margin-top: 0px;
+  }
+}
+
 .content-container {
   width: 100%;
   height: 100%;
@@ -8,22 +87,82 @@
   height: calc(100% - 50px);
   overflow-y: scroll;
 }
+// nav-bar styling starts
 .nav-bar {
   width: 100%;
   height: 60px;
-  background: rgb(0,3,36);
+  background: #000324;
   z-index: 100;
-  border-bottom: 1px solid black;
-  color: white;
+  // border-bottom: 1px solid black;
+  border-bottom: 1px solid #5a0000;
+  color: #5a0000;
 }
 .nav-content {
   height: 100%;
-  width: 65%;
+  width: 100%;
   margin: 0 auto;
-  padding-left: 10px;
-  padding-right: 10px;
+  // padding-left: 10px;
+  // padding-right: 10px;
   display: flex;
+  #title {
+    position: relative;
+    left: 0;
+    width: 17.5%;
+    padding-left: 10px
+  }
+  #nav-middle {
+    width: 65%;
+    margin:  0;
+    // border: 1px solid red;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    // align-items: center;
+    justify-content: space-between;
+    padding: 0 0 0 15px;
+    #searchbar {
+      margin: 0;
+      position: relative;
+      left: 0;
+      width: 60%;
+      // border: 1px solid white;
+    }
+    .space {
+      width : 40%;
+      // border: 1px solid grey;
+    }
+
+  }
+  #nav-right {
+  
+    position: relative;
+    width: 17.5%;
+    height: 65px;
+    // border: 1px solid white;
+    // content: "Haha okay"
+    #admin {
+      width: 100%;
+      // border: 1px solid purple;
+      position: relative;
+      // background-color: #fff;
+      // border: 1px solid white;
+      display: flex;
+      justify-content: right;
+      color: #7c0000;
+      p {
+        width: auto;
+        color: #7c0000;
+        right: 0;
+        display: flex;
+        align-items: center;
+        padding: 0 15px 0 0;
+        justify-content: right;
+      }
+    }
+  }
 }
+
+// nav-bar styling ends
 .body-content {
   width: 100%;
   height: calc(100% - 60px);
@@ -63,10 +202,10 @@
 }
 #mid {
   z-index: 100;
-  width: 65%;
+  // margin-left: 15px;
+  width: calc(82.5% - 15px);
   background: white;
   overflow-y: scroll;
-
   ::-webkit-scrollbar {
     width: 10px;
   }
@@ -78,9 +217,15 @@
     border-radius: 10px;
   }
 }
+#left {
+  width: 17.5%;
+}
+#right {
+  width: 15px;
+  // border: 1px solid red;
+}
 #left,
 #right {
-  width: 17.5%;
   height: 100%;
   background: #f2f2f2;
   position: relative;

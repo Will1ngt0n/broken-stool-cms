@@ -33,6 +33,7 @@ export class PendingOrderPage implements OnInit {
   cell
   totalQuantity : number
   routingPage
+  tshirtCount: number = 0
 
   pdfObj = null;
   reciept = null;
@@ -356,6 +357,7 @@ getOrder(refNo, name){
  return this.productsService.getOrderDetails(refNo).then(result => {
     this.item = result[0]
     this.item['details'].name = name
+    this.tshirtCount = this.item['details']['tshirtCount']
     this.products = this.item['details']['product']
     this.quantity = this.products.length
     this.deliveryType = this.item['details']['deliveryType']

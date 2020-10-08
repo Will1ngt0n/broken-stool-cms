@@ -2,28 +2,52 @@
   <app-loader></app-loader>
 </div>
 <ion-content>
+  <!-- search results div starts -->
+  <div class="searchResults" *ngIf="searchInput && blnShowSearchResults">
 
-  <div class="searchResults" *ngIf="searchInput">
-    Search Results
-    <ion-list *ngFor="let item of searchArray">
-      <ion-item (click)="showHideSearchDetails(item.data.name)">{{item.data.name}}</ion-item>
+    <p *ngIf="searchArray.length > 0">
+      Search Results
+    </p>
+    <ion-list *ngIf="searchArray.length > 0">
+      <div *ngFor="let item of searchArray">
+        <ion-item *ngIf='searchArray.length > 0' (click)="showHideSearchDetails(item)">{{item.data.name}}</ion-item>
+      </div>
     </ion-list>
+
+    <div id="oops" *ngIf="searchArray.length === 0">
+      <p>
+        <ion-icon name="sad"></ion-icon> There are no matches for this search
+      </p>
+    </div>
   </div>
+  <!-- search results div ends -->
+  
   <div class="content-container">
+    <!-- Nav Bar content starts -->
     <div class="nav-bar">
       <div class="nav-content">
-        <div id="title">
-          <img src="../../assets/imgs/Logo/Logo.png" id="appLogo" alt="" (click)="back()" id="dankie-home-button">
-          <!-- <h4>DankieJesu</h4> -->
+        <div id="title" (click)="fnHideSearchResults(true)">
+          <img src="../../assets/imgs/Logo/Logo.png" id="appLogo" alt="" (click)="goHome()" id="dankie-home-button">
+          
         </div>
-        <div id="searchbar">
+        <div id="nav-middle">
+          <div id="searchbar" style="visibility: hidden;">
+            <ion-input [(ngModel)]='searchInput' id="mySearchBar" (ionChange)='search()' placeholder="Search products"
+              show-cancel-button="never"></ion-input>
+          </div>
+          <div class="space" (click)="fnHideSearchResults(true)"></div>
         </div>
-        <div id="admin" (click)='signOutPopup()'>
-          <p>SIGN OUT</p>
+        <div id="nav-right" (click)="fnHideSearchResults(true)">
+          <div id="admin" (click)="fnHideSearchResults(true)">
+            <p (click)='signOutPopup()'>SIGN OUT</p>
+          </div>
         </div>
+
+
       </div>
     </div>
-    <div class="body-content">
+    <!-- Nav Bar content ends -->
+    <div class="body-content"  (click)="fnHideSearchResults(true)">
       <div id="left" padding>
       </div>
       <div id="mid">

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef, Renderer2, OnInit} from '@angular/core';
 import { FormBuilder, Validators, EmailValidator } from '@angular/forms';
 import { AuthService } from '../services/auth-services/auth.service';
 import * as firebase from 'firebase'
@@ -6,6 +6,7 @@ import { AlertController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuestionsService } from '../services/question-services/questions.service';
 import { Location } from '@angular/common'
+import { relative } from 'path';
 
 
 declare var window
@@ -15,7 +16,7 @@ var provider = new firebase.auth.GoogleAuthProvider();
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
   loginForm
   number
   password
@@ -35,7 +36,7 @@ export class HomePage {
   email
   question
   questionsForm
-  constructor(private loc: Location, public authService: AuthService, public formBuilder: FormBuilder, public alertController: AlertController, private navCtrl: Router, private questionsService: QuestionsService, private activatedRoute: ActivatedRoute) {
+  constructor(private render : Renderer2, private loc: Location, public authService: AuthService, public formBuilder: FormBuilder, public alertController: AlertController, private navCtrl: Router, private questionsService: QuestionsService, private activatedRoute: ActivatedRoute) {
     // let person = {}
     // person = {
     //   'hello': {
@@ -568,10 +569,20 @@ export class HomePage {
       this.showQA = false;
     }, 299);
   }
+
   ngOnInit() {
     this.questionsSnap()
     this.answersSnap()
     this.writeToUpdates()
+
+ 
+  }
+  ionViewDidEnter() {
+    setTimeout(()=> {
+      console.log('listening');
+      console.log(this.mainView);
+      this.trackScroll()
+    }, 600)
   }
   questionsSnap() {
     firebase.firestore().collection('FAQs').onSnapshot(result => {
@@ -665,6 +676,77 @@ export class HomePage {
   writeToUpdates() {
     firebase.firestore().collection('Updates').add({
       timestamp: new Date().getTime()
+    })
+  }
+  @ViewChild( 'mainView', {static: true}) mainView : ElementRef
+  @ViewChild( 'fab2', {static: false}) fab2 : ElementRef
+  @ViewChild('fab1', {static: false}) fab1 : ElementRef
+  @ViewChild('footer', {static: false}) footer : ElementRef
+  // fab1 = document.querySelector('#fab1')
+  // fab2 = document.querySelector('#fab2')
+  checkOffset() {
+    // if((this.getRectTop(this.fab1)) + document.body.scrollTop) + this.fab1
+  }
+  getRectTop(el){
+    var rect = el.getBoundingClientRect()
+    return rect.top
+  }
+  trackScroll() {
+    let view = this.render; let button = this.render; let button2 = this.render; let footer = this.render
+    view.listen(this.mainView.nativeElement, 'scroll', (event)=> {
+      let e = event.explicitOriginalTarget
+      let array = [{scrollHeight: e.scrollHeight, scrollTop: e.scrollTop, scrollTopMax: e.scrollTopMax, screenWidth: e.clientWidth}]
+      console.log(array);
+      console.log(e);
+      console.log(this.footer.nativeElement.clientHeight);
+      let fHeight = this.footer.nativeElement.clientHeight
+      if(e.scrollTopMax - e.scrollTop < fHeight) {
+        // console.log('We are equal');
+        console.log(`${e.scrollTopMax} - ${e.scrollTop} < ${fHeight} : ${e.scrollTopMax - e.scrollTop}`);
+        console.log('We have to change')
+        console.log(this.fab1);
+        try {
+          button.addClass(this.fab1['el'], 'fixed')
+          button.removeClass(this.fab1['el'], 'float')          
+        } catch (error) { console.warn(error); }
+        try {
+          button2.addClass(this.fab2['el'], 'fixed')
+          button2.removeClass(this.fab2['el'], 'float')
+        } catch (error) { console.warn(error); }
+
+        console.log(this.fab2);
+        
+      } else {
+        console.log('we are not changing');
+        
+        console.log(`${e.scrollTopMax} - ${e.scrollTop} !< ${fHeight} but === | > ${e.scrollTopMax - e.scrollTop}`);
+        try {
+          button.addClass(this.fab1['el'], 'float')
+          button.removeClass(this.fab1['el'], 'fixed')
+        } catch (error) { console.warn(error); }
+        try {
+          button2.addClass(this.fab2['el'], 'float')
+          button2.removeClass(this.fab2['el'], 'fixed')
+        } catch (error) { console.warn(error); }
+
+      }
+      // if(e.scrollTopMax > 3362 && e.scrollTop >= 3000) {
+      //   try {
+      //     console.log(this.fab2['el']);
+      //     button.addClass(this.fab2['el'], 'fixed')
+      //     button.removeClass(this.fab2['el'], 'float')
+      //     // button.setStyle(this.fab2, 'position', 'relative')
+      //     // button.setStyle(this.fab2.nativeElement, 'bottom', '500px')
+      //     console.log(this.fab2);
+      //   } catch (error) {
+      //     console.warn(error);
+      //     this.fab2.nativeElement.class += 'fixed'
+      //   }
+      //   console.log(array);
+      // } else if(e.scrollTopMax > 3200 && e.scrollTop >= 2800) {
+      //   button.addClass(this.fab2['el'], 'fixed2')
+      //   button.removeClass(this.fab2['el'], 'float')
+      // }
     })
   }
 }

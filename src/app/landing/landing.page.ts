@@ -49,6 +49,8 @@ export class LandingPage implements OnInit {
   description: String
   size: Array<any> = []
   color: Array<any> = []
+  filters : string = ''
+  updateFilters : string = ''
   colors: Object = {};
   accessory: boolean;
   summerGear: Array<any> = []
@@ -194,15 +196,54 @@ export class LandingPage implements OnInit {
     // Delete all code below
     // This is for internetless coding only purposes
     // Please delete
-    let val = {
-      data: {
-        name: 'Will', price: 'R500', description: 'toasting here', pictureLink: null, hideItem: false, size: ['XL', 'S']
-      }, brand: 'Kwasi', category: 'valuable', productID: 'roseta', 
-    }
-    // this.showHideSearchDetails(val)
-    this.brands.push({name: 'Kwanga', brandID: '34fds8f989JKJsdf3rf43', pictureLink: '' }, {name: 'Dankie Jesu', brandID: 'jhf43hrhjrhfh43hjkfhj34', pictureLink: null},
-      {name: 'Kwazi', brandID: 'HJH87778hJHJ877889VHV', pictureLink: undefined}, {name: 'Dumbi', brandID: 'asdf87f8s789fsf', pictureLink: false})
+    this.testLocal()
+}
+testLocal() {
+  let val = {
+    data: {
+      name: 'Will', price: 'R500', description: 'toasting here', pictureLink: null, hideItem: false, size: ['XL', 'S']
+    }, brand: 'Kwasi', category: 'valuable', productID: 'roseta', 
   }
+  // this.showHideSearchDetails(val)
+  this.departmentOptions.push('Kwanga', 'Dankie Jesu', 'Kwazi', 'Dumbi')
+  // this.categoryList( {brandID: result.docs[key].id, name :result.docs[key].data().name, pictureLink : result.docs[key].data().pictureLink})
+  this.brands.push({name: 'Kwanga', brandID: '34fds8f989JKJsdf3rf43', pictureLink: '' }, {name: 'Dankie Jesu', brandID: 'jhf43hrhjrhfh43hjkfhj34', pictureLink: null},
+    {name: 'Kwazi', brandID: 'HJH87778hJHJ877889VHV', pictureLink: undefined}, {name: 'Dumbi', brandID: 'asdf87f8s789fsf', pictureLink: false})
+  this.categoryList = [
+    { brand: {name: 'Kwanga', brandID: '34fds8f989JKJsdf3rf43', pictureLink: ''},
+      categoryList:[
+        {category : 'Shorts', isSummer: true, isAccessory : true, categoryID: 'asdfewrf4rvert', pictureLink: null},
+        {category : 'Shorts', isSummer: true, isAccessory : true, categoryID: 'asdfewrf4rvert', pictureLink: null},
+        {category : 'Shorts', isSummer: true, isAccessory : true, categoryID: 'asdfewrf4rvert', pictureLink: null},
+      ]
+    },
+    { brand: {name: 'Dankie Jesu', brandID: '34fds8f989JKJsdf3rf43', pictureLink: ''},
+      categoryList:[
+        {category : 'Shorts', isSummer: true, isAccessory : true, categoryID: 'asdfewrf4rvert', pictureLink: null},
+        {category : 'Shorts', isSummer: true, isAccessory : true, categoryID: 'asdfewrf4rvert', pictureLink: null},
+        {category : 'Shorts', isSummer: true, isAccessory : true, categoryID: 'asdfewrf4rvert', pictureLink: null},
+      ]
+    },
+    { brand: {name: 'Kwazi', brandID: '34fds8f989JKJsdf3rf43', pictureLink: ''},
+      categoryList:[
+        {category : 'Shorts', isSummer: true, isAccessory : true, categoryID: 'asdfewrf4rvert', pictureLink: null},
+        {category : 'Shorts', isSummer: true, isAccessory : true, categoryID: 'asdfewrf4rvert', pictureLink: null},
+        {category : 'Shorts', isSummer: true, isAccessory : true, categoryID: 'asdfewrf4rvert', pictureLink: null},
+      ]
+    },
+    { brand: {name: 'Dumbi', brandID: '34fds8f989JKJsdf3rf43', pictureLink: ''},
+      categoryList:[
+        {category : 'Shorts', isSummer: true, isAccessory : true, categoryID: 'asdfewrf4rvert', pictureLink: null},
+        {category : 'Shorts', isSummer: true, isAccessory : true, categoryID: 'asdfewrf4rvert', pictureLink: null},
+        {category : 'Shorts', isSummer: true, isAccessory : true, categoryID: 'asdfewrf4rvert', pictureLink: null},
+      ]
+    }]
+    console.log(this.categoryList);
+    
+}
+localCategories() {
+
+}
   signOutPopup() {
     this.presentLogoutConfirmAlert()
   }
@@ -887,8 +928,19 @@ export class LandingPage implements OnInit {
 
         
   }
+  
   addProducts() {
-    return this.productService.addItem(this.department, this.departmentID, this.selectedCategory, this.selectedCategoryID, this.itemName, this.description, this.price, this.size, this.accessory, this.summer, this.color, this.picture, this.newProductCode).then((result : any) => {
+    let filters: Array<any> = this.filters.split(/\n/) // escaping the enter (\n) char
+    filters = [...filters, ...this.color, ...this.size, this.department, this.selectedCategory, this.itemName, this.price]
+    for(let i = 0; i<filters.length; i++){
+      if(filters[i] === '') {
+        filters.splice(i, 1)
+      }
+    }
+    this.accessory ? filters = [...filters, 'accessory'] : null
+    console.log(filters);
+    
+    return this.productService.addItem(this.department, this.departmentID, this.selectedCategory, this.selectedCategoryID, this.itemName, this.description, this.price, this.size, this.accessory, this.summer, this.color, this.picture, this.newProductCode, filters).then((result : any) => {
       console.log(result);
       if(result === 'success'){
         console.log('successs');
@@ -976,7 +1028,8 @@ export class LandingPage implements OnInit {
   }
   //Routing to sales page
   viewSales() {
-    this.route.navigate(['sales-specials'])
+    // this.route.navigate(['sales-specials'])
+    this.route.navigate(['items-list', 'specials'])
     // console.log(query);
     // let navOptions = {
     //   queryParams: { query: query }
@@ -1568,6 +1621,7 @@ export class LandingPage implements OnInit {
   //Search functionality
   searchInput
   search() {
+    this.fnHideSearchResults(false)
     this.filterItems(this.allProducts)
   }
   filterItems(array) {
@@ -1576,10 +1630,22 @@ export class LandingPage implements OnInit {
       let nameResult = array.filter(item => item.data.name.toLowerCase().indexOf(queryFormatted) >= 0)
       let brandResult = array.filter(item => item.brand.toLowerCase().indexOf(queryFormatted) >= 0)
       let categoryResult = array.filter(item => item.category.toLowerCase().indexOf(queryFormatted) >= 0)
+      let winterResult = []
+      let summerResult = []
+      if(queryFormatted == 'winter') {
+        winterResult = array.filter(item => item.data.isSummer.toLowerCase().indexOf(false) >= 0)
+      }
+      if(queryFormatted == 'summer') {
+        summerResult = array.filter(item => item.data.isSummer.toLowerCase().indexOf(true) >= 0)
+      }
       let returnResult
       let addBrand: boolean
       let addCategory: boolean
       let addName: boolean
+
+      //
+      let addWinter: boolean
+      let addSummer: boolean
       addCategory = false
       addName = false
       returnResult = nameResult
@@ -1609,10 +1675,39 @@ export class LandingPage implements OnInit {
           returnResult.push(categoryResult[key])
         }
       }
+      for(let key in winterResult){
+        for(let i in returnResult){
+          if(returnResult[i].productID === brandResult[key].productID){
+            addWinter = false
+            break
+          }else if(returnResult[i].productID !== brandResult[key].productID){
+            addWinter = true
+          }
+        }
+        if(addWinter === true){
+          returnResult.push(brandResult[key])
+        }
+      }
+      for(let key in summerResult){
+        for(let i in returnResult){
+          if(returnResult[i].productID === brandResult[key].productID){
+            addSummer = false
+            break
+          }else if(returnResult[i].productID !== brandResult[key].productID){
+            addSummer = true
+          }
+        }
+        if(addSummer === true){
+          returnResult.push(brandResult[key])
+        }
+      }
       addName = false
       addCategory = false
       addBrand = false
-      this.searchArray = nameResult
+      addWinter = false
+      addSummer = false
+      // this.searchArray = nameResult
+      this.searchArray = returnResult
     }else if(queryFormatted === '*'){
     this.searchArray = this.allProducts
     }
@@ -1755,6 +1850,7 @@ export class LandingPage implements OnInit {
       this.updateBrand = item.brand
       this.updateCategory = item.category
       this.updateProductID = item.productID
+      this.updateFilters = (item.filters.split(',')).join(/\n/)
       this.itemSizes = item.data.size
       this.itemColors = item.data.color
       this.item = item
@@ -1823,7 +1919,7 @@ export class LandingPage implements OnInit {
 
   updateItem() {
     this.presentLoading()
-    console.log(this.updateProductID, this.updateBrand, this.updateCategory, this.updatePrice, this.updateDescription, this.updateName, this.itemSizes, this.pictureUpdate, this.itemColors);
+    console.log(this.updateProductID, this.updateBrand, this.updateCategory, this.updatePrice, this.updateDescription, this.updateName, this.itemSizes, this.pictureUpdate, this.itemColors, this.filters);
     //console.log(this.updateName);
     let sort : Array<string> = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']
     let tempColor = this.itemSizes
@@ -1841,7 +1937,7 @@ export class LandingPage implements OnInit {
       this.cutDoubleSpace(this.updateDescription).then(result => {
         this.updateDescription = result
       }).then( () => {
-        return this.productService.updateItemsListItem(this.updateProductID, this.updateBrand, this.updateCategory, this.updatePrice, this.updateDescription, this.updateName, this.itemSizes, this.pictureUpdate, this.itemColors).then(result => {
+        return this.productService.updateItemsListItem(this.updateProductID, this.updateBrand, this.updateCategory, this.updatePrice, this.updateDescription, this.updateName, this.itemSizes, this.pictureUpdate, this.itemColors, this.updateFilters).then(result => {
           console.log(result);
           if (result === 'success') {
             console.log(result);
@@ -2320,6 +2416,8 @@ console.log(val);
       
       //this.categoryList = this.
       for(let key in this.categoryList){
+        console.log(this.categoryList[key]);
+        
         if(this.department === this.categoryList[key].brand.name){
           this.departmentID = this.categoryList[key].brand.brandID
           console.log(this.categoryList[key]);
@@ -2949,6 +3047,15 @@ console.log(val);
     console.log(parameter);
     this.routeService.storeInventoryParameter(parameter)
     this.route.navigate(['items-list', 'Inventory'])
+  }
+  blnShowSearchResults : boolean = false // meant to control focus loss
+  fnHideSearchResults(bln : boolean) {
+    console.log('we are hiding the search bar: ' + bln);
+     if(bln) {
+       this.blnShowSearchResults = false
+     } else {
+       this.blnShowSearchResults = true
+     }
   }
   dismissLoader() {
     try {

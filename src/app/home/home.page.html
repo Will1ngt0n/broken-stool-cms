@@ -51,24 +51,20 @@ Disclaimer -->
             </div>
         </div>
     </div>
-    <ion-fab id="fab-button" vertical="bottom" horizontal="end" *ngIf="admin === true">
-        <ion-button (click)="asnwerQuestions()">
-            <ion-icon ios="ios-paper-plane" md="md-paper-plane"></ion-icon> <i id="fab-text">Answer Questions</i>
-        </ion-button>
-    </ion-fab>
-    <ion-fab id="fab-button" vertical="bottom" horizontal="end" *ngIf="admin === false">
-        <ion-button (click)="askUs()">
-            <ion-icon name="help"></ion-icon><i id="fab-text">Ask Us</i>
-        </ion-button>
-    </ion-fab>
+    
+
     <div class="content-container">
         <div class="navigation" (click)="goAway()">
             <div class="navigation-inner">
 
 
                 <div>
-                    <p id="yesAdmin" (click)="goHome()" *ngIf="admin">Dankie Jesu</p>
-                    <p id="noAdmin" *ngIf="!admin"><a href="https://broken-stool-flat.firebaseapp.com/home">Dankie Jesu</a> </p>
+                    <!-- <p id="yesAdmin" (click)="goHome()" *ngIf="admin">Dankie Jesu</p> -->
+                    <img src="../../assets/imgs/Logo/Logo.png" id="dankie-home-button" alt="" (click)="goHome()" *ngIf="admin">
+                    <!-- <p id="noAdmin" *ngIf="!admin"><a href="https://broken-stool-flat.firebaseapp.com/home">Dankie Jesu</a> </p> -->
+                    <a href="https://broken-stool-flat.firebaseapp.com/home" id="href">
+                        <img src="../../assets/imgs/Logo/Logo.png" id="dankie-home-button" alt="" *ngIf="!admin">
+                    </a>
                 </div>
                 <div>
                     <p id="one" (click)="changeTab('FAQs')">FAQs</p>
@@ -85,6 +81,7 @@ Disclaimer -->
                 <div>
                     <p id="five" (click)="changeTab('Disclaimer')">Disclaimer</p>
                 </div>
+                <div id="six"></div>
             </div>
         </div>
         <div class="navigator-small" (click)="goAway()">
@@ -119,7 +116,7 @@ Disclaimer -->
                 <p id="fiveS" (click)="changeTab('Disclaimer')">Disclaimer</p>
             </div>
         </div>
-        <div class="inner-content">
+        <div class="inner-content"  #mainView>
             <div class="goAwayer" (click)="goAway()">
 
             </div>
@@ -500,7 +497,7 @@ Disclaimer -->
 
 
             </div>
-            <div id="disclaimer" *ngIf="activeTab === 'Disclaimer'">
+            <div id="disclaimer"  *ngIf="activeTab === 'Disclaimer'">
                 <div class="top-bar">
                     <br>
                     <h3>Disclaimer</h3>
@@ -688,6 +685,16 @@ Disclaimer -->
                         any queries regarding any of our terms, please contact us.</p>
                 </div>
             </div>
+            <ion-fab id="fab-button" #fab1 vertical="bottom" horizontal="end" *ngIf="admin === true">
+                <ion-button (click)="asnwerQuestions()">
+                    <ion-icon ios="ios-paper-plane" md="md-paper-plane"></ion-icon> <i id="fab-text">Answer Questions</i>
+                </ion-button>
+            </ion-fab>
+            <ion-fab id="fab-button" #fab2 vertical="bottom" horizontal="end" *ngIf="admin === false" class="float">
+                <ion-button (click)="askUs()">
+                    <ion-icon name="help"></ion-icon><i id="fab-text">Ask Us</i>
+                </ion-button>
+            </ion-fab>
             <!-- <div class="feet">
                 <div>
                     <p id="footer-title">CONTACT US</p>
@@ -720,7 +727,7 @@ Disclaimer -->
                     </a>
                 </div>
             </div> -->
-            <div id="flex">  <!-- mine to replace above footer-->
+            <div #footer id="flex">  <!-- mine to replace above footer-->
                 <div>
                     <p class="footer-title">VISIT US AT</p>
                     <address>
@@ -732,8 +739,8 @@ Disclaimer -->
                 </div>
                 <div>
                     <p class="footer-title">CONTACT US</p>
-                    <a href="dankiejesu@brokenstool.co.za">dankiejesu@brokenstool.co.za</a><br>
-                    <a href="0614464674">(+27) 61 446 4674</a><br>
+                    <a href="dankiejesu@brokenstool.co.za" style="color: #ffffff">dankiejesu@brokenstool.co.za</a><br>
+                    <a href="0614464674" style="color: #ffffff">(+27) 61 446 4674</a><br>
 
                     <!-- <p class="footer-title">CONNECT</p>
                     <div id="fsocials-cont">
@@ -754,11 +761,13 @@ Disclaimer -->
                         <div class="fsocials-div">
                             <a href="https://www.facebook.com/brokenstoolbrand/" id="socials">
                                 <ion-icon name="logo-facebook"></ion-icon> 
+                                <div class="logo-tag">Facebook</div> 
                             </a>
                         </div>
                         <div class="fsocials-div">
                             <a href="https://www.instagram.com/dankiejesu/" id="socials">
                                 <ion-icon name="logo-instagram"></ion-icon>
+                                <div class="logo-tag">Instagram</div> 
                             </a>
                         </div>
                     </div>

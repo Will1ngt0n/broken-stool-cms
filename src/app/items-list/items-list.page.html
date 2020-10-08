@@ -2,6 +2,115 @@
   <app-loader></app-loader>
 </div>
 <ion-content>
+  <div class="searchResults" *ngIf="searchInput && blnShowSearchResults">
+
+    <p *ngIf="searchArray.length > 0">
+      Search Results
+    </p>
+    <ion-list *ngIf="searchArray.length > 0" class="ion-list-background">
+      <div *ngFor="let item of searchArray" class="ion-list-background">
+        <ion-item *ngIf='searchArray.length > 0' (click)="fnHideSearchResults(true); toggleUpdate(item.productID, item.brand, item.category, item.data.name, item.data.description, item.data.price, item.data.pictureLink, item.data.size, item.data.color)" class="ion-list-background">{{item.data.name}}</ion-item>
+      </div>
+    </ion-list>
+
+    <div id="oops" *ngIf="searchArray.length === 0">
+      <p>
+        <ion-icon name="sad"></ion-icon> There are no matches for this search
+      </p>
+    </div>
+  </div>
+  <!-- <div class="clicked-from-search" *ngIf="clickedSearchItem === 'showItem'">
+    <div id="dismisser-bg" (click)="showHideSearchDetails('close')">
+
+    </div>
+    <div id="forms">
+      <div class="top-bar">
+        <h4>Edit Item</h4>
+        <ion-button id="dismisser-Btn" color="light" fill="clear" (click)="showHideSearchDetails('close')">
+          <ion-icon name="close" color="primary"></ion-icon>
+        </ion-button>
+      </div>
+      <div class="update-content">
+        <div class="updatePicture">
+          <label for="uploaderBtn" id="imageToupdate">
+            <div id="upload-label">
+              Update Photo
+            </div>
+            <img src="../../assets/imgs/Image Corrupt.jpg" *ngIf='!updatePic' alt="">
+            <img [src]="updatePic" *ngIf='updatePic' alt="">
+          </label>
+        </div>
+        <div class="bottom">
+          <div class="product-information-search">
+            <input type="text" placeholder="Product name" maxlength="25" (keyup)='findMatch($event, item);'
+              [(ngModel)]='updateName'>
+            <span *ngIf='categoryUpdateMatch'>This item already exists in this category</span>
+            <input type="text" placeholder="Price (R)" (keyup)='changeSearchPrice();' [(ngModel)]='updatePrice'>
+            <p class="instruction">Choose available sizes</p>
+            <div class="opts-sizes-search">
+              <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxXS' name='popCheckboxXS'
+                (ionChange)='checkSizeUpdateCheckboxes($event, "XS")'></ion-checkbox>
+              <p id="text-size">XS</p>
+              <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxS' name='popCheckboxS'
+                (ionChange)='checkSizeUpdateCheckboxes($event, "S")'></ion-checkbox>
+              <p id="text-size">S</p>
+              <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxM' name='popCheckboxM'
+                (ionChange)='checkSizeUpdateCheckboxes($event, "M")'></ion-checkbox>
+              <p id="text-size">M</p>
+              <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxL' name='popCheckboxL'
+                (ionChange)='checkSizeUpdateCheckboxes($event, "L")'></ion-checkbox>
+              <p id="text-size">L</p>
+              <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxXL' name='popCheckboxXL'
+                (ionChange)='checkSizeUpdateCheckboxes($event, "XL")'></ion-checkbox>
+              <p id="text-size">XL</p>
+              <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxXXL' name='popCheckboxXXL'
+                (ionChange)='checkSizeUpdateCheckboxes($event, "XXL")'></ion-checkbox>
+              <p id="text-size">2XL</p>
+              <ion-checkbox color="primary" class="size-checkbox" [checked]='popCheckboxXXXL' name='popCheckboxXXXL'
+                (ionChange)='checkSizeUpdateCheckboxes($event, "XXXL")'></ion-checkbox>
+              <p id="text-size">3XL</p>
+            </div>
+            <p class="instruction">Choose available colours</p>
+            <div class="opts-search">
+              <div class="myBox">
+                <ion-checkbox class="myCheck" [checked]='checkBlack' (ionChange)='checkColorUpdate($event, "Black")'>
+                </ion-checkbox>
+              </div>
+              <div class="myBox">
+                <ion-checkbox class="myCheck" [checked]='checkBrown' (ionChange)='checkColorUpdate($event, "Brown")'>
+                </ion-checkbox>
+              </div>
+              <div class="myBox">
+                <ion-checkbox class="myCheck" [checked]='checkOrange' (ionChange)='checkColorUpdate($event, "Orange")'>
+                </ion-checkbox>
+              </div>
+              <div class="myBox">
+                <ion-checkbox class="myCheck" [checked]='checkYellow' (ionChange)='checkColorUpdate($event, "Yellow")'>
+                </ion-checkbox>
+              </div>
+               <div class="myBox">
+                <ion-checkbox class="myCheck" [checked]='checkWhite' (ionChange)='checkColorUpdate($event, "White")'>
+                </ion-checkbox>
+              </div>
+            </div>
+            <textarea rows="4" type="text" placeholder="Description" maxlength="150"
+              [(ngModel)]='updateDescription'></textarea>
+            <input #updateSearchPic width='100px' id="uploaderBtn" class='pictureInput' type="file"
+              accept="image/jpeg, jpg, tif, png" (change)='addUpdatePicture($event)'>
+            <ion-button color="dark" (click)='updateItem()' [disabled]='!updateForm'>Update</ion-button>
+            <ion-button color="medium" (click)='hideItem(item.productID, item.brand, item.category, item)'
+              *ngIf='item.data.hideItem === false'>Hide</ion-button>
+            <ion-button color='medium' (click)='showItem(item.productID, item.brand, item.category, item)'
+              *ngIf='item.data.hideItem !== false'>Show</ion-button>
+            <ion-button color="danger" (click)='deleteItem(item.productID, item.brand, item.category, item)'>Delete
+            </ion-button>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div> -->
   <div class="del-upd-del-list" *ngIf="promoUdpate === 'Promote item' || promoUdpate === 'Update item'">
     <div id="goAway" (click)="dismissPromo()"></div>
     <div class="inner-cont-opt" *ngIf="promoUdpate === 'Promote item'">
@@ -132,23 +241,37 @@
       </div>
     </div>
   </div>
+
+  <!-- Main Content starts -->
   <div class="content-container">
+    <!-- Nav Bar content starts -->
     <div class="nav-bar">
       <div class="nav-content">
-        <div id="title">
-          <img src="../../assets/imgs/Logo/Logo.png" id="appLogo" alt="" (click)="back()" id="dankie-home-button">
-          <!-- <h4>DankieJesu</h4> -->
+        <div id="title" (click)="fnHideSearchResults(true)">
+          <img src="../../assets/imgs/Logo/Logo.png" id="appLogo" alt="" (click)="goHome()" id="dankie-home-button">
+          
         </div>
-        <div id="searchbar">
+        <div id="nav-middle">
+          <div id="searchbar">
+            <ion-input [(ngModel)]='searchInput' id="mySearchBar" (ionChange)='search()' placeholder="Search products"
+              show-cancel-button="never"></ion-input>
+          </div>
+          <div class="space" (click)="fnHideSearchResults(true)"></div>
         </div>
-        <div id="admin" (click)='signOutPopup()'>
-          <p>SIGN OUT</p>
+        <div id="nav-right" (click)="fnHideSearchResults(true)">
+          <div id="admin" (click)="fnHideSearchResults(true)">
+            <p (click)='signOutPopup()'>SIGN OUT</p>
+          </div>
         </div>
+
+
       </div>
     </div>
-    <div class="body-content">
-      <div id="left" padding>
-      </div>
+    <!-- Nav Bar content ends -->
+    <!-- Body Content starts -->
+    <div class="body-content" (click)="fnHideSearchResults(true)">
+      <!-- <div id="left" padding>
+      </div> -->
       <div id="mid">
         <div class="top-bar">
           <ion-button color="dark" fill="clear" (click)='back()'>
@@ -294,8 +417,8 @@
           </div>
         </div>
       </div>
-      <div id="right">
-      </div>
+      <!-- <div id="right">
+      </div> -->
     </div>
   </div>
 

@@ -26,7 +26,12 @@
 @import "~@ionic/angular/css/flex-utils.css";
 @import url("https://fonts.googleapis.com/css?family=Abel|Poiret+One|Open+Sans+Condensed|Jura|Manjari|Poppins|Raleway|Montserrat ");
 
-
+html, body {
+    ::-webkit-scrollbar {
+    background: #7c0000 !important;   
+    }
+    scrollbar-color: #7c0000 !important;
+}
 p, div{
     font-family: "Poppins", "Roboto", Arial;
 }

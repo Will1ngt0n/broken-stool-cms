@@ -12,19 +12,21 @@
     <button (click)='savePic()'>Save</button>
   </div> -->
 
+
+  <!-- popup content container start: search results, searched product, add brand, add category, edit brand -->
   <ion-fab vertical="bottom" id="myFab" horizontal="end" slot="fixed">
     <ion-fab-button (click)='signOutPopup()'>
       <ion-icon name="log-out"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  <div class="searchResults" *ngIf="searchInput">
+  <div class="searchResults" *ngIf="searchInput && blnShowSearchResults">
 
     <p *ngIf="searchArray.length > 0">
       Search Results
     </p>
-    <ion-list *ngIf="searchArray.length > 0">
-      <div *ngFor="let item of searchArray">
-        <ion-item *ngIf='searchArray.length > 0' (click)="showHideSearchDetails(item)">{{item.data.name}}</ion-item>
+    <ion-list *ngIf="searchArray.length > 0" class="ion-list-background">
+      <div *ngFor="let item of searchArray"  class="ion-list-background">
+        <ion-item *ngIf='searchArray.length > 0' (click)="showHideSearchDetails(item)"  class="ion-list-background">{{item.data.name}}</ion-item>
       </div>
     </ion-list>
 
@@ -115,6 +117,8 @@
               [(ngModel)]='updateDescription'></textarea>
             <input #updateSearchPic width='100px' id="uploaderBtn" class='pictureInput' type="file"
               accept="image/jpeg, jpg, tif, png" (change)='addUpdatePicture($event)'>
+              <textarea type="text" rows="4" class="user-input-area" placeholder="Enter filters for the product"
+              [disabled]='selectedCategory === "Select Category"' [(ngModel)]='updateFilters'></textarea>
             <ion-button color="dark" (click)='updateItem()' [disabled]='!updateForm'>Update</ion-button>
             <ion-button color="medium" (click)='hideItem(item.productID, item.brand, item.category, item)'
               *ngIf='item.data.hideItem === false'>Hide</ion-button>
@@ -286,19 +290,26 @@
       </div>
     </div>
   </div>
+  <!-- Pop up content container end -->
+
+  <!-- main content container start: nav, main(left, mid, right), footer -->
   <div class="content-container">
+    <!-- Nav Bar content starts -->
     <div class="nav-bar">
       <div class="nav-content">
-        <div id="title">
+        <div id="title" (click)="fnHideSearchResults(true)">
           <img src="../../assets/imgs/Logo/Logo.png" id="appLogo" alt="" (click)="reloadPage()" id="dankie-home-button">
           
         </div>
         <div id="nav-middle">
           <div id="searchbar">
-          <ion-input [(ngModel)]='searchInput' id="mySearchBar" (ionChange)='search()' placeholder="Search products"
-            show-cancel-button="never"></ion-input>
+            <ion-input [(ngModel)]='searchInput' id="mySearchBar" (ionChange)='search()' placeholder="Search products"
+              show-cancel-button="never"></ion-input>
           </div>
-          <div id="admin">
+          <div class="space" (click)="fnHideSearchResults(true)"></div>
+        </div>
+        <div id="nav-right" (click)="fnHideSearchResults(true)">
+          <div id="admin" (click)="fnHideSearchResults(true)">
             <p (click)='signOutPopup()'>SIGN OUT</p>
           </div>
         </div>
@@ -306,8 +317,9 @@
 
       </div>
     </div>
+    <!-- Nav Bar content ends -->
 
-    <div class="body-content">
+    <div class="body-content" (click)="fnHideSearchResults(true)">
       <div id="left">
         <div class="history-items">
           <!-- this shows when order history is clicked -->
@@ -509,216 +521,10 @@
             </ion-grid>
           </div>
         </div>
-
-
-        <!-- <div class="slide-specials">
-          <ion-item (click)='viewSales("viewAll")' color="medium">
-            <ion-label id="my-label">Sales &amp; Specials</ion-label>
-            <ion-note slot="end" color="primary">
-              See All
-              <ion-icon name="arrow-forward"></ion-icon>
-
-            </ion-note>
-          </ion-item>
-          <div class="items">
-            <div class="box-item" (click)='viewSales("viewAll")'>
-              <p id="item-label1">View All Specials</p>
-              <img class="bg" src="../../assets/imgs/All.png" *ngIf='!allSpecialsPicture' alt="">
-              <img class="bg" [src]="allSpecialsPicture" *ngIf='allSpecialsPicture' alt="">
-            </div>
-            <div class="box-item" (click)='viewSales("Dankie Jesu")'>
-              <p id="item-label">Dankie Jesu Specials</p>
-              <img class="bg" src="../../assets/imgs/Dankie.png" *ngIf='!dankieJesuSpecialsPicture' alt="">
-              <img class="bg" [src]="dankieJesuSpecialsPicture" *ngIf='dankieJesuSpecialsPicture' alt="">
-            </div>
-            <div class="box-item" (click)='viewSales("Kwanga")'>
-              <p id="item-label">Kwanga Apparel Specials</p>
-              <img class="bg" src="../../assets/imgs/Kwanga.png" *ngIf='!kwangaSpecialsPicture' alt="">
-              <img class="bg" [src]="kwangaSpecialsPicture" *ngIf='kwangaSpecialsPicture' alt="">
-            </div>
-          </div>
-        </div>
-        <div class="slide-winter-summer">
-          <ion-item (click)='viewMore("summer-gear")' color="medium">
-            <ion-label id="my-label">Summer Gear</ion-label>
-            <ion-note slot="end" color="primary">
-              See All
-              <ion-icon name="arrow-forward"></ion-icon>
-
-            </ion-note>
-          </ion-item>
-          <div class="items" *ngIf='summerGear.length > 0'>
-            <ion-grid>
-              <ion-row>
-                <ion-col class="my-ion-col" size="2" *ngFor='let item of summerGear'
-                  (click)="showHideSearchDetails(item)">
-
-                  <div class="item-container">
-                    <div class="name-holder">
-                      <p>{{item.data.name}}</p>
-                    </div>
-                    <img src="../../assets/imgs/Image Corrupt.jpg" *ngIf="!item.data.pictureLink" alt="">
-                    <img src="../../assets/imgs/Dankie.png" [src]="item.data.pictureLink" *ngIf='item && item.data'
-                      alt="">
-                  </div>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </div>
-          <div class="items" id="isEmpty" *ngIf='summerGear.length == 0'>
-            <div id="floatOn-Empty"><p>Summer Gear has no recent uploads so far</p></div>
-            
-            <ion-grid>
-              <ion-row>
-                <ion-col class="my-ion-col" size="2">
-                  <div class="item-container">
-                    <div id="placeholder-s"></div>
-                  </div>
-
-                </ion-col>
-                <ion-col class="my-ion-col" size="2">
-                  <div class="item-container">
-                    <div id="placeholder-s"></div>
-                  </div>
-
-                </ion-col>
-                <ion-col class="my-ion-col" size="2">
-                  <div class="item-container">
-                    <div id="placeholder-s"></div>
-                  </div>
-
-                </ion-col>
-                <ion-col class="my-ion-col" size="2">
-                  <div class="item-container">
-                    <div id="placeholder-s"></div>
-                  </div>
-
-                </ion-col>
-                <ion-col class="my-ion-col" size="2">
-                  <div class="item-container">
-                    <div id="placeholder-s"></div>
-                  </div>
-
-                </ion-col>
-                <ion-col class="my-ion-col" size="2">
-                  <div class="item-container">
-                    <div id="placeholder-s"></div>
-                  </div>
-
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </div>
-        </div>
-
-        <div class="slide-winter-summer">
-          <ion-item (click)='viewMore("winter-gear")' color="medium">
-            <ion-label id="my-label">Winter Gear</ion-label>
-            <ion-note slot="end" color="primary">
-              See All
-              <ion-icon name="arrow-forward"></ion-icon>
-
-            </ion-note>
-          </ion-item>
-          <div class="items" *ngIf='winterGear.length > 0'>
-            <ion-grid>
-              <ion-row>
-                <ion-col class="my-ion-col" size="2" *ngFor='let item of winterGear'
-                  (click)="showHideSearchDetails(item)">
-
-                  <div class="item-container">
-                    <div class="name-holder">
-                      <p>{{item.data.name}}</p>
-                    </div>
-                    <img src="../../assets/imgs/Image Corrupt.jpg" *ngIf="!item.data.pictureLink" alt="">
-                    <img src="../../assets/imgs/Dankie.png" [src]="item.data.pictureLink" *ngIf='item && item.data'
-                      alt="">
-                  </div>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </div>
-          <div class="items" id="isEmpty" *ngIf='winterGear.length == 0'>
-            <div id="floatOn-Empty"><p>Winter Gear has no recent uploads so far</p></div>
-            
-            <ion-grid>
-              <ion-row>
-                <ion-col class="my-ion-col" size="2">
-                  <div class="item-container">
-                    <div id="placeholder-s"></div>
-                  </div>
-
-                </ion-col>
-                <ion-col class="my-ion-col" size="2">
-                  <div class="item-container">
-                    <div id="placeholder-s"></div>
-                  </div>
-
-                </ion-col>
-                <ion-col class="my-ion-col" size="2">
-                  <div class="item-container">
-                    <div id="placeholder-s"></div>
-                  </div>
-
-                </ion-col>
-                <ion-col class="my-ion-col" size="2">
-                  <div class="item-container">
-                    <div id="placeholder-s"></div>
-                  </div>
-
-                </ion-col>
-                <ion-col class="my-ion-col" size="2">
-                  <div class="item-container">
-                    <div id="placeholder-s"></div>
-                  </div>
-
-                </ion-col>
-                <ion-col class="my-ion-col" size="2">
-                  <div class="item-container">
-                    <div id="placeholder-s"></div>
-                  </div>
-
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </div>
-        </div>
-
-        <div class="slide-specials">
-          <ion-item (click)='viewMore("kwanga-sub-categories")' color="medium">
-            <ion-label id="my-label">Kwanga Apparel</ion-label>
-            <ion-note slot="end" color="primary">
-              See All
-              <ion-icon name="arrow-forward"></ion-icon>
-
-            </ion-note>
-          </ion-item>
-          <div class="items" *ngIf='kwangaGear.length > 0'>
-            <div class="box-item" *ngFor='let item of kwangaGear' (click)="showHideSearchDetails(item)">
-              <div class="name-holder">
-                <p>{{item.data.name}}</p>
-              </div>
-              <img class="bg" [src]="item.data.pictureLink" *ngIf='item && item.data' alt="">
-              <img src="../../assets/imgs/Image Corrupt.jpg" *ngIf="!item.data.pictureLink" alt="">
-            </div>
-
-          </div>
-          <div class="items" *ngIf='kwangaGear.length == 0'>
-            <div id="floatOn-Empty">
-              <p>Kwanga Apparel has no recent uploads</p>
-            </div>
-            <div class="box-item">
-              <div id="placeholder-s"></div>
-            </div>
-            <div class="box-item">
-              <div id="placeholder-s"></div>
-            </div>
-            <div class="box-item">
-              <div id="placeholder-s"></div>
-            </div>
-          </div>
-        </div> -->
       </div>
+      <!-- mid div end -->
+
+      <!-- right div start -->
       <div id="right">
 
         <div class="adding">
@@ -843,6 +649,12 @@
 
             <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
           </div>
+          <!-- <textarea type="text" maxlength='150' rows="5" class="user-input-area" placeholder="Filters"
+          [disabled]='selectedCategory === "Select Category"' (change)='filters'
+          (keyup)='checkItemDescription();'></textarea> -->
+          <textarea type="text" maxlength='150' rows="5" class="user-input-area" placeholder="Filters"
+          [disabled]='selectedCategory === "Select Category"' [(ngModel)]='filters'
+          (keyup)='checkItemDescription();' tooltip="Enter data"></textarea>
           <div>
             <input id="generate-code" type='text' [disabled]='!generateCode' placeholder="Product Code"
               [(ngModel)]='newProductCode' (change)='checkCode($event)'>
@@ -1070,16 +882,16 @@
         </div>
 
         <input #fileInput width='100px' id="image-uploader" class='pictureInput' type="file"
-          accept="image/jpeg, jpg, tif, png" (change)='addPicture($event)'>
-        <label for="image-uploader">
-          <div class="adder">
-            <ion-icon name="add"></ion-icon>
-          </div>
-          <div class="imageChanged">
-            Change Image
-          </div>
-          <img src="{{myUpload}}" id="myUpload-Image" alt="">
-        </label>
+        accept="image/jpeg, jpg, tif, png" (change)='addPicture($event)'>
+      <label for="image-uploader">
+        <div class="adder mobile-adder">
+          <ion-icon name="add"></ion-icon>
+        </div>
+        <div class="imageChanged">
+          Change Image
+        </div>
+        <img src="{{myUpload}}" id="myUpload-Image" alt="">
+      </label>
         <div class='colors'>
           <h5 class="web-title">Available colors</h5>
           <div class="colors-cont">
@@ -1105,6 +917,9 @@
             </div>
           </div>
         </div>
+        <textarea type="text" rows="5" class="user-input-area" placeholder="Enter filters for the product"
+        [disabled]='selectedCategory === "Select Category"' [(ngModel)]='filters'
+        (keyup)='checkItemDescription();'></textarea>
         <div>
           <input type='text' id="generate-code" [disabled]='!generateCode' placeholder="Product Code"
             [(ngModel)]='newProductCode' (keyup)='checkValidity()'>

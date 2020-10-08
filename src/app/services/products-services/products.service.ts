@@ -12,7 +12,7 @@ export class ProductsService {
   constructor(public loadingCtrl: LoadingController) {
     this.products = []
   }
-  addItem(brand, brandID, selectedCategory, selectedCategoryID, itemName, description, price, size, accessory, summer, color, picture, productCode){
+  addItem(brand, brandID, selectedCategory, selectedCategoryID, itemName, description, price, size, accessory, summer, color, picture, productCode, filters){
     let resultID
 return new Promise((resolve, reject)  => {
       firebase.firestore().collection('Products').add({
@@ -34,7 +34,8 @@ return new Promise((resolve, reject)  => {
         isSummer: summer,
         onSale: false,
         timestamp : firebase.firestore.FieldValue.serverTimestamp(),
-        dateAdded : new Date().getTime()
+        dateAdded : new Date().getTime(),
+        filters: filters
       }).then(result => {
         console.log(result.id);
         resultID = result.id
@@ -413,7 +414,7 @@ return new Promise((resolve, reject)  => {
       return 'error'
     })
   }
-  updateItemsListItem(itemID, itemBrand, itemCategory, itemPrice, itemDescription, itemName, sizes, picture, colors){
+  updateItemsListItem(itemID, itemBrand, itemCategory, itemPrice, itemDescription, itemName, sizes, picture, colors, filters){
     console.log(picture,' I am pictrue');
     return new Promise( (resolve, reject) => {
       firebase.firestore().collection('Products').doc(itemID).update({
@@ -421,7 +422,8 @@ return new Promise((resolve, reject)  => {
         description : itemDescription,
         name : itemName,
         size: sizes,
-        color: colors
+        color: colors,
+        filters: filters
       })
       .then(result => {
         if(picture !== undefined){
@@ -837,6 +839,15 @@ return new Promise((resolve, reject)  => {
   load16CategoryItems(){
     return null
   }
+  filterSearch(query) {
+    return firebase.firestore().collection('Products').where('filters', 'array-contains-any', query).get().then(res  => {
+      let result: Array<object> = []
+      for(let key in res) {
+        let productID = res.docs[key].id; let docData = res.docs[key].data()
+        result = [...result, {productID: productID, data: docData, category: docData['category'], categoryID: docData['categoryID'], brand: docData['brand'], brandID: docData['brandID']}]
+      }
+    })
+  } 
   getBrandCategories(query){
     console.log(query);
     

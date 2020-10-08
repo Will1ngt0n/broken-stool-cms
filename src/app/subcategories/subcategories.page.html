@@ -2,23 +2,52 @@
   <app-loader></app-loader>
 </div>
 <ion-content>
+  <div class="searchResults" *ngIf="searchInput && blnShowSearchResults">
+
+    <p *ngIf="searchArray.length > 0">
+      Search Results
+    </p>
+    <ion-list *ngIf="searchArray.length > 0" class="ion-list-background">
+      <div *ngFor="let item of searchArray"  class="ion-list-background">
+        <ion-item *ngIf='searchArray.length > 0' (click)="showHideSearchDetails(item)"  class="ion-list-background">{{item.data.name}}</ion-item>
+      </div>
+    </ion-list>
+
+    <div id="oops" *ngIf="searchArray.length === 0">
+      <p>
+        <ion-icon name="sad"></ion-icon> There are no matches for this search
+      </p>
+    </div>
+  </div>
   <div class="content-container">
+    <!-- Nav Bar content starts -->
     <div class="nav-bar">
       <div class="nav-content">
-        <div id="title">
-          <img src="../../assets/imgs/Logo/Logo.png" id="appLogo" alt="" (click)="back()" id="dankie-home-button">
-          <!-- <h4>DankieJesu</h4> -->
+        <div id="title" (click)="fnHideSearchResults(true)">
+          <img src="../../assets/imgs/Logo/Logo.png" id="appLogo" alt="" (click)="goHome()" id="dankie-home-button">
+          
         </div>
-        <div id="searchbar">
+        <div id="nav-middle">
+          <div id="searchbar">
+            <ion-input [(ngModel)]='searchInput' id="mySearchBar" (ionChange)='search()' placeholder="Search products"
+              show-cancel-button="never"></ion-input>
+          </div>
+          <div class="space" (click)="fnHideSearchResults(true)"></div>
         </div>
-        <div id="admin">
-          <!-- <p (click)='signOutPopup()'>SIGN OUT</p> -->
+        <div id="nav-right" (click)="fnHideSearchResults(true)">
+          <div id="admin" (click)="fnHideSearchResults(true)">
+            <p (click)='signOutPopup()'>SIGN OUT</p>
+          </div>
         </div>
+
+
       </div>
     </div>
-    <div class="body-content">
-      <div id="left" padding>
-      </div>
+    <!-- Nav Bar content ends -->
+    <div class="body-content" (click)="fnHideSearchResults(true)">
+      <!-- <div id="left" padding>
+        
+      </div> -->
       <div id="mid">
         <div class="top-bar">
           <ion-button color="dark" fill="clear" (click)='back()'>
@@ -101,8 +130,8 @@
         </div>
  -->
       </div>
-      <div id="right">
-      </div>
+      <!-- <div id="right">
+      </div> -->
     </div>
   </div>
 

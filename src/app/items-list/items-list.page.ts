@@ -29,7 +29,7 @@ export class ItemsListPage implements OnInit, OnDestroy {
 
   description
   quantity
-  searchInput
+  searchInput : string = ''
   searchArray
   name
   productName
@@ -122,7 +122,9 @@ export class ItemsListPage implements OnInit, OnDestroy {
     this.promoButtonEnabled = false
 
   }
-
+  goHome() {
+    this.route.navigate(['/landing']);
+  }
   async productAlert(message, header) {
     const alert = await this.alertController.create({
       header: header,
@@ -558,6 +560,12 @@ export class ItemsListPage implements OnInit, OnDestroy {
                 this.loadInventory()       // testing, bring this back
                 this.loadInventorySnaps()  // testing, bring this back
               })
+            } else if(para === 'specials') {
+              
+              this.title = 'Specials'
+              this.currentCategory = [para]
+              this.pictureLink = '../../assets/imgs/images.jpg'
+              this.loadSales()
             }else if(para === 'All'){
               this.routeService.readBrandItemsListParameters().then(result => {
                 console.log(result);
@@ -757,6 +765,7 @@ export class ItemsListPage implements OnInit, OnDestroy {
     }
     this.checkPromoValidity()
   }
+  updateFilters: string = ''
   pictureUpdate : File
   updateItem() {
     this.presentLoading()
@@ -767,7 +776,7 @@ export class ItemsListPage implements OnInit, OnDestroy {
       this.cutDoubleSpace(this.updateDescription).then(result => {
         this.updateDescription = result
       }).then(result => {
-        return this.productsService.updateItemsListItem(this.itemID, this.itemBrand, this.itemCategory, this.updatePrice, this.updateDescription, this.updateName, this.itemSizes, this.pictureUpdate, this.itemColors).then(result => {
+        return this.productsService.updateItemsListItem(this.itemID, this.itemBrand, this.itemCategory, this.updatePrice, this.updateDescription, this.updateName, this.itemSizes, this.pictureUpdate, this.itemColors, this.updateFilters).then(result => {
           this.loaderDismiss(result)
           if (result === 'success') {
             this.productAlert('Product was successfully updated', 'Success!')
@@ -1053,25 +1062,25 @@ export class ItemsListPage implements OnInit, OnDestroy {
     this.validateUpdateForm()
   }
   //Search functionality
-  search(query) {
-    this.filterItems(query, this.allProducts)
-    this.searchArray = []
-  }
-  filterItems(query, array) {
-    let queryFormatted = query.toLowerCase();
-    if (queryFormatted !== '') {
-      let nameResult = array.filter(item => item.data.name.toLowerCase().indexOf(queryFormatted) >= 0)
-      let addBrand: boolean
-      let addCategory: boolean
-      let addName: boolean
-      addName = false
-      addCategory = false
-      addBrand = false
-      this.searchArray = nameResult
-    } else if (queryFormatted === '') {
-      this.searchArray = []
-    }
-  }
+  // search(query) {
+  //   this.filterItems(query, this.allProducts)
+  //   this.searchArray = []
+  // }
+  // filterItems(query, array) {
+  //   let queryFormatted = query.toLowerCase();
+  //   if (queryFormatted !== '') {
+  //     let nameResult = array.filter(item => item.data.name.toLowerCase().indexOf(queryFormatted) >= 0)
+  //     let addBrand: boolean
+  //     let addCategory: boolean
+  //     let addName: boolean
+  //     addName = false
+  //     addCategory = false
+  //     addBrand = false
+  //     this.searchArray = nameResult
+  //   } else if (queryFormatted === '') {
+  //     this.searchArray = []
+  //   }
+  // }
   colorsAndValue = []
   colorToggle(colorValue){
     document.getElementById(colorValue).style.boxShadow = "0px 3px 10px " + colorValue;
@@ -1228,6 +1237,150 @@ export class ItemsListPage implements OnInit, OnDestroy {
     console.log('we are running bruh');
     
   }
+
+  clickedSearchItem: string = "hideItem"
+  showHideSearchDetails(item) {
+    console.log("closing");
+    console.log(this.clickedSearchItem);
+    
+    if (this.clickedSearchItem == "hideItem") {
+      // this.updateName = item.data.name
+      // this.updatePrice = item.data.price
+      // this.updateDescription = item.data.description
+      // try { this.updatePic = item.data.pictureLink }
+      // catch (error) {
+      //   this.updatePic = null
+      // }
+      // this.pictureUpdate
+      // this.updateSearchPic = item.data.pictureLink
+      // this.updateBrand = item.brand
+      // this.updateCategory = item.category
+      // this.updateProductID = item.productID
+      // this.itemSizes = item.data.size
+      // this.itemColors = item.data.color
+      // this.item = item
+      // this.searchedProductStatus = item.data.hideItem
+      // console.log(this.updatePic);
+      
+      console.log(item);
+      this.clickedSearchItem = "showItem"
+      // this.updateForm = true
+      // this.popCheckboxXS = false ;this.popCheckboxS = false ;this.popCheckboxM = false ;this.popCheckboxL = false ;this.popCheckboxXL = false ;this.popCheckboxXXL = false ;this.popCheckboxXXXL = false ;
+      // this.checkBlack = false; this.checkBrown = false; this.checkOrange = false; this.checkYellow = false; this.checkWhite = false
+      // for(let key in this.itemSizes){
+      //   if(this.itemSizes[key] === 'XS'){
+      //     this.popCheckboxXS = true
+      //     this.updateSizes.push('XS')
+      //   }else if(this.itemSizes[key] === 'S'){
+      //     this.popCheckboxS = true
+      //     this.updateSizes.push('S')
+      //   }else if(this.itemSizes[key] === 'M'){
+      //     this.popCheckboxM = true
+      //     this.updateSizes.push('M')
+      //   }else if(this.itemSizes[key] === 'L'){
+      //     this.popCheckboxL = true
+      //     this.updateSizes.push('XL')
+      //   }else if(this.itemSizes[key] === 'XL'){
+      //     this.popCheckboxXL = true
+      //     this.updateSizes.push('XXL')
+      //   }else if(this.itemSizes[key] === 'XXL'){
+      //     this.popCheckboxXXL = true
+      //     this.updateSizes.push('XXL')
+      //   }else if(this.itemSizes[key] === 'XXXL'){
+      //     this.popCheckboxXXXL = true
+      //     this.updateSizes.push('XXXL')
+      //   }
+      // }
+      // for(let key in this.itemColors){
+      //   if(this.itemColors[key] === 'Black'){
+      //     this.checkBlack = true
+      //     this.updateSizes.push('XS')
+      //   }else if(this.itemColors[key] === 'Brown'){
+      //     this.checkBrown = true
+      //     this.updateSizes.push('S')
+      //   }else if(this.itemColors[key] === 'Orange'){
+      //     this.checkOrange = true
+      //     this.updateSizes.push('M')
+      //   }else if(this.itemColors[key] === 'Yellow'){
+      //     this.checkYellow = true
+      //     this.updateSizes.push('XL')
+      //   }else if(this.itemColors[key] === 'White'){
+      //     this.checkWhite = true
+      //     this.updateSizes.push('XXL')
+      //   }
+      // }
+      setTimeout(() => {
+        this.searchInput = ''
+      }, 100);
+    }
+    else {
+      this.clickedSearchItem = "hideItem"
+    }
+  }
+  search() {
+    this.fnHideSearchResults(false)
+    this.filterItems(this.currentViewedItems)
+    console.log('items searching: ' + this.searchInput);
+    
+  }
+  blnShowSearchResults : boolean = false
+  fnHideSearchResults(bln : boolean) {
+    console.log('we are hiding the search bar: ' + bln);
+     if(bln) {
+       this.blnShowSearchResults = false
+     } else {
+       this.blnShowSearchResults = true
+     }
+     console.log(this.blnShowSearchResults);
+     
+  }
+  filterItems(array) {
+    let queryFormatted = this.searchInput.toLowerCase();
+    if(queryFormatted !== '' && queryFormatted !== '*'){
+      let nameResult = array.filter(item => item.data.name.toLowerCase().indexOf(queryFormatted) >= 0)
+      let brandResult = array.filter(item => item.brand.toLowerCase().indexOf(queryFormatted) >= 0)
+      let categoryResult = array.filter(item => item.category.toLowerCase().indexOf(queryFormatted) >= 0)
+      let returnResult
+      let addBrand: boolean
+      let addCategory: boolean
+      let addName: boolean
+      addCategory = false
+      addName = false
+      returnResult = nameResult
+      for(let key in brandResult){
+        for(let i in returnResult){
+          if(returnResult[i].productID === brandResult[key].productID){
+            addBrand = false
+            break
+          }else if(returnResult[i].productID !== brandResult[key].productID){
+            addBrand = true
+          }
+        }
+        if(addBrand === true){
+          returnResult.push(brandResult[key])
+        }
+      }
+      for(let key in categoryResult){
+        for(let i in returnResult){
+          if(returnResult[i].productID === categoryResult[key].productID){
+            addCategory = false
+            break
+          }else if(returnResult[i].productID !== categoryResult[key].productID){
+            addCategory = true
+          }
+        }
+        if(addCategory === true){
+          returnResult.push(categoryResult[key])
+        }
+      }
+      addName = false
+      addCategory = false
+      addBrand = false
+      this.searchArray = nameResult
+    }else if(queryFormatted === '*'){
+    this.searchArray = this.allProducts
+    }
+  }
   dismissLoader() {
     try {
       this.render.addClass(this.loaderDiv.nativeElement, 'hidden')
@@ -1236,5 +1389,15 @@ export class ItemsListPage implements OnInit, OnDestroy {
       this.loaderDiv.nativeElement.class = 'hidden'
     }
     console.log(this.loaderDiv)
+  }
+  loadSales(){
+    return this.productsService.getAllSales().then(result => {
+      let array = []
+      array = result
+      if(array.length !== 0){
+        this.currentSelectedItems = result
+        
+      }
+    })
   }
 }
